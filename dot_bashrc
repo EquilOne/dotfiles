@@ -1,0 +1,20 @@
+#!/bin/bash
+# =============================================================================
+# BASH CONFIGURATION - Unified Modular Approach
+# =============================================================================
+
+# Source global definitions (system-wide bash config)
+if [ -f /etc/bashrc ]; then
+    . /etc/bashrc
+fi
+
+# Load unified shell configuration
+if [ -f ~/.config/shell/loader.sh ]; then
+    source ~/.config/shell/loader.sh
+else
+    echo "⚠️  Warning: ~/.config/shell/loader.sh not found"
+fi
+
+# Bash-specific configurations (if needed)
+# Add bash-only settings here
+
