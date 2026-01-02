@@ -1,0 +1,46 @@
+#!/bin/zsh
+# =============================================================================
+# ZSH CONFIGURATION - Unified Modular Approach
+# =============================================================================
+
+# Zsh-specific history settings
+HISTFILE=$XDG_STATE_HOME/zsh/history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_FIND_NO_DUPS
+setopt HIST_SAVE_NO_DUPS
+setopt APPEND_HISTORY
+setopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY
+
+# Zsh options
+setopt autocd extendedglob
+
+# Vi mode
+bindkey -v
+
+# Load unified shell configuration
+if [ -f ~/.config/shell/loader.sh ]; then
+    source ~/.config/shell/loader.sh
+else
+    echo "⚠️  Warning: ~/.config/shell/loader.sh not found"
+fi
+
+# Load Zsh-specific tools (cursor_mode, completions, etc.)
+for file in $HOME/.config/zsh/**/*.zsh(N); do
+    [[ -r "$file" ]] && source "$file"
+done
+unset file
+
+# Starship width management (from your existing setup)
+if type set_starship_width >/dev/null 2>&1; then
+    set_starship_width
+    autoload -Uz add-zsh-hook
+    add-zsh-hook precmd set_starship_width
+fi
+
+# Disable flow control (Ctrl+S/Ctrl+Q)
+stty -ixon 2>/dev/null
+

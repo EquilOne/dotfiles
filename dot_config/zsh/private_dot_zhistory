@@ -1,0 +1,2799 @@
+z .dotfiles
+mkdir zsh/
+eza
+mv ~/.config/zsh/plugins ./zsh/
+eza zsh/
+z zsh
+eza
+mkdir aliases
+mv ~/.config/zsh/aliases ./aliases/
+eza aliases/
+source ~/.zshenv
+source ~/.zshenv
+echo $HOME
+eza $HOIME
+eza -a $HOMe
+cat $DOTFILES/zsh/plugins/cursor_mode
+z .dotfiles
+eza
+z zsh
+eza
+z plugins
+eza
+source ~/.zshenv
+source ~/.config/zsh/.zshrc
+source ~/.config/zsh/.zshrc
+source ~/.config/zsh/.zshrc
+z ..
+z aliases
+nvim aliases 
+sudo pacman -S fzf
+nvim .config/zsh/.zshrc 
+ls
+la
+z .config
+ls
+ls eza/
+z eza
+mkdir themes
+ls
+git clone git@github.com:eza-community/eza-themes.git
+ls
+rm -rf themes/
+ls
+ls eza-themes/
+ls
+ln -sf /home/equilone/.config/eza/eza-themes/themes/rose-pine-moon.yml\ ~/$EZA_CONFIG_DIR/theme.yml
+ls
+la
+nvim .zshenv
+ls
+echo $EZA_CONFIG_DIR
+source ~/.zshenv
+echo $EZA_CONFIG_DIR
+ls
+hsit
+hist
+history
+46
+ln -sf /home/equilone/.config/eza/eza-themes/themes/rose-pine-moon.yml\ ~/$EZA_CONFIG_DIR/theme.yml
+ls
+z .config
+ls
+z envman
+ls
+cat alias.env 
+nvim alias.env 
+cat ENV.env 
+cat function.sh 
+cat load.sh 
+ls
+cat load.sh 
+cat PATH.env 
+la
+z ~
+la
+nvim theme.yml 
+z $EZA_CONFIG_DIR
+ls
+touch theme.yml
+nvim theme.yml
+ls
+la
+echo theme.yml
+cat theme.yml 
+cat @theme.yml
+rm theme.yml 
+ls
+la
+echo $LS_COLORS
+echo $EXA_COLORS
+z $EZA_CONFIG_DIR
+source ~/.zshenv
+z $EZA_CONFIG_DIR
+ls
+ls
+la
+ll
+nvim ./.dotfiles/zsh/aliases/aliases 
+source ~/.config/zsh/.zshrc
+ls
+la
+ll
+ls
+z .config
+la
+la
+ls
+z eza
+ls
+ls
+la
+sudo pacman -S chezmoi
+cd chezmoi
+chezmoi init
+chezmoi cd
+mv . ~/.local/share/
+z .. 
+mv . ~/.local/share/
+mv ./chezmoi/ ~/.local/share/
+la
+z ~/.local/share/chezmoi
+la
+z ~/.config
+ls
+z ..
+la
+z .supermaven
+ls
+nvim config.json 
+z ..
+z .config/nvim
+la
+z plugin
+ls
+z after
+ls
+z ../..
+ls
+z lua
+ls
+z ocn
+z config
+ls
+z ..
+ls
+z plugins
+ls
+z ..
+ls
+z config
+ls
+nvim lazy.lua 
+z ~
+ls
+ll
+la
+ls
+ls
+la
+pwd
+z ~
+la
+chezmoi cd
+echo $EZA_CONFIG_DIR
+ls
+z $EZA_CONFIG_DIR
+touch theme.yml
+nivm theme.yml
+nvim theme.yml
+sym
+link theme.yml 
+link --help
+ll
+unlink ./theme.yml
+ls
+ll
+ln -s ~/.config/eza/eza-themes/themes/rose-pine-moon.yml theme.yml
+ls
+cat theme.yml 
+ls
+ll
+la
+z home
+z ~
+ls
+ll
+la
+z alias
+ls
+nvim aliases 
+ls
+ll
+la
+sudo pacman -S flatpak
+flatpak search zen-browser
+flatpak search zen
+flakpak install Zen
+which flatpak
+flatpak install Zen
+sudo pacman -Syu
+flatpak install zen
+zen
+which zen
+which zen
+ls
+z .config/.local
+ls
+z share
+ls
+z flatpak
+ls
+z repo
+ls
+z ..
+ll
+ls db/
+z db
+ls
+z ..
+ls
+ls repo/
+ls repo/objects/
+ls repo/state/
+ls repo/extensions/
+fd zen
+z ~
+ls
+flatpak --help
+flatpak list
+Zen
+z alias
+nvim aliases 
+restart
+sudo pacman -S keyd
+z aliases
+nvim aliases 
+eza
+ls
+nvim aliases 
+z aliases
+nvim aliases 
+ls
+z aliases
+nvim aliases 
+sudo systemctl enable --now
+sudo systemctl enable keyd --now
+z /etc/keyd
+ls
+nvim default.conf
+ls
+sudo nvim default.conf
+sudo keyd reload
+ls
+ll
+la
+z .config
+la
+zen
+flatpak list
+restart
+flatpak list
+z defaults
+fd default
+grep default
+fzf | fd
+z .config
+ls
+z uwsm
+ls
+nvim default 
+zen-browser
+grep -r "app.zen_browser.zen" /usr/share/applications/
+xdg-settings set default-web-browser app.zen_browser.zen
+flatpak list
+flatpak list
+xdg-settings --help
+xdg-settings set default-web-browser app.zen_browser.zen.desktop
+xdg-open https://google.com
+restart
+xdg-open
+hyprland --help
+hyprctl reload
+xdg-settings get default-web-browser
+xdg-settings set default-web-browser app.zen_browser.zen.desktop
+hyprctl reload
+xdg-settings set default-web-browser app.zen_browser.zen.desktop
+echo $BROWSER
+echo $BROWSER
+restart
+xdg-settings set default-web-browser app.zen_browser.zen.desktop
+xdg-settings get default-web-browser
+echo $BROWSER
+flatpak run app.zen_browser.zen 
+hyprctl reload
+hyprctl reload
+ls
+z .config
+ls
+z ..
+z .local
+la
+z shar
+z share
+ls
+z ~
+chezmoi init
+chezmoi cd
+ls
+ls dot_config/
+ls dot_config/hypr/
+chezmoi edit dot_config/hypr/input.conf
+chezmoi edit dot_config/hypr/input.conf.bak.1762031804
+git status
+nvim dot_config/hypr/input.conf
+z config/hypr
+ls
+cp input.conf input.conf.bak
+ls
+nvim hyprland.conf
+pwd
+z ~/.config
+ls
+chezmoi add ./hypr
+z hypr
+ls
+nvim input.conf.bak.1762031804 
+cp input.conf.bak.1762031804 > input.conf
+cp ./input.conf.bak.1762031804 > ./input.conf
+./input.conf.bak.1762031804 > ./input.conf
+ll
+rm input.conf
+ls
+mv input.conf.bak.1762031804 input.conf
+ls
+chezmoi add .
+chezmoi cd
+restart
+z aliases
+nvim aliase
+nvim aliases 
+source ~/.config/zsh/.zshrc
+chz
+gs
+source ~/.config/zsh/.zshrc
+gst
+git add .
+gst
+z home
+z ~
+z .config
+ls
+la
+z ..
+la
+nvim .bash
+nvim .bashrc
+z .local/share/omarchy/default
+ls
+nvim xcompose 
+ls
+z hypr
+ls
+z bindings
+ls
+cat tiling
+cat tiling.conf 
+nvim tiling.conf 
+nvim tiling-v2.conf 
+ls
+echo cha
+echo $xha
+echo $cha
+cha tiling-v2.conf
+cha
+chz
+ls
+g add dot_local\ 
+git add dot_local 
+gs
+gst
+la
+z dot_
+ls
+z dot_local
+ls
+z share
+ls
+z omarchy/default
+ls
+z hypr/bindings
+ls
+chz
+ls
+la
+nvim .XCompose 
+chz
+ls
+g st
+g add .
+gst
+gcm "first commit"
+g br -M main
+g remote add origin git@github.com:EquilOne/omarchy_dotfile.git
+git push -u origin main
+g remote add origin git@github.com:EquilOne/omarchy_dotfiles.git
+git push -u origin main
+git remote show
+git remote remove
+git remote remove git@github.com:EquilOne/omarchy_dotfile.git
+git remote remove git@github.com:EquilOne/omarchy_dotfiles.git
+git remote add origin git@github.com:EquilOne/omarchy_dotfiles.git
+git remote add origin git@github.com:EquilOne/omarchy_dotfile.git
+git remote remove origin git@github.com:EquilOne/omarchy_dotfile.git
+git remote remove git@github.com:EquilOne/omarchy_dotfile.git
+git remote --help
+git remote remove --help
+git remote remove origin
+git remote show
+git remote add origin git@github.com:EquilOne/omarchy_dotfiles.git
+git branch -M main
+git push origin main
+z .local/share/omarchy/default/hypr/bindings
+gst
+g add .
+gcm
+nvim tiling.conf 
+nvim tiling-v2.conf 
+ls
+nvim utilities.conf 
+git add .
+gcm "Update keybinds for dwindle tilling behavior and show keybinds."
+g config list
+g st
+g ci
+ls
+cha .
+nvim utilities.conf 
+nvim tiling-v2.conf 
+ga .
+g add .
+gst
+gcm "Change keybind for closing a window."
+z ~
+nvim .zshenv 
+which ticktick
+fd ticktick
+fd ~/ ticktick
+fd ticktick ~/
+z .local/share/applications
+ls
+nvim vivaldi-cfammbeebmjdpoppachopcohfchgjapd-Default.desktop 
+z Education
+ls
+z webflyx
+gst
+git --version
+z aliases
+nvim aliases
+z ~
+eza -lAF
+eza -AF
+bootdev run 8c3b66a7-a454-480b-a0db-9cd34a721cef
+bootdev run 8c3b66a7-a454-480b-a0db-9cd34a721cef -s
+zsh
+z webflyx
+ls
+git config set --local webflyx.ceo "ThePrimeagen"
+git config set --local webflyx.cto "The Laneagen"
+git config set --local webflyx.valuation "mid"
+g config list --local
+cat .git/config
+bootdev run 8c3b66a7-a454-480b-a0db-9cd34a721cef
+bash
+bootdev run 8c3b66a7-a454-480b-a0db-9cd34a721cef -s
+g config get webflyx.valuation
+bootdev run ea9fe1c9-5284-4aae-95eb-1c6a834aa7c1
+bootdev run ea9fe1c9-5284-4aae-95eb-1c6a834aa7c1 -s
+g config unset webflyx.cto
+g config unset webflyx
+git config set --append webflyx.ceo "Warren"
+git config set --append webflyx.ceo "Carson"
+git config set --append webflyx.ceo "Sarah"
+g config list --local
+g config unset --all webflyx.ceo
+g config list --local
+bootdev run 9473bfc6-37ac-4644-ab55-76e8d88d8a27
+bootdev run 9473bfc6-37ac-4644-ab55-76e8d88d8a27 -s
+g config remove-section webflyx
+g config --local list
+g config list --local
+bootdev run c2b04b80-e061-4305-96e4-33a1f6e4d959
+bootdev run c2b04b80-e061-4305-96e4-33a1f6e4d959 -s
+gst
+g st
+which bootdev
+source ~/.zshenv 
+zsh
+ls
+la
+g set --local webflyx.cto "TheLaneagen"
+g config set --local webflyx.cto "TheLaneagen"
+bahs
+bash
+source ~/.zshenv
+bootdev --version
+git branch
+bootdev run 8b4b9cd5-af15-4d71-b790-299fd2150a93
+git config --local branch.master
+bootdev run 8b4b9cd5-af15-4d71-b790-299fd2150a93
+git
+git branch -M master
+git branch list
+git branch --help
+bootdev run 8b4b9cd5-af15-4d71-b790-299fd2150a93
+bootdev run 8b4b9cd5-af15-4d71-b790-299fd2150a93 -s
+git config
+git config lsit
+git config list
+git branch -m master main
+bootdev run 34d03c25-be7c-4f27-84a4-2c98f2a752ed
+bootdev run 34d03c25-be7c-4f27-84a4-2c98f2a752ed -s
+g switch -c add_classics
+g br
+bootdev run 02f31255-f521-4317-946a-a8a9ca67e7cf
+bootdev run 02f31255-f521-4317-946a-a8a9ca67e7cf -s
+bootdev run 7b1f541b-a333-4ac0-8317-8165530c0998 -s
+nvim classics.csv
+ls
+g config list
+g add .
+gst
+gcm "D: Add classics csv"
+gst
+git log
+g log
+bootdev run da54c8cb-2b06-45ab-b8bb-157bc2446432
+bootdev run da54c8cb-2b06-45ab-b8bb-157bc2446432 -s
+git log --decorate=full
+git log --decorate=no
+git log --decorate=no
+git log --oneline
+git log --decorate=full --oneline 
+bootdev run 4c6ecd20-8510-4b37-918a-763fbade5e05
+bootdev run 4c6ecd20-8510-4b37-918a-763fbade5e05 -s
+cat .git/refs/heads/main
+ls .git/refs/heads/
+git config list
+g switch main
+nvim contents.md 
+gcm "E: Add contents to contents.md"
+git add .
+gcm "E: Add contents to contents.md"
+g log --oneline --graph --all
+bootdev run 5a03b470-0ae5-45be-83e2-dd548497214f
+bootdev run 5a03b470-0ae5-45be-83e2-dd548497214f -s
+g merge add_classics 
+git log --graph --oneline --parents 
+bootdev run 41af0d0d-9805-4dd0-b7f8-6526a6d42ec8
+bootdev run 41af0d0d-9805-4dd0-b7f8-6526a6d42ec8 -s
+git branch -d list
+git branch -d add_classics 
+git lof
+g log
+g log --graph
+git log --all
+git log
+git log --oneline
+git log --oneline --all
+git log --oneline graph
+git log --oneline --graph
+ls
+ll
+la
+eza -a
+eza -Fa
+eza -AF
+eza -lAF
+eza -AF
+gsw update_titles
+source ~/.config/zsh/.zshrc
+gsw update_titles
+ls
+echo "The Curious Case of Benjamin Button" >> titles.md
+cat titles.md 
+nvim titles.md 
+gcm "G: Curious Case of Ben Button"
+gawd
+gcm "G: Curious Case of Ben Button"
+gl
+gll
+glg
+gl
+gll
+glg
+gg
+glg
+bootdev run 9e41bec4-ca71-41a0-bcbd-9cdb5a08867c
+bootdev run 9e41bec4-ca71-41a0-bcbd-9cdb5a08867c -s
+gsw main
+source ~/.config/zsh/.zshrc
+gsw main 
+gl
+g config list
+git merge update_titles 
+glg
+git branch -r updade_titles
+git branch -d update_titles 
+bootdev run e15fb7d6-7bbb-4185-bd12-f46613207d1c
+bootdev run e15fb7d6-7bbb-4185-bd12-f46613207d1c -s
+gl
+gswc update_dune bfc4772
+glg
+glg --all
+bootdev run 079797b4-66f7-4b95-a5fd-a1163dba32d9
+bootdev run 079797b4-66f7-4b95-a5fd-a1163dba32d9 -s
+la
+ls quotes/
+nvim quotes/dune.md 
+gawd
+gcm "H: Spice
+gst
+gcm "H: Spice"
+nvim
+gcm "I: Fear"
+gawd
+gawd
+gcm "I: Fear"
+glg
+glg --all
+git rebase main
+glg
+glg --all
+bootdev run 64c4ccc9-1f14-4b70-83fc-829d91efe335
+bootdev run 64c4ccc9-1f14-4b70-83fc-829d91efe335 -s
+echo "* The Internship" > titles.md
+gst
+gawd
+gcm "J: Ooops
+gcm "J: Ooops
+gcm "J: Ooops/
+gcm "J: Ooops.."
+bootdev run bb5f3005-894f-4d2f-80d1-75f4f143dd0d
+bootdev run bb5f3005-894f-4d2f-80d1-75f4f143dd0d -s
+gl
+g reset --soft 0693cfb
+gl
+gst
+bootdev run cc5ecbd6-a740-408a-9b69-5fe961aef13e
+bootdev run cc5ecbd6-a740-408a-9b69-5fe961aef13e -s
+z webflyx
+gst
+g reset --hard 0693cfb
+gst
+bootdev run eb5c6d9f-6203-4174-8e32-e261a707d7fe
+source ~/.zshenv
+bootdev run eb5c6d9f-6203-4174-8e32-e261a707d7fe
+bootdev run eb5c6d9f-6203-4174-8e32-e261a707d7fe -s
+z .local/applications
+z .local/share/applications
+ls
+rm -rf vivaldi-cfammbeebmjdpoppachopcohfchgjapd-Default.desktop vivaldi-ppapbcehlphjebahihpfcobkeifkbhcl-Default.desktop 
+ls
+z ~
+yay -Ss ticktick
+yay -S ticktick
+ticktick
+yay -Rns ticktick
+ll
+ls
+lla
+la
+ls
+ll
+z aliases
+nvim
+z ~
+la
+less .zshenv
+which bootdev
+nvim .zshenv 
+ls
+z Education/
+mkdir webflyx-local
+z webflyx-local
+ls
+git init
+bootdev run 0443e68c-dc97-4eda-bcac-a44578c9eb68
+sudo pacman -Syu
+which bootdev
+sudo pacman -Syu
+z webflyx
+bootdev run 0443e68c-dc97-4eda-bcac-a44578c9eb68
+bootdev run 0443e68c-dc97-4eda-bcac-a44578c9eb68 -s
+git remote add origin ../webflyx
+bootdev run ad1ac5e6-8ce7-4fc8-b603-6a359ba9c715
+bootdev run ad1ac5e6-8ce7-4fc8-b603-6a359ba9c715 -s
+bootdev run 26a9aebe-7e7b-4ad7-9de1-1e8bda7b1296
+bootdev run 26a9aebe-7e7b-4ad7-9de1-1e8bda7b1296 -s
+git fetch
+find .git/objects/
+bootdev run 874bc151-49f5-4e84-b7b4-a20d4260871d
+bootdev run 874bc151-49f5-4e84-b7b4-a20d4260871d -s
+bootdev run d8b81b4d-9341-46e9-b452-6673b07e36d1
+bootdev run d8b81b4d-9341-46e9-b452-6673b07e36d1 -s
+git fetch origin 
+gl
+ls
+la
+git log
+gl origin/update_dune
+bootdev run 1f90b5ff-af72-4dd8-a32f-9d3c73ecd218 -s
+g merge origin/main
+gl
+bootdev run eb6e6c58-4948-4438-af6e-daff6eaa10e7 -s
+z .config
+ls
+nvim starship
+nvim starship.toml
+z .config/
+ls
+nvim starship.toml
+z webflyc
+z webflyx
+z webflyx
+la
+gst
+gst
+g fetch origin
+g switch main
+z ..
+z webflyx
+ls
+gst
+z webflyx
+nvim .config/starship.toml.bak 
+nvim .config/starship.toml
+nvim .config/starship.toml
+nvim .config/starship.toml
+nvim .config/starship.toml
+z webflyx
+nvim .config/starship.toml
+nvim .config/starship.toml
+z webflyx
+z webflyx
+source ~/.config/starship.toml
+z webflyx
+z ../webflyx-local
+z webflyx
+lkj
+nvim
+nvim
+
+nvim
+zch
+z chezmoi
+ls
+la
+z ~
+chezmoi cd
+ls
+ls dot_config/
+gst
+gawd
+gcm "Added personal rose-pine-moon config/pallette"
+gst
+z ~
+ls
+ls dot_config/
+ls dot_local/
+ls dot_local/share/
+z ~
+ls
+z .config
+ls
+chezmoi add starship.toml
+chezmoi cd
+ls
+z ~
+chezmoi cd
+z webflyx
+ls
+touch a-test.txt
+rm -rf a-test.txt 
+touch a-test.txt
+rm -rf a-test.txt 
+touch test.txt
+gawd
+gst
+g restore --staged test.txt 
+rm -rf test.txt 
+touch test.txt
+rm -rf test.txt 
+pwd
+touch test.txt
+rm -rf test.txt 
+ls
+z home
+z ~
+brew search github cli
+brew install github
+yay -Syu
+yay -Ss github
+z webflyx
+gh auth login
+z ../webflyx-local
+z ..
+rm -rf webflyx-local/
+ls
+g remote add origin git@github.com:EquilOne/webflyx.git
+z webflyx
+g remote add origin git@github.com:EquilOne/webflyx.git
+g remote  remove origin
+g remote add origin git@github.com:EquilOne/webflyx.git
+g ls-remote 
+bootdev run c465d09d-b53a-4276-978c-cc2c9f4e02ad
+git ls-remote
+bootdev run c465d09d-b53a-4276-978c-cc2c9f4e02ad
+g remote remove origin
+g ls-remote
+g remote add origin https://github.com/EquilOne/webflyx.git
+g ls-remote
+g ls-remote
+g ls-remote
+bootdev run c465d09d-b53a-4276-978c-cc2c9f4e02ad
+gh auth login
+gh auth login
+gh auth login
+gh config set editor nvim
+gh auth status
+z webflyx
+z webflyx
+gh auth status
+git remote -v
+git ls-remote
+ssh -T git@github.com
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+ssh-add -l
+g ls-remote 
+bootdev run c465d09d-b53a-4276-978c-cc2c9f4e02ad
+bootdev run c465d09d-b53a-4276-978c-cc2c9f4e02ad -s
+z aliases
+ls
+less aliases
+which pandoc
+zsh
+which pandoc
+bash
+yay -Ss pandoc
+yay -S pandoc
+sudo pacman -S pandoc
+pandoc --version
+z aliases
+nvim aliases 
+chz
+gst
+ls
+nvim .gitingnore
+gst
+mv .gitingnore .gitignore
+gst
+gawd
+gcm "Update hypr config files, add gitignore"
+chezmoi diff
+z .config
+ls
+chezmoi add hypr
+chezmoi add hypr
+chezmoi diff
+ls ./hypr/
+nvim
+ls 
+la
+ls .local/
+ls .local/share/
+z ~
+la
+z .dotfiles
+ls
+z zsh
+ls
+la
+z ~
+less .zsh
+less .zshenv
+chad .zshenv
+ls
+ls dot_config/
+ls
+chezmoi diff
+ls
+ls dot_
+ls dot_config/
+z ocnfig
+z config
+ls
+chezmoi add hypr
+chz
+nvim
+nvim
+chad .zshenv
+chz
+ls
+z ~
+ls
+la
+chad .dotfiles
+la
+z .config
+ls
+la
+la eza/
+la eza/
+z eza
+less theme.yml
+ll theme.yml 
+z ..
+chad eza
+ls
+la
+ls carapace/
+ls -T carapace/
+eza -FT
+eza -TF
+eza -TF ./hypr/
+eza -ATF ./hypr/
+eza -hATF hypr/
+eza -lATF hypr/
+lt
+z ~/.config/chezmoi/
+ls
+nvim chezmoistate.boltdb 
+z .con
+ls
+z .local
+ls
+z share
+ls
+z chezmoi
+ls
+z .local
+z share
+ls
+ls chezmoi/
+z ~/.local/share
+ls
+ls chezmoi/
+la chezmoi/
+z ~/.config/chezmoi
+la
+la
+z ~
+ls
+la
+la .dotfiles/
+fd chezmoi.toml .config/
+z ~/.config/chezmoi
+nvim chezmoi.toml
+chz
+nvim .chezmoiignore
+rm -rf dot_config/hypr/*.bak.*
+ls
+ls dot_config/
+ls dot_config/hypr/
+rm -rf dot_config/hypr/*.bak
+ls dot_config/hypr/
+gst
+gawd
+gcm "Add .chezmoiignore"
+gst
+ls
+z dot_config
+ls
+ls hypr/
+rm -rf ./hypr/*.bak.* *.bak
+ls
+ls hypr/
+rm -rf ./hypr/*.bak.* 
+rm -rf ./hypr/*.bak 
+ls
+ls hypr/
+gst
+gawd
+gcm
+g commit
+z ..
+ls
+la
+nvim .chezmoiignore 
+gawd
+gcm "Update .chezmoiignore"
+nvim
+lt
+lt
+nvim
+lt
+nvim
+lt
+lt
+nvim
+lt
+ls
+lt Education/
+la
+nvim
+chad ~/.dotfiles/
+chad .local/share/omarchy/default/hypr
+chd
+z aliases
+less aliases
+ls
+z .config
+ls
+z ../.local
+ls
+z share
+ls
+z ~
+nvim .zshenv 
+la
+z .local
+ls
+z share
+ls
+z ~/.config
+ls
+la
+z .local
+ls
+z share
+ls
+z ~
+fd ./ keyd
+fd keyd ./
+which keyd
+z /usr/bin/keyd
+ls
+z usr/bin
+z /usr/bin
+ls
+less keyd
+z ~
+z ~/.cn
+z ~/.config
+ls
+head starship.toml
+less starship.toml
+chz
+lt
+z webflyc
+z webflyx
+g remote remove origin
+g remote add origin git@github.com:EquilOne/webflyx.git
+g ls-remote 
+bootdev run c465d09d-b53a-4276-978c-cc2c9f4e02ad
+bootdev run c465d09d-b53a-4276-978c-cc2c9f4e02ad -s
+git config list --globla
+git config list --global
+g ls-remote 
+g switch main
+fll
+gll
+gl
+g config list --global
+g push origin main
+g config set --local pull.rebase false
+g config list --local
+gsw update_dune 
+g merge main
+g merge
+gsw main 
+g merge update_dune 
+gl
+gst
+g ls-remote 
+g pull origin main
+gl
+touch test.txt
+rm -rf test.txt 
+ls
+g branch --delete update_dune 
+bootdev run 68fb19fe-ef3d-4d11-ad8a-3d009cc64319
+bootdev run 68fb19fe-ef3d-4d11-ad8a-3d009cc64319 -s
+gswc add_classics
+ls
+nvim classics.csv 
+ls
+gst
+gawd
+gcm "L: Update classics, Psycho"
+g push origin add_classics
+git config list --global
+gsw main
+g pull origin main
+g branch -d add_classics 
+ls
+gl
+gl -n 10
+glten
+source ~/.zshenv
+glgten
+source ~/.config/zsh/.zshrc
+glgten
+glten
+gl
+g branch list
+g ls-files 
+g ls-tree 
+bootdev run b9bb7c2e-793a-4c9a-bc43-ca21556a4b6f
+bootdev run b9bb7c2e-793a-4c9a-bc43-ca21556a4b6f -s
+touch secure/passwords.txt
+mkdir secure
+touch secure/passwords.txt
+ls
+nvim secure/passwords.txt 
+nvim guilty_pleasures.md
+ls
+nvim .gitignore
+ls
+la
+cat .gitignore 
+gawd
+gst
+nvim .giting
+nvim .gitignore 
+gawd
+gst
+ls
+g restore --staged 
+g restore --staged guilty_pleasures.md 
+gst
+gcm "M: Add .gitignore for secrets"
+bootdev run 130bca89-8624-402c-a522-327e5c497159
+bootdev run 130bca89-8624-402c-a522-327e5c497159 -s
+touch advert.md
+nvim advert.md 
+pandoc advert.md -o advert.html
+ls
+nvim advert.html 
+xdg-open advert.ht
+xdg-open advert.html
+nvim .gitignore 
+gst
+gawd
+gcm "N: Add advert.md"
+bootdev run 03550ba5-9699-468f-aa60-67df8fa47b6f
+bootdev run 03550ba5-9699-468f-aa60-67df8fa47b6f -s
+la
+ls
+chz
+lt
+nvim .chezmoiignore 
+z dot_dotfiles/zsh
+ls
+z plugins
+ls
+z ../..
+/ ..
+z ..
+z dot_config
+ls
+z eza
+ls
+z eza-themes
+ls
+z imgs
+ls
+z ..
+ls
+z test_dir
+ls
+z src
+ls
+chz
+gst
+gawd
+gcm "Edit .chezmoiignore to include test folder in eza themes"
+g remote show
+g ls-remote 
+g push origin main
+chd
+g push --set-upstream origin main
+chd
+ls
+ls
+ls dot_local/
+ls dot_local/share
+lt
+gl
+glg
+z ~/.dotfiles
+ls
+z zsh
+ls
+z ~/.config/zsh
+ls
+la
+less .zshrc
+nvim
+ls 
+la
+la ./.config
+chad .config/starship.toml
+chd
+ched .config/starship.toml
+ched .config/starship.toml
+chz
+lt
+rm -rf ./dot_config/eza/eza-themes/test_dir
+lt
+chd
+ch apply
+ch apply
+z ~
+ls
+ls always 
+eza -F auto 
+source ~/.config/zsh/.zshrc
+ls
+la
+ll
+la
+z alias
+ls
+nvim aliases 
+chd
+ch apply
+ls auto 
+nvim
+ched .dotfiles/zsh/aliases/aliases
+bootdev --version
+bootdev run 6120f97b-117f-4a84-94d6-a3436f21f1a4
+bootdev run 6120f97b-117f-4a84-94d6-a3436f21f1a4 -s
+ls
+z workspace
+ls
+whoami
+mkdir github/equilone/bookbot/
+mkdir -p github/equilone/bookbot/
+ls
+z github/equilone/bookbot
+ls
+z ..
+rm -rf bookbot/
+ls
+g clone git@github.com:EquilOne/bookbot.git
+ls
+ls boo
+ls bookbot/
+z workspace/github/equilone/bookbot
+ls
+nvim main.py 
+gst
+gawd
+gst
+gcm "Add .gitignore, get book text function in main.py"
+chezmoi edit .config/starship.toml
+nvim
+chd
+ch apply
+nvim
+chad .config/starship.toml
+chd
+ch apply
+z alias
+less aliases
+g config --global list
+g config list --global
+g push origin main
+chezmoi edit .config/starship.toml
+nvim
+z ~/Downloads
+ls
+mv starship_narrow.toml ~/.config/
+echo starship.toml > ~/.config/starship.toml
+ls
+ls
+nvim
+z config
+ls
+nvim starship.toml
+cat ~/Downloads/starship.toml > ~/.config/starship.toml
+z ..
+nvim .zshenv 
+z .config/zsh
+ls
+la
+nvim .zshrc
+z equilone
+ls
+z bookbot
+z .dotfiles/zsh/plugins
+nvim resize_prompt 
+z config
+ls
+mkdir starship
+mv starship.toml ./starship/
+ls starship
+mv starship_narrow.toml ./starship/
+ls
+rm -rf starship.toml.bak
+source ./zsh/.zshrc
+chz
+pwd
+source ~/.config/zsh/.zshrc
+pwd
+source ~/.config/zsh/.zshrc
+source ~/.zshenv
+z ~
+chz
+z bookbot
+z ~
+chad .dotfiles
+chz
+ls
+ls dot_config/
+z ~
+less .zshenv
+chad .config
+z bookbo
+source ~/.config/zsh/.zshrc
+z ~
+ls
+z .config/starship
+ls
+rm -rf ./*
+g clone git@github.com:EquilOne/starship-configs.git
+ls
+ls starship-configs/
+mv starship-configs/starship.toml ../
+ls
+la
+ls starship-configs/
+mv ../starship.toml ./
+ls
+mv starship-configs/starship_narrow.toml ./
+ls
+rm -rf starship-configs/
+ls
+chz
+source ~/.config/zsh/.zshrc
+ched starship.toml
+z ~/.config
+ls
+chad starship/
+ched starship/starship_narrow.toml
+ched starship/starship_narrow.toml
+ched starship/starship_narrow.toml
+ch
+chz
+z ~
+ls
+z .config
+ls
+z home
+z ~
+less .zshenv
+which wget
+zsh
+ls
+z alias
+less aliases
+z ~/workspace/github/equilone
+ls
+ls bookbot/
+z bookbot
+bootdev run b193d218-e022-4fb1-95be-1b9c2c440927
+bootdev run b193d218-e022-4fb1-95be-1b9c2c440927 -s
+nvim README.md 
+bootdev run 4695fb05-cb7c-44e4-b206-0ed8eac44588
+bootdev run 4695fb05-cb7c-44e4-b206-0ed8eac44588 -s
+glg
+gawd
+glg
+git commit -m "update readme with a description"
+source ~/.config/zsh/.zshrc
+touch test
+source ~/.config/zsh/.zshrc
+rm -rf test 
+g push origin main
+python3 --version
+bootdev run d2371c4c-0dad-4c85-9d4f-e92da72335f6
+bootdev run d2371c4c-0dad-4c85-9d4f-e92da72335f6 -s
+nvim main.py
+python3 main.py 
+bootdev run d6350dd3-7ec9-425b-b10c-892b8f2a9b7a -s
+mkdir books
+nvim books/frankenstein.txt
+wget -O books/frankenstein.txt https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/frankenstein.txt
+ls
+z books
+z ..
+nvim .gitignore
+bootdev run 3e0113f5-18a9-4b4a-9600-6b9b928c01ac
+ls books/
+ls
+z books
+ls
+wget -O books/frankenstein.txt https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/frankenstein.txt
+which wget
+bash
+sudo pacman -S wget
+gst
+wget -O books/frankenstein.txt https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/frankenstein.txt
+z ..
+wget -O books/frankenstein.txt https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/frankenstein.txt
+bootdev run 3e0113f5-18a9-4b4a-9600-6b9b928c01ac
+bootdev run 3e0113f5-18a9-4b4a-9600-6b9b928c01ac -s
+touch test
+z
+z bookbot
+rm -rf test 
+g push
+gst
+z
+chad ~/.config/starship.toml
+chd
+ch apply
+ched ./.config/starship.toml
+z bookboyt
+z bookbot
+z ~
+la
+z con
+la
+z zsh
+ls
+la
+less .zshrc
+z ~
+less .zshenv
+less ~/.config/zsh/.zshrc
+lt
+ltl
+lta
+ranger
+ranger -a
+ranger --help
+ranger
+ranger
+less ~/.config/zsh/.zshrc
+z .dotfiles/zsh
+ls
+z plugins
+ls
+nvim resize_prompt
+nvim
+z bookbot
+chz
+ranger
+nvim
+source ~/.config/zsh/.zshrc
+source ~/.config/zsh/.zshrc
+source ~/.config/zsh/.zshrc
+touch text.txt
+gawd
+touch new.text
+g restore --staged text.txt 
+gst
+rm -rf new.text text.txt 
+nvim
+nvim 
+nvim
+chz
+z bookbot
+chz
+ls
+chz
+z ~/test
+z ..
+rm -rf test/
+ls
+z bookbot
+z ~
+mkdir test
+z test
+touch test.py
+z bookbot
+chz
+ch verify
+z ~
+nvim
+source ~/.config/zsh/.zshrc
+pwd
+touch test.txt
+gawd
+touch new.txt
+rm -rf new.txt 
+gst
+g restore --staged test.txt 
+rm -rf test.txt 
+ls
+z dot_config
+ls
+ls starship
+less starship.toml
+rm -rf starship.toml 
+ls
+gawd
+gcm 'remove(starship): delete old config'
+g push origin main
+z ~/.dotfiles
+ls
+z zsh
+ls
+z plugins
+ls
+nvim resize_prompt 
+z bookbot
+source ~/.zshenv
+nvim resize_prompt 
+z ~/.dotfiles/zsh/plugins
+ls
+nvim resize_prompt 
+source ~/.zshenv
+ch managed
+ch managed | wc -l
+ch verify 
+ch verify -r
+ch status
+z ~
+ch status
+ch doctor
+brew update
+brew upgrade
+ch doctor
+chz
+z ~/.config
+ls
+z starship
+ls
+pwd
+chz
+gawd
+gcm "update(starhip): added support for 40 column splits"
+gst
+g push -u orign main
+echo gsw
+gswc update
+gsw main
+g pull origin main
+g branch --set-upstream-to main
+g branch --set-upstream-to origin
+g pull 
+g pull origin main
+g merge update
+g push origin main --force
+g remote remove orign 
+g remote show
+g remote add origin git@github.com:EquilOne/starship-configs.git
+g remote show
+g push origin main
+g push origin main --force
+nvim .zshenv
+z .config/starship
+ls
+nvim starship_narrow.toml 
+ls
+touch starship_minimal.toml
+cat starship_narrow.toml > starship_minimal.toml
+nvim starship_minimal.toml 
+nvim starship_minimal.toml 
+z ~/.dotfiles/zsh/plugins
+nvim resize_prompt  
+nvmi ~/.zshenv
+nvim ~/.zshenv
+z ~/.config
+ls
+z starship
+la
+g init
+g remote add git@github.com:EquilOne/starship-configs.git
+g remote add orign git@github.com:EquilOne/starship-configs.git
+nvim starship.toml 
+gst
+source ~/.zshenv
+source ~/.config/zsh/.zshrc
+nvim starship_narrow.toml 
+chz
+z bookbot
+touch test.txt
+gawd
+touch new.txt
+gawd
+rm -rf test.txt 
+gst
+g rm test.txt
+git rm new.txt 
+g restore --staged new.txt 
+gst
+rm -rf new.txt 
+ls
+la
+chz
+z .dotfiles/zsh/plugins
+nvim resize_prompt 
+who am i
+whoami
+z config
+chad ./starship
+ched ./starship/starship.toml
+source ~/.config/zsh/.zshrc
+ched ./starship/starship.toml
+nvim starship/starship.toml 
+ch diff
+chad hypr/hypridle.conf
+chad ../.dotfiles/zsh/plugins
+chd
+ch apply
+chz
+cat .zshenv
+fd ~ whfd
+fd "whkd" ~
+fd "whkd" ~ | fzf
+la
+z /etc/keyd
+ls
+nvim default.conf 
+sudo nvim default.conf 
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+z .config/nvim/lua/plugins
+ls
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+z .config/nvim
+ls
+nvim
+ls
+ls lua/plugins/
+ls
+ls plugin/
+ls plugin/after/
+z lua
+ls
+ls config/
+z plugins
+ls
+nvim example.lua 
+ls
+nvim omarchy-theme-hotreload.lua 
+nvim
+nvim
+sudo keyd reload
+sudo systemctl enable --now keyd
+sudo keyd reload
+z /etc/keyd
+la
+sudo nvim default.conf 
+sudo systemctl enable --now keyd
+sudo keyd reload
+z ~
+la
+z .config
+ls
+z nvim
+ls
+nvim init.lua 
+nvim stylua.toml 
+ls
+ls lua/
+ls plugin/
+z lua
+ls
+ls config/
+z config
+nvim autocmds.lua 
+nvim keymaps.lua 
+nvim lazy.lua 
+nvim options.lua 
+ls
+nvim keymaps.lua
+z ~/.config
+ls
+z zsh
+nvim .zshrc 
+yay -S bitwarden-cli
+yay -Ss bitwarden-cli
+sudo pacman -S bitwarden-cli
+yay -S bitwarden-cli
+brew install bitwarden-cli
+brew update
+brew upgrade
+bw login
+ls
+la
+z ~/.dotfiles
+ls
+z zsh
+ls
+mkdir functions
+z functions
+nvim bitwarden.zsh
+ls ../
+ls ../aliases/
+ls ../plugins/
+nvim load_keys
+nvim ~/.config/zsh/.zshrc 
+ls
+mv load_keys load_keys.zsh
+ls
+nvim load_keys.zsh 
+z ~
+load-keys
+load_keys
+bw get password
+load_keys
+load_keys
+bw get password OpenRouter API Key
+ls
+ls
+z home
+z ~
+load_keys
+nvim .dotfiles/zsh/functions/load_keys.zsh 
+nvim .dotfiles/zsh/functions/bitwarden.zsh 
+nvim .dotfiles/zsh/functions/load_keys.zsh 
+bw sync
+bw list items --search "OpenRouter"
+nvim .dotfiles/zsh/functions/load_keys.zsh 
+nvim .dotfiles/zsh/functions/load_keys.zsh 
+bw sync
+head ~/.dotfiles/zsh/functions/load_keys.zsh 
+load-keys
+echo $OPENROUTER_API_KEY
+load-keys
+echo $OPENROUTER_API_KEY
+load-keys
+bw get password "9442d2e7-3b25-4478-a622-b39c0171d551"\
+
+bw sync
+bw get password "9442d2e7-3b25-4478-a622-b39c0171d551"\
+
+nvim
+echo $OPENROUTER_API_KEY
+load-keys
+echo $OPENROUTER_API_KEY
+nvim
+nvim
+nvim
+nvim
+z bookbot
+nvim
+nvim
+z ~/.config/nvim/lua/plugins
+nvim avante.lua 
+nvim
+nvim
+nvim avante.lua 
+nvim
+nvim avante.lua 
+nvim
+nvim avante.lua 
+nvim
+load-keys
+z .config/zsh/
+ls
+la
+nvim .zshrc
+load-keys
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+z workspace/github/equilone/bookbot
+ls
+ls books/
+nvim main.py 
+load-keys
+nvim
+z .config
+la
+z .local
+ls
+z share
+ls
+z nvim
+ls
+z avante
+ls
+la
+z ~/.local
+ls
+ls share/
+z share/nvim
+ls
+ls lazy/
+ls
+ls mason/
+z lazy
+ls
+z ~/.config/.local/share/nvim
+ls
+ls avante/
+ls lazy/
+z lazy
+z avante.nvim
+ls
+ls plugin/
+nvim plugin/avante.lua 
+ls
+ls plugin/
+ls lua
+ls lua/avante/providers/
+z ~/.config/nvim/plugin
+ls
+z ..
+ls
+z lua/plugins
+ls
+nvim avante.lua
+nvim
+ls
+nvim avante.lua 
+nvim
+nvim
+ls
+z ~/.dotfiles/zsh/functions
+ls
+nvim load_keys.zsh 
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+Hyperland -h
+Hyprland -h
+hyprctl reload
+chz
+ch diff
+gst
+glg
+la
+nvim .chezmoiignore 
+gawd
+gcm "feat(.chezmoiignore): add .git to ignored patterns"
+ch forget ~/.config/starship/
+chad -n ~/.config/starship/
+chad ~/.config/starship/
+ch diff
+chad ~/.config/hypr/hypridle.conf
+ch diff
+chad ~/.dotfiles/zsh/plugins
+ch diff
+nvim ~/.config/starship/starship.toml 
+chad ~/.config/starship/
+z ~/.config/starship/
+ls
+la
+sudo pacman -Scc
+sudo pacman -Syu
+yay -S uv
+z ~
+yay -S uv
+sudo pacman -S uv
+which uv
+z ~
+which go
+ls
+la
+z .local
+ls
+z ..
+nvim .zshenv 
+nvim .zshenv 
+nvim ~/.config/zsh/.zshrc 
+nvim .zshenv 
+yay -Rn go
+z workspace/github/equilone
+ls
+g clone git@github.com:EquilOne/asteroids.git
+g fetch
+ls
+z asteroids
+g fetch
+gst
+la
+g pull origin main
+uv run main.py
+uv run main.py
+uv run main.py
+uv run main.py
+uv run main.py
+uv run main.py
+bootdev run 12d26038-a9f0-4ef7-bb19-a659fc150ed0
+bootdev run 12d26038-a9f0-4ef7-bb19-a659fc150ed0 -s
+bootdev run 12d26038-a9f0-4ef7-bb19-a659fc150ed0 -s
+uv run main.py
+uv run main.py
+uv run main.py
+uv run main.py
+k
+uv run main.py
+uv run main.py
+uv run main.py
+uv run main.py
+bootdev run 482925e6-e043-43a4-b9c6-9eda414bb9a7
+bootdev upgrade
+which go
+source ~/.zshenv
+bootdev upgrade
+bootdev upgrade
+bootdev run 482925e6-e043-43a4-b9c6-9eda414bb9a7 -s
+gst
+la
+cat .gitignore 
+less game_events.jsonl
+less game_state.jsonl
+ls
+gst
+gawd
+gst
+uv run main.py
+uv run main.py
+uv run main.py
+bootdev run e100e54d-23e9-4d44-9a46-e335a7b732b7
+ls
+rm -rf game_events.jsonl 
+ls
+uv run main.py
+  ls
+less game_events.jsonl
+less game_state.jsonl
+bootdev run e100e54d-23e9-4d44-9a46-e335a7b732b7
+nvim game_state.jsonl 
+ls
+less game_state.jsonl
+ls
+nvim game_state.jsonl 
+uv run main.py
+bootdev run e100e54d-23e9-4d44-9a46-e335a7b732b7 -s
+uv run main.py
+uv run main.py
+uv run main.py
+bootdev run dd8853da-b6ec-4975-95c2-2bafdbda2b25
+bootdev run dd8853da-b6ec-4975-95c2-2bafdbda2b25 -s
+uv run main.py
+bootdev run 960e1df9-33f2-4142-a9aa-c66a8f7af398
+bootdev run 960e1df9-33f2-4142-a9aa-c66a8f7af398 -s
+gst
+uv run main.py
+gst
+gawd
+gcm "feat(shot): add shooting and object destruction"
+g push origin main
+uv run main.py
+uv run main.py
+less game_events.jsonl
+less game_state.jsonl
+nvim game_state.jsonl 
+which tldr
+tldr ls
+tldr chezmoi add
+tldr --update
+tldr git log
+z /usr/local/go
+z /usr/local/
+la
+ls
+ls bin/
+ls sbin/
+ls share/
+la bi
+la bin/
+z /etc/profile.d
+ls
+la
+z ..
+ls
+ rm -rf /usr/local/go && tar -C /usr/local -xzf go1.25.4.linux-amd64.tar.gz
+rm -rf /usr/local/go
+yay -S go
+which go
+go version
+which prettier
+which curl
+nvim 
+nvim
+nvim
+nvim
+which rg
+yay --help
+yay -Q ripgrep
+yay -Q file
+tldr file
+echo $OPENROUTER_API_KEY
+z ~/.dotfiles/zsh/functions
+ls
+nvim load_keys.zsh 
+nvim bitwarden.zsh 
+nvim load_keys.zsh 
+z asteroids
+nvim
+nvim
+nvim
+gst
+nvim
+ls
+nvim logger
+nvim logger.py 
+nvim .gitignore 
+gst
+gad asteroid.py circleshape.py
+g add asteroid.py circleshape.py
+gcm "feat(asteroid/circleshape): add moving asteroids and collision calc"
+gst
+gawd
+gcm "feat: add shot radius constant, logging player hit"
+nvim main.py 
+nvim
+z .config
+ls
+yay -Rn inputleap
+brew --help
+brew list
+brew update
+brew upgrade
+yay -Syu
+nvim
+nvim
+z nvim
+ls
+z lua/plugins
+ls
+nvim code-companion.lua 
+nvim
+nvim
+ls
+cat avante.lua 
+ls
+ls ..
+mkdir archive
+ls
+mv avante.lua archive/avante.bak
+ls
+nvim
+nvim
+nvim
+nvim
+nvim
+ls ~/.dotfiles/zsh/functions/load_keys.zsh 
+head ~/.dotfiles/zsh/functions/load_keys.zsh 
+load-keys
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+load-keys
+nvim
+nvim
+nvim
+nvim
+load-keys
+curl https://openrouter.ai/api/v1/chat/completions \\
+  -H "Authorization: Bearer $OPENROUTER_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{\
+    "model": "anthropic/claude-sonnet-4.5",\
+    "messages": [{"role": "user", "content": "Test"}]\
+  }'
+nvim
+nvim
+nvim
+nvim
+z ~/.config/nvim/lua/plugins
+ls
+nvim formatting.lua
+nvim
+nvim
+yay -S jless
+z asteroids
+jless game_state.jsonl
+bootdev run 09dc2ef8-bac4-43b1-81ff-23727cc512f6
+bootdev run 09dc2ef8-bac4-43b1-81ff-23727cc512f6 -s
+gst
+gaes
+gawdd
+gawd
+gst
+less .gitignore
+ls
+nvim .gitignore 
+gst
+git restore --staged game_events.jsonl 
+gst
+uv run main.py
+uv run main
+uv run main.py
+uv run main.py
+uv run main.py
+uv run main.py
+uv run main.py
+uv run main.py
+uv run main.py
+uv run main.py
+gst
+cat .gitignore 
+ls
+ga .gitignore
+g add .gitignore main.py 
+gst
+g add constants.py hud.py 
+gst
+g restore game_events.jsonl 
+gst
+gcm "feat(hud): add asteroid splitting and hud framework"
+g push origin main
+gl
+glg
+nvim
+load-keys
+nvim
+la
+z .venv
+la
+gst
+nvim ../hud.py 
+gawd
+z ..
+gawd
+gcm "feat(hud): add further structure for hud"
+g push origin main
+z ~
+z .config/nvim
+ls
+la lu
+la lua/
+z lua
+la
+ls config/
+ls
+chad ../lua
+ch diff
+z ~
+ch diff
+ch tracked
+ch --help
+ch managed
+ch diff
+chad ./.config/hypr/bindings.conf ./.config/hypr/hyprlock.conf
+z ./.local/share/omarchy/default
+ls
+ch untrack ./hypr
+ch unmanage ./hypr
+ch diff
+chz
+z ~/.local/share/omarchy/default
+gst
+g branch list
+g remote show
+g remote get-url
+eval "$(ssh-agent -s)"
+bw unlock
+bw get item 9442d2e7-3b25-4478-a622-b39c0171d551 --pretty
+lsusb
+yay -Ss fprintd
+z /etc/
+la
+z ~
+la ./.ssh/
+z .ssh
+ls
+z agent
+ls
+la
+z ..
+ssh-add -l
+which ssh-agent
+ssh-agent
+ls
+ssh-add ~/.ssh/id_ed25519
+pwd
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+z ~/.dotfiles/zsh/functions
+ls
+z ~
+z .dotfiles/zsh/functions
+ls
+cat bitwarden.zsh 
+yay -Q secret
+yay -Q key
+yay -Q
+yay -Q | fd
+yay -Q | fzf
+yay -S libsecret
+secret-tool store --label='BWCLI' application bitwarden-cli
+nvim bitwarden.zsh 
+nvim load_keys.zsh 
+ch diff
+z ../..
+ch tracked
+ch managed
+ls
+z zsh
+ls
+chad functions
+z ~
+secret-tool lookup application bitwarden-cli
+load-keys
+z .dotfiles/zsh/functions
+ls
+nvim load_keys.zsh 
+nvim bitwarden.zsh 
+nvim load_keys.zsh 
+z nvim/lua/plugins
+ls
+nvim code-companion.lua 
+nvim code-companion.lua 
+bw get item "9442d2e7-3b25-4478-a622-b39c0171d551" --field "password"
+bw get item --help
+bw get password "9442d2e7-3b25-4478-a622-b39c0171d551"
+load-keys
+echo $OPEN_ROUTER_KEY
+z ~/.dotfiles/zsh/functions
+ls
+nvim load_keys.zsh 
+load-keys
+source ~/.config/zsh/.zshrc
+load-keys
+nvim
+z .config
+ls
+la
+z .local
+z share
+ls
+la
+ls applications/
+z ..
+la
+z ..
+ls
+z .config/nvim/lua
+la
+z plugins
+ls
+less formatting.lua
+nvim formatting.lua 
+ched formatting.lua
+load-keys
+nvim
+load-keys
+nvim
+nvim
+ls
+la
+z .dotfiles
+ls
+z zsh
+ls
+z aliases
+ls
+nvim aliases 
+yay -Syu
+yay -Syu
+brew upgrade
+which fmpeg
+which ffmpeg
+which 7zz
+yay -S p7zip
+which jq
+which poppler
+yay -S poppler
+which pdftoppm
+pdftoppm -v
+which fd
+which rg
+which fzf zoxide resvg
+yay -S resvg
+which fzf zoxide resvg
+yay -S GraphicsMagick
+yay -Ss graphicsmagick
+yay -S graphicsmagick
+which xclip wl-clipboard xsel
+yay -S yazi
+yazi
+ls
+la
+z .dotfiles
+ls
+z zsh
+ls
+z aliases
+ls
+nvim aliases 
+chad aliases
+z ~/.config
+ls
+la
+nvim
+nvim
+nvim
+nvim
+chezmoi cd
+ls
+z dot_config
+ls
+z ..
+z dot_dotfiles
+ls
+z zsh
+ls
+z ~
+z .config
+ls
+nvim
+nvim
+chd
+z .dotfiles
+ls
+z zsh
+ls
+ls functions/
+nvim functions/bitwarden.zsh 
+ls /mnt/
+which ffmpeg
+z ~
+ls
+ls Videos/
+cp /run/media/equilone/Lexar/Chase\ winning\ STATE\ WRESTLING\ FEB\ 2013.mov ~/Videos/
+z /run/media/equilone/Lexar/
+ls
+ffmpeg -i CHRISTMAS\ NATIVITY\ 2017.MOV -c copy -movflags +faststart christmas-nativity2017
+ffmpeg -i CHRISTMAS\ NATIVITY\ 2017.MOV -c:v libx264 -crf 23 -c:a aac christmas-nativity2017.mp4
+ls
+ffmped -i Chase\ winning\ STATE\ WRESTLING\ FEB\ 2013.mov chase-state-championship2013
+ffmpeg -i Chase\ winning\ STATE\ WRESTLING\ FEB\ 2013.mov chase-state-championship2013
+ffmpeg -i Chase\ winning\ STATE\ WRESTLING\ FEB\ 2013.mov -c:v libx264 -crf 23 -c:a aac chase-state-championship-2013
+ffmpeg -i Chase\ winning\ STATE\ WRESTLING\ FEB\ 2013.mov -c:v libx264 -crf 23 -c:a aac chase-state-championship-2013.mp4
+ls
+mkdir mp4
+ls
+rm -rf mp4/
+ls
+.mov
+ls
+mkdir .mov
+ls
+la
+mv .mov mov
+ls
+mv CHRISTMAS\ NATIVITY\ 2017.MOV HOUSE\ FIRE\ AFTERMATH\ mov/
+ls
+mv CHRISTMAS\ NATIVITY\ 2017.MOV HOUSE\ FIRE\ AFTERMATH\ mov/
+mv CHRISTMAS\ NATIVITY\ 2017.MOV HOUSE\ FIRE\ AFTERMATH\ mov
+ls
+mv Chase\ winning\ STATE\ WRESTLING\ FEB\ 2013.mov mov
+ls
+ls mov/
+mv HOUSE\ FIRE\ AFTERMATH\ mov
+ls
+mv HOUSE\ FIRE\ AFTERMATH\ mov/
+mv HOUSE\ FIRE\ AFTERMATH\ ./mov
+mv --help
+ls
+z .config
+ls
+la
+z .local
+z share
+ls
+which ranger
+z ~/.local
+ls
+z share
+ls
+z omarchy
+gst
+ls
+ranger
+z config
+ls
+ls
+z omarchy
+ls
+z ..
+ls
+gst
+z hypr
+ls
+gst
+cat autostart.conf 
+cat bindings.conf 
+nvim bindings.conf 
+la
+z /run/media/equilone
+ls
+ranger imac_backup/
+ls
+z ..
+z ~
+ls
+la
+z .local/share
+ls
+la
+z ~/.config
+ls
+z ..
+ls
+z /run/media/equilone/785B-3DFF
+ls
+la
+cat ._2019\ UX250H.pdf 
+nvim ._2019\ UX250H.pdf 
+la
+la Sys
+la 'System Volume Information'
+z ..
+ls
+ls
+z ..
+ls
+z equilone
+ls
+z /run/media/equilone/XPANCE\ 64G
+ls
+ffmpeg -i All\ nativity/Nativity2025/IMG_4994.MOV -c:v libx264 -c:a aac -movflags +faststart nativity2025.mp4
+ls
+ls
+la
+z ..
+ls
+z XPANCE\ 64G
+ls
+ffmpeg -v error -i All\ nativity/Nativity2025/IMG_4994.MOV -f null - 2>mov_errors.log
+ls
+cat mov
+cat mov_errors.log 
+z All\ nativity/Nativity2025
+ls
+ffmpeg -i IMG_4994.MOV -c:v livx264 -c:a aac output.mp4
+ffmpeg -i IMG_4994.MOV -c:v libx264 -c:a aac output.mp4
+yay -S protonpass
+mv HPSCANS/* ./
+ls
+mv Jenny\'s\ PIX/* ./
+rm -rf LOST.DIR/
+rm -rf Movies/
+ls
+mv Pictures/* ./
+rm -rf temporaryitems/
+l
+ls
+lt
+la
+la HPSCANS/
+rm -rf HPSCANS/
+rm -rf Jenny\'s\ PIX/
+ls
+lt
+rm -rf avi/
+ls
+la Pictures/
+rm -rf Pictures/
+ls
+rg 'sort'
+z ~
+ls
+z Work
+ls
+z tries
+ls
+z ~
+ls
+la
+z .cache
+ls
+z ..
+ls
+la
+z .dotfiles
+ls
+z zh
+z zsh
+ls
+z functions
+ls
+z ..
+ls
+ls plugins/
+z ~
+tldr rg
+tldr fd
+fd "script" | fzf
+fd "scripts"
+fd "sort"
+fd --extension sh
+which pip
+yay -S pip
+which python
+python3 --version
+python3 --help
+yay -Syu
+python -m ensurepip --upgrade
+yay -Ss tipyup organizer
+yay -Ss tipyup 
+yay -S python-pipx
+pipx ensurepath
+pipx install organizer-cle
+pipx install organizer-cli
+tldr organize
+z /run/media/equilone/XPANCE\ 64G
+ls
+organize
+Organize safe
+npm install -g tidyup
+tidyup --version
+tidyup --ext
+tidyup ./ --ext
+ls
+tidyup . --ext
+tidyup /run/media/equilone/XPANCE\ 64G --ext
+z ~
+pipx --help
+pipz uninstall organizer-cli 
+pipx uninstall organizer-cli 
+npm uninstall -g tidyup
+/usr/bin
+ls
+z /usr/bin
+ls
+z en
+ls
+z /usr/src
+ls
+z ..
+ls
+z local
+ls
+z /
+tldr fd
+fd --extension sh
+fd --extension sh | fzf
+z ~
+ls
+la
+ls .var/
+fd --extension sh | fzf
+z .local/bin
+ls
+ls scripts/
+nvim scripts/sort_files.sh 
+cp scripts/sort_files.sh scripts/sort_files.sh.bak
+nvim scripts/organize-by-type.sh
+chmod +x scripts/organize-by-type.sh
+z ~
+ls
+ls Downloads/
+./.local/bin/scripts/organize-by-type.sh ~/Downloads
+ls
+ls Downloads/
+ls Downloads/Logos/
+ls Downloads/Logos/jpg/
+./.local/bin/scripts/organize-by-type.sh /run/media/equilone/XPANCE\ 64G
+z /run/media/equilone/XPANCE\ 64G
+ls
+mv thumb/GospelDoct_Forgiveness-04_movie.mp4.thumb_100x139 ./
+ls
+rm -rf thumb/
+ranger
+ranger
+ranger
+ranger
+hyprctl activewindow
+hyprctl clients all 
+hyprctl clients  
+nvim
+hyprctl monitors all
+nvim .config/hypr/input.conf
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim .config/nvim/lua/plugins/themes.lua
+dos2unix .config/nvim/lua/plugins/themes.lua 
+z plugins
+ls
+cat theme.lua
+cat all-themes.lua 
+cat themes.lua 
+nvim omarchy-theme-hotreload.lua 
+nvim
+nvim
+nvim
+nvim themes.lua 
+ls
+mv theme.lua.bak theme.lua
+ls
+nvim
+cat theme.lua 
+nvim
+nvim ./.config/hypr/monitors.conf 
+nvim .config/ghostty/config 
+nvim
+nvim
+yz
+rm -rf ~/.config/nvim/lua/plugins/snacks.lua 
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim 
+z .config/omarchy/themes
+ls
+z rose-pine-dark
+ls
+nvim neovim.lua 
+gst
+ls backgrounds/
+g remote show 
+g remote get-url 
+g remote get-url origin  
+ls
+hyprctl devices
+z /run/media/equilone
+ls
+la
+ls
+z XPANCE\ 64G
+ls
+z All\ nativity
+ls
+z Nativity2025
+ls
+ls
+ffmpeg -i IMG_4994.MOV -c copy .movflags +faststart family-nativity2025
+ffmpeg -i IMG_4994.MOV -c copy .movflags +faststart family-nativity2025.mp4
+ffmpeg -i IMG_4994.MOV -c copy -movflags +faststart family-nativity2025.mp4
+ls
+ls
+z ..
+ls
+mkdir Nativity2017
+mv christmas-nativity2017.mp4 Nativity2017/family-nativity2017.mp4
+ls
+rm -rf 2011-10-067-the-nativity-360p-eng.mp4 
+ls
+z ..
+ls
+z ~/.local/bin/scripts
+ls
+nvim organize-by-type.sh 
+ls
+./organize-by-type.sh /run/media/equilone/XPANCE\ 64G
+ls
+nvim organize-by-type.sh 
+~
+z ~
+ls
+hyprctl monitors all
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim
+nvim 
+z .config/nvim/lua/plugins
+ls
+mv themes.lua themes.lua.bak
+ls
+mv theme.lua theme.lua.bak
+ls
+nvim
+nvim
+ls
+nvim
+nvim
+opencode
+brew upgrade
+brew install opencode
+opencode
+z ..
+z ..
+ls
+opencode
+zsh
+z .config
+ls
+ls zsh/
+mkdidr zsh/completion zsh/tools
+mkdir zsh/completion zsh/tools
+ls zsh/
+g clone git@github.com:EquilOne/new-shell-conf.git
+ls
+yay -Syu
+yay -S tmux
+yay -S yazi
+yay -S carapace
+ls
+mv new-shell-conf/shell ./
+ls
+ls shell/
+ls new-shell-conf/zsh/
+la new-shell-conf/zsh/
+la
+la zsh
+mv new-shell-conf/zsh/.zshrc ./zsh/.zshrc 
+mv new-shell-conf/zsh/completion ./zsh/completion
+ls zsh/completion/
+mv zsh/completion/completion zsh/
+yz
+lt
+mv zsh/completion/completion/main.zsh zsh/completion/
+lt
+rm -rf zsh/completion/completion
+ls
+lt
+mv new-shell-conf/zsh/tools zsh/
+lt
+ls
+la
+la always 
+la auto 
+la .local/share/
+rg "cursormode"
+ls
+la
+z ..
+la
+la .dotfiles/
+z .dotfiles/zsh
+ls
+ls functions/
+ls plugins/
+rm -rf plugins/cursor_mode 
+ls ../
+ls ~/.config/zsh/tools/
+nvim ~/.config/zsh/tools/main.zsh 
+ls
+ls aliases/
+ls plugins/
+z config
+ls
+z zsh
+ls
+ls ls completion/
+ls tools/
+nvim completion/main.zsh 
+z ..
+ls
+la new-shell-config/
+la new-shell-conf/
+which bat
+mv new-shell-conf/bat ./
+ls
+mv new-shell-conf/nvim ./nvim
+ls new-shell-conf/
+mv new-shell-conf/yazi ./
+ls new-shell-conf/zsh/
+mv new-shell-conf/README.md ./
+ls new-shell-conf/
+cat ../.zshenv 
+ls
+z ..
+ls
+la
+cat .zshenv
+nvim .zshenv 
+la
+mv Downloads/.bashrc ~/
+mv Downloads/.bash_profile ~/
+cat .bashrc 
+bash
