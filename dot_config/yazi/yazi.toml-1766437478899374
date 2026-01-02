@@ -1,0 +1,25 @@
+# =============================================================================
+# YAZI CONFIGURATION
+# =============================================================================
+
+[manager]
+ratio          = [ 1, 4, 3 ]
+sort_by        = "alphabetical"
+sort_dir_first = true
+show_hidden    = false
+show_symlink   = true
+
+[opener]
+edit = [
+    { run = '$EDITOR "$1"', desc = "$EDITOR", block = true },
+]
+open = [
+    { run = 'xdg-open "$1"', desc = "Open" },
+]
+
+[open]
+rules = [
+    { mime = "text/*", use = [ "edit" ] },
+    { mime = "image/*", use = [ "open" ] },
+    { mime = "video/*", use = [ "open" ] },
+]
