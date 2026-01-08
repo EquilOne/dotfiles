@@ -19,12 +19,35 @@ shell-integration-features = no-cursor
 
 # Keyboard bindings
 keybind = f11=toggle_fullscreen
+# Clipboard bindings
 keybind = shift+insert=paste_from_clipboard
 keybind = control+insert=copy_to_clipboard
+# Tabs/Splits
+# Resize splits
 keybind = super+control+shift+alt+arrow_down=resize_split:down,100
 keybind = super+control+shift+alt+arrow_up=resize_split:up,100
 keybind = super+control+shift+alt+arrow_left=resize_split:left,100
 keybind = super+control+shift+alt+arrow_right=resize_split:right,100
+# Create tabs/splits
+keybind = ctrl+a>t=new_tab
+keybind = ctrl+a>minus=new_split:down
+keybind = ctrl+a>shift+backslash=new_split:right
+# Close tabs/splits
+keybind = ctrl+a>shift+x=close_tab
+keybind = ctrl+a>x=close_surface
+# Navigate tabs
+keybind = ctrl+a>bracket_left=previous_tab
+keybind = ctrl+a>bracket_right=next_tab
+# Navigate splits
+keybind = ctrl+a>h=goto_split:left
+keybind = ctrl+a>j=goto_split:down
+keybind = ctrl+a>k=goto_split:up
+keybind = ctrl+a>l=goto_split:right
+# Zoom split
+keybind = ctrl+a>z=toggle_split_zoom
+
+# Quick terminal (Quake style)
+keybind = global:ctrl+backquote=toggle_quick_terminal
 
 # Slowdown mouse scrolling
 mouse-scroll-multiplier = 1.0
