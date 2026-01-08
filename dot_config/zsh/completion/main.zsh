@@ -1,6 +1,7 @@
 # Zsh completion system
 autoload -Uz compinit
 compinit
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
 # ev package manager autocomplete comands
 if command -v uv >/dev/null 2>&1 && eval "$(uv generate-shell-completion zsh 2>/dev/null)"; then
