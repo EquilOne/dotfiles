@@ -1,6 +1,0 @@
-.git/
-.git/**
-nvim/*
-!nvim/lua/
-!nvim/lua/**
-!nvim/.gitignore

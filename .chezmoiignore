@@ -1,1 +1,8 @@
-.git/
+.git
+.git/**
+**/.git
+**/.git/**
+nvim/*
+!nvim/lua
+!nvim/lua/**
+!nvim/.gitignore
