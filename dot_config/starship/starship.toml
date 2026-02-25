@@ -1,0 +1,268 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+$username\
+$directory\
+$git_branch\
+$git_status\
+$fill\
+$custom\
+$c\
+$elixir\
+$elm\
+$golang\
+$haskell\
+$java\
+$julia\
+$nodejs\
+$nim\
+$rust\
+$scala\
+$conda\
+$python\n \
+$line_break\
+$os\
+$shell\
+[](fg:text) \
+"""
+
+add_newline = true
+follow_symlinks = true
+palette = "rose-pine-moon"
+
+[palettes.rose-pine-moon]
+overlay = '#393552'
+surface = '#2a273f'
+love = '#eb6f92'
+gold = '#f6c177'
+# rose = '#ea9a97' # moon
+rose = '#d7827e' # dawn
+# pine = '#3e8fb0' # moon
+pine = '#31748f' # main 
+# pine = '#286983' # dawn
+foam = '#9ccfd8'
+iris = '#c4a7e7'
+text = '#e0def4'
+hightlight = '#56526e'
+subtle = '#908caa'
+muted = '#6e6a86'
+
+[shell]
+disabled = false
+style = "bg:rose fg:text"
+format = "[ $indicator ]($style)[](fg:rose) "
+bash_indicator = ""
+fish_indicator = ""
+zsh_indicator = ""
+powershell_indicator = ""
+cmd_indicator = ""
+
+[os]
+disabled = false
+style = "bg:pine fg:text"
+format = "[](fg:pine)[ $symbol]($style)"
+
+[directory]
+format = "[](fg:muted)[$path]($style)[](fg:muted) "
+style = "bg:muted fg:text"
+truncation_length = 3
+truncation_symbol = "…/"
+read_only = " 󰌾"
+truncate_to_repo = true
+
+[directory.substitutions]
+Documents = "󰈙"
+Downloads = " "
+Music = " "
+Pictures = " "
+# "~" = ' :'
+# "~" = " "
+"root" = " "
+".config" = " "
+"workspace" = " "
+"github" = " "
+"equilone" = " "
+
+[fill]
+style = "fg:overlay"
+symbol = " "
+
+[git_branch]
+format = "[](fg:overlay)[$symbol $branch]($style)[](fg:overlay)"
+style = "bg:overlay fg:subtle"
+symbol = ""
+
+[git_status]
+disabled = false
+style = "bg:overlay fg:love"
+format = "[$ahead_behind]($style)[$all_status]($style)"
+up_to_date = '[ ](fg:overlay)[\(✓\)](bg:overlay fg:iris)[](fg:overlay)'
+untracked = '[ ](fg:overlay)[?\($count\)](bg:overlay fg:gold)[](fg:overlay)'
+stashed = '[ ](fg:overlay)[\$](bg:overlay fg:iris)[](fg:overlay)'
+modified = '[ ](fg:overlay)[!\($count\)](bg:overlay fg:gold)[](fg:overlay)'
+renamed = '[ ](fg:overlay)[»\($count\)](bg:overlay fg:iris)[](fg:overlay)'
+deleted = '[ ](fg:overlay)[✘\($count\)](style)[](fg:overlay)'
+staged = '[ ](fg:overlay)[++\($count\)](bg:overlay fg:gold)[](fg:overlay)'
+ahead = '[ ](fg:overlay)[⇡\(${count}\)](bg:overlay fg:foam)[](fg:overlay)'
+diverged = '[ ](fg:overlay)⇕[\[](bg:overlay fg:iris)[⇡\(${ahead_count}\)](bg:overlay fg:foam)[⇣\(${behind_count}\)](bg:overlay fg:rose)[\]](bg:overlay fg:iris)[](fg:overlay)'
+behind = '[ ](fg:overlay)[⇣\(${count}\)](bg:overlay fg:rose)[](fg:overlay)'
+
+[time]
+disabled = true
+format = " [](fg:overlay)[ $time 󰴈 ]($style)[](fg:overlay)"
+style = "bg:overlay fg:rose"
+time_format = "%I:%M%P"
+use_12hr = false
+
+[username]
+disabled = false
+format = "[](fg:surface)[ $user]($style)[](fg:surface) "
+show_always = true
+style_root = "bg:surface fg:rose"
+style_user = "bg:surface fg:foam"
+aliases = { "chase" = "Equil", "equilone" = "Equil", "root" = "Daddy" }
+
+[line_break]
+disabled = false
+
+[custom.chezmoi]
+style = "bg:overlay fg:subtle"
+format = "[](fg:overlay)[$symbol$output]($style)[](fg:overlay)"
+disabled = false
+symbol = "󰣫 "
+when = ''' [[ $PWD == $XDG_DATA_HOME/chezmoi* ]] '''
+command = """chezmoi --version | awk '{print $3}' | tr -d ','"""
+
+# Languages
+
+[c]
+style = "bg:overlay fg:subtle"
+format = " [](fg:overlay)[$symbol$version]($style)[](fg:overlay)"
+disabled = false
+symbol = " "
+
+[elixir]
+style = "bg:overlay fg:subtle"
+format = " [](fg:overlay)[$symbol$version]($style)[](fg:overlay)"
+disabled = false
+symbol = " "
+
+[elm]
+style = "bg:overlay fg:subtle"
+format = " [](fg:overlay)[$symbol$version]($style)[](fg:overlay)"
+disabled = false
+symbol = " "
+
+[golang]
+style = "bg:overlay fg:subtle"
+format = " [](fg:overlay)[$symbol$version]($style)[](fg:overlay)"
+disabled = false
+symbol = " "
+
+[haskell]
+style = "bg:overlay fg:subtle"
+format = " [](fg:overlay)[$symbol$version]($style)[](fg:overlay)"
+disabled = false
+symbol = " "
+
+[java]
+style = "bg:overlay fg:subtle"
+format = " [](fg:overlay)[$symbol$version]($style)[](fg:overlay)"
+disabled = false
+symbol = " "
+
+[julia]
+style = "bg:overlay fg:subtle"
+format = " [](fg:overlay)[$symbol$version]($style)[](fg:overlay)"
+disabled = false
+symbol = " "
+
+[nodejs]
+style = "bg:overlay fg:subtle"
+format = " [](fg:overlay)[$symbol$version]($style)[](fg:overlay)"
+disabled = true
+symbol = "󰎙 "
+
+[nim]
+style = "bg:overlay fg:subtle"
+format = " [](fg:overlay)[$symbol$version]($style)[](fg:overlay)"
+disabled = false
+symbol = "󰆥 "
+
+[rust]
+style = "bg:overlay fg:subtle"
+format = " [](fg:overlay)[$symbol$version]($style)[](fg:overlay)"
+disabled = false
+symbol = " "
+
+[scala]
+style = "bg:overlay fg:subtle"
+format = " [](fg:overlay)[$symbol$version]($style)[](fg:overlay)"
+disabled = false
+symbol = " "
+
+[python]
+style = "bg:overlay fg:subtle"
+format = "[](fg:overlay)[$symbol]($style)[$version]($style)[](fg:overlay)"
+disabled = false
+symbol = '󱔎 '
+# pyenv_version_name = true
+# pyenv_prefix = "uv "
+# python_binary = ["uv", "run", "python"]
+detect_files = ["uv.lock", "pyproject.toml", ".python-version"]
+
+[conda]
+style = "bg:overlay fg:subtle"
+format = " [](fg:overlay)[$symbol$environment]($style)[](fg:overlay)"
+disabled = false
+symbol = '🅒 '
+
+# Operating Systems
+
+[os.symbols]
+Alpaquita = " "
+Alpine = " "
+AlmaLinux = " "
+Amazon = " "
+Android = " "
+Arch = " "
+Artix = " "
+CachyOS = " "
+CentOS = " "
+Debian = " "
+DragonFly = " "
+Emscripten = " "
+EndeavourOS = " "
+Fedora = " "
+# Fedora = " "
+FreeBSD = " "
+Garuda = "󰛓 "
+Gentoo = " "
+HardenedBSD = "󰞌 "
+Illumos = "󰈸 "
+Kali = " "
+Linux = " "
+Mabox = " "
+Macos = " "
+Manjaro = " "
+Mariner = " "
+MidnightBSD = " "
+Mint = " "
+NetBSD = " "
+NixOS = " "
+Nobara = " "
+OpenBSD = "󰈺 "
+openSUSE = " "
+OracleLinux = "󰌷 "
+Pop = " "
+Raspbian = " "
+Redhat = " "
+RedHatEnterprise = " "
+RockyLinux = " "
+Redox = "󰀘 "
+Solus = "󰠳 "
+SUSE = " "
+Ubuntu = " "
+Unknown = " "
+Void = " "
+Windows = "󰍲 "
