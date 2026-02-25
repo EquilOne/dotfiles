@@ -3,3 +3,5 @@
 -- Add any additional options here
 vim.opt.relativenumber = true
 vim.opt.mousescroll = "ver:1,hor:1"
+vim.opt.textwidth = 80
+vim.opt.colorcolumn = "+1"
