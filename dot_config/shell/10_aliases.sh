@@ -8,9 +8,18 @@ alias shutdown='sudo shutdown now'
 alias restart='sudo reboot'
 
 # Navigation
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ~='cd ~'
+if command -v zoxide >/dev/null 2>&1; then
+  # cd replacements
+  alias ..='z ..'
+  alias ...='z ../..'
+  alias ~='z ~'
+  alias home='z ~'
+else
+  alias ..='cd ..'
+  alias ...='cd ../..'
+  alias ~='cd ~'
+  alias home='cd ~'
+fi
 
 # eza, add icons, group by directory
 alias eza='eza --icons=always --color=always --group-directories-first'
@@ -58,7 +67,8 @@ alias gwd='git add .'
 alias gc='git commit -v'
 alias gcm='git commit -m'
 alias gst='git status'
-alias gps='git push'
+alias gfo='git fetch origin'
+alias gpsh='git push'
 alias gpl='git pull'
 alias gl='git log --oneline'
 alias gll='git log'
@@ -83,7 +93,6 @@ alias cat='bat'
 if command -v yazi >/dev/null 2>&1; then
   alias yz='yazi'
   alias yw='yazi "$WORKSPACE"'
-  alias yah='yazi "$(history 1 | awk "{print \$2}")"'
 fi
 
 # Debug: Show what loaded
