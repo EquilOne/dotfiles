@@ -19,10 +19,20 @@ This configuration uses a **numbered loading system** for deterministic executio
 │   ├── fzf_functions.sh      # FZF utility functions
 │   └── yazi_integration.sh   # Yazi file manager integration
 ├── 20_path.sh                # PATH management
+├── 21_zsh_completions.sh     # Zsh completion system init
+├── 22_alias_completions.sh   # Completion wrappers for aliases
+├── 25_completions/           # Multi-shell completion bridge
+│   └── carapace.sh           # Carapace completions
 ├── 30_tools/                 # Tool initializations
+│   ├── direnv_init.sh        # Direnv hook
 │   ├── fzf_init.sh           # FZF + keybindings
 │   └── zoxide_init.sh        # Zoxide + aliases
-└── test_config.sh            # Configuration test script
+├── tests/                    # Modular test suite
+│   ├── helpers.sh            # Shared test helpers
+│   ├── test_env.sh           # Environment tests
+│   ├── test_functions.sh     # Function/Alias tests
+│   └── test_path.sh          # PATH integrity tests
+└── test_config.sh            # Test runner (delegates to tests/)
 ```
 
 ## 🔢 Numbering System
@@ -58,6 +68,9 @@ Files load in numerical order (00-89 for core, 90+ for future secrets):
 | **Zoxide** | Smart directory jumper | `30_tools/zoxide_init.sh` | ✅ Active |
 | **Yazi** | Terminal file manager | `15_functions/` | ✅ Active |
 | **Starship** | Cross-shell prompt | `15_functions/01_starship.sh` | ✅ Active |
+| **Direnv** | Directory env loader | `30_tools/direnv_init.sh` | ✅ Active |
+| **Carapace** | Multi-shell completion bridge | `25_completions/carapace.sh` | ✅ Active |
+| **Vivid** | LS_COLORS generator | `00_rose_pine_colors.sh` | ✅ Optional |
 
 ### Key Functions
 
@@ -69,6 +82,7 @@ Files load in numerical order (00-89 for core, 90+ for future secrets):
 | `y` | `15_functions/02_yazi_shell_wrapper.sh` | Yazi with auto-cd |
 | `fy` | `15_functions/yazi_integration.sh` | FZF → Yazi integration |
 | `zy` | `15_functions/yazi_integration.sh` | Zoxide → Yazi integration |
+| `set_starship_width` | `15_functions/01_starship.sh` | Set Starship config based on terminal width (COLUMNS < 40: minimal, < 80: narrow, else full) |
 
 ### Available Aliases
 
@@ -76,9 +90,20 @@ Files load in numerical order (00-89 for core, 90+ for future secrets):
 |-------|---------|-------------|
 | `yz` | `yazi` | Standard yazi launcher |
 | `yw` | `yazi "$WORKSPACE"` | Open yazi in workspace |
-| `yah` | `yazi "$(history 1 | awk '{print $2}')"` | Open yazi in last dir |
-| `zz` | `z -` | Jump to previous directory |
-| `zh` | `zoxide query -l -s` | List zoxide history |
+| `cat` | `bat` | Modern `cat` replacement (when `bat` is installed) |
+| `..`, `...` | `z ..`, `z ../..` | Directory navigation (zoxide-based) |
+| `~`, `home` | `z ~` | Jump to home directory |
+
+#### Git Aliases
+`g`, `gs`, `gsc`, `ga`, `gwd`, `gc`, `gcm`, `gst`, `gfo`, `gpsh`, `gpl`, `gl`, `gll`, `glg`, `glten`, `glgten`
+
+#### Chezmoi Aliases
+`ch`, `cha`, `che`, `chd`, `chu`, `chst`, `chap`, `chz`
+
+#### File Listing (ls/eza)
+- **Standard**: `ls`, `la`, `ll`, `lla`
+- **Tree**: `lt`, `lta`, `ltl`, `ltla`
+- **Smart**: `lzr` (recent), `lzs` (size), `lzg` (git), `lzgt` (git tree)
 
 ## 🎨 Theme: Rose Pine Moon
 
@@ -89,9 +114,14 @@ All tools use the Rose Pine Moon color scheme:
 
 ## 🧪 Testing
 
-Run the test script to verify configuration:
+Run the full test suite to verify configuration:
 ```bash
 ~/.config/shell/test_config.sh
+```
+
+Run a single test module:
+```bash
+source ~/.config/shell/tests/helpers.sh && load_config && source ~/.config/shell/tests/test_functions.sh && summary
 ```
 
 Or enable debug mode:
@@ -99,6 +129,14 @@ Or enable debug mode:
 export SHELL_DEBUG=1
 source ~/.config/shell/loader.sh
 ```
+
+## 🍺 Homebrew
+
+The `05_brew.sh` script searches for the `brew` binary in multiple locations across Linux and macOS in priority order:
+1. `/home/linuxbrew/.linuxbrew/bin/brew`
+2. `$HOME/.linuxbrew/bin/brew`
+3. `/opt/homebrew/bin/brew`
+4. `$HOME/.homebrew/bin/brew`
 
 ## 🔧 Troubleshooting
 

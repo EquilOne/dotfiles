@@ -1,4 +1,7 @@
-# ~/.config/shell/26_alias_completions.sh
+#!/bin/bash
+# =============================================================================
+# ALIAS COMPLETIONS (zsh-specific)
+# =============================================================================
 
 if [[ "$CURRENT_SHELL" == "zsh" ]]; then
   # Inherit eza completions for ls aliases
@@ -17,4 +20,8 @@ if [[ "$CURRENT_SHELL" == "zsh" ]]; then
   }
 
   # Add more alias completions as needed
+fi
+
+if [[ -n "$SHELL_DEBUG" ]]; then
+    echo "[DEBUG] 22_alias_completions.sh loaded - alias completions configured"
 fi

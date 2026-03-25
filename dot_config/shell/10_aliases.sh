@@ -87,7 +87,9 @@ alias chap='chezmoi apply'
 alias chz='chezmoi cd'
 
 # Cat --> Bat
-alias cat='bat'
+if command -v bat >/dev/null 2>&1; then
+  alias cat='bat'
+fi
 
 # Yazi enhancements
 if command -v yazi >/dev/null 2>&1; then

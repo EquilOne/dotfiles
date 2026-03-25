@@ -25,8 +25,10 @@ export ROSE_PINE_HIGHLIGHT_HIGH='#56526e' # Strong highlight
 export FZF_DEFAULT_OPTS="\
 --color=bg+:$ROSE_PINE_OVERLAY,bg:$ROSE_PINE_SURFACE,spinner:$ROSE_PINE_ROSE,hl:$ROSE_PINE_GOLD,fg:$ROSE_PINE_TEXT,header:$ROSE_PINE_IRIS,info:$ROSE_PINE_PINE,pointer:$ROSE_PINE_ROSE,marker:$ROSE_PINE_GOLD,fg+:$ROSE_PINE_TEXT,prompt:$ROSE_PINE_PINE,hl+:$ROSE_PINE_GOLD,border:$ROSE_PINE_HIGHLIGHT_LOW,preview-bg:$ROSE_PINE_BASE"
 
-# Vivid
-export LS_COLORS="$(vivid generate rose-pine-moon)"
+# Vivid - LS_COLORS via rose-pine-moon theme (only if vivid is installed)
+if command -v vivid >/dev/null 2>&1; then
+    export LS_COLORS="$(vivid generate rose-pine-moon)"
+fi
 
 # Debug output
 if [[ -n "$SHELL_DEBUG" ]]; then

@@ -11,7 +11,6 @@
 | `y` | Change shell directory with Yazi |
 | `yz` | Simple Yazi launcher |
 | `yw` | Open Yazi in workspace directory |
-| `yah` | Open Yazi in last command's directory |
 
 ## FZF (Fuzzy Finder)
 
@@ -28,8 +27,6 @@
 |---------|-------------|
 | `z <query>` | Jump to directory (frecency-based) |
 | `zi` | Interactive directory picker with FZF |
-| `zz` | Jump to previous directory |
-| `zh` | List all zoxide history |
 
 ## Yazi (File Manager)
 
@@ -50,10 +47,19 @@
 | `Space` | Select file |
 | `/` | Search |
 
-## Debugging
+## Git Aliases
+
+`g`, `gs`, `gsc`, `ga`, `gwd`, `gc`, `gcm`, `gst`, `gfo`, `gpsh`, `gpl`, `gl`, `gll`, `glg`, `glten`, `glgten`
+
+## Chezmoi Aliases
+
+`ch`, `cha`, `che`, `chd`, `chu`, `chst`, `chap`, `chz`
+
+## Testing
 
 | Command | Description |
 |---------|-------------|
+| `~/.config/shell/test_config.sh` | Full suite |
+| `source tests/helpers.sh && load_config && source tests/test_env.sh && summary` | Single module |
 | `export SHELL_DEBUG=1` | Enable debug mode |
 | `source ~/.config/shell/loader.sh` | Reload configuration |
-| `~/.config/shell/test_config.sh` | Run configuration tests |
