@@ -7,7 +7,15 @@ tools:
   webfetch: false
 permissions:
   edit: deny
-  bash: allow
+  bash:
+    - pattern: "git diff*"
+      mode: allow
+    - pattern: "git status"
+      mode: allow
+    - pattern: "git commit*"
+      mode: ask
+    - pattern: "*"
+      mode: deny
   webfetch: deny
 ---
 
@@ -21,7 +29,7 @@ Rules:
 - Subject: imperative mood, ≤72 chars, no period at end
 - Reject unverified assumptions. State contradictions before confirming
 - If diff is empty, report "No staged changes found" and stop
-- Never auto-commit; output message only unless user explicitly asks
+- Ask permission to commit; output message only if user denies permission
 
 Workflow:
 
