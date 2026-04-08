@@ -25,5 +25,6 @@ echo "==============================="
 source "$TESTS_DIR/test_env.sh"
 source "$TESTS_DIR/test_functions.sh"
 source "$TESTS_DIR/test_path.sh"
+source "$TESTS_DIR/test_zsh_completions.sh"
 
 summary
