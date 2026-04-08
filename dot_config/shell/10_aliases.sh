@@ -24,7 +24,7 @@ fi
 # eza, add icons, group by directory
 alias eza='eza --icons=always --color=always --group-directories-first'
 
-# eza to ls when eza availble
+# eza to ls when eza available
 if command -v eza >/dev/null 2>&1; then
   # ls replacements
   alias ls='eza -F auto'
@@ -67,9 +67,12 @@ alias gwd='git add .'
 alias gc='git commit -v'
 alias gcm='git commit -m'
 alias gst='git status'
-alias gfo='git fetch origin'
 alias gpsh='git push'
 alias gpl='git pull'
+alias gf='git fetch'
+alias gpsho='git push origin'
+alias gplo='git pull origin'
+alias gfo='git fetch origin'
 alias gl='git log --oneline'
 alias gll='git log'
 alias glg='git log --oneline --graph'
