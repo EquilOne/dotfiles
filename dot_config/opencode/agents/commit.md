@@ -1,6 +1,6 @@
 ---
 description: Generate concise, conventional Git commit messages from staged diffs
-mode: subagent
+mode: primary
 model: openrouter/inception/mercury-2
 tools:
   bash: true

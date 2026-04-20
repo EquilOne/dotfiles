@@ -1,0 +1,19 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "autoupdate": false,
+  "default_agent": "chat",
+  "agent": {
+    "plan": {
+      "model": "openrouter/deepseek/deepseek-v3.2"
+    },
+    "build": {
+      "model": "openrouter/anthropic/claude-sonnet-4.6"
+    },
+    "explore": {
+      "model": "openrouter/google/gemini-3.1-flash-lite-preview"
+    },
+    "general": {
+      "model": "openrouter/google/gemini-3-flash-preview"
+    }
+  }
+}
