@@ -2,10 +2,7 @@
 description: Review code for quality, security, correctness, and style
 mode: subagent
 model: openrouter/x-ai/grok-4.1-fast
-tools:
-  bash: true
-  webfetch: true
-permissions:
+permission:
   edit: deny
   bash: allow
   webfetch: allow
@@ -27,6 +24,8 @@ Rules:
 - Verify security patterns against official docs via webfetch when uncertain
 - Never auto-apply fixes; output findings only unless explicitly asked
 - Flag all findings regardless of severity — no silent omissions
+- If target is documentation or config, review for correctness, clarity, consistency, and risky settings
+- Never delegate write tasks to circumvent own lack of write permission
 
 Workflow:
 

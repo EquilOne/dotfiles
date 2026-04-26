@@ -7,7 +7,7 @@
       "model": "openrouter/deepseek/deepseek-v3.2"
     },
     "build": {
-      "model": "openrouter/anthropic/claude-sonnet-4.6"
+      "model": "openrouter/moonshotai/kimi-k2.6"
     },
     "explore": {
       "model": "openrouter/google/gemini-3.1-flash-lite-preview"
