@@ -95,15 +95,17 @@ load_config() {
         "10_aliases.sh"
         "15_functions/01_starship.sh"
         "15_functions/02_yazi_shell_wrapper.sh"
-        "15_functions/fzf_functions.sh"
-        "15_functions/yazi_integration.sh"
+        "15_functions/03_fzf_functions.sh"
+        "15_functions/04_yazi_integration.sh"
         "20_path.sh"
         "21_zsh_completions.sh"
         "22_alias_completions.sh"
-        "25_completions/carapace.sh"
-        "30_tools/direnv_init.sh"
-        "30_tools/fzf_init.sh"
-        "30_tools/zoxide_init.sh"
+        "25_completions/01_carapace.sh"
+        "25_completions/02_uv.sh"
+        "30_tools/01_direnv_init.sh"
+        "30_tools/02_fzf_init.sh"
+        "30_tools/03_keychain_init.sh"
+        "30_tools/04_zoxide_init.sh"
     )
 
     for conf in "${configs[@]}"; do

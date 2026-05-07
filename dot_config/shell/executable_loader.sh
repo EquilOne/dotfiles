@@ -5,13 +5,17 @@
 # Usage: source ~/.config/shell/loader.sh
 # Debug: export SHELL_DEBUG=1 before sourcing
 
-# Early exit if not interactive
-[[ $- != *i* ]] && return
-
 # Only load files for the current shell
 CURRENT_SHELL="${ZSH_VERSION:+zsh}${BASH_VERSION:+bash}"
 CURRENT_SHELL="${CURRENT_SHELL:-unknown}"
 export CURRENT_SHELL
+
+# Early exit if not interactive
+if [[ "$CURRENT_SHELL" == "bash" ]]; then
+    [[ $- != *i* ]] && return
+elif [[ "$CURRENT_SHELL" == "zsh" ]]; then
+    [[ ! -o interactive ]] && return
+fi
 
 CONFIG_DIR="$HOME/.config/shell"
 
@@ -32,7 +36,7 @@ elif [[ "$CURRENT_SHELL" == "bash" ]]; then
 fi
 
 # Load numbered items (files and dirs) in order
-for item in "$CONFIG_DIR"/[0-9][0-9]*; do
+for item in "$CONFIG_DIR"/[0-8][0-9]*; do
 	[[ -e "$item" ]] || continue
 
     	if [[ -f "$item" && "$item" == *.sh ]]; then
