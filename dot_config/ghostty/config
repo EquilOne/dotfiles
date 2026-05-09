@@ -4,11 +4,14 @@ config-file = ?"~/.config/omarchy/current/theme/ghostty.conf"
 # Font
 font-family = "MartianMono Nerd Font"
 font-style = Regular
-font-size = 14
+font-size = 12
 
 # Window
-window-padding-x = 14
-window-padding-y = 14
+window-width = 120
+window-height = 36
+window-padding-x = 36
+window-padding-y = 24
+window-inherit-font-size = true
 confirm-close-surface=false
 resize-overlay = never
 
@@ -29,25 +32,52 @@ keybind = super+control+shift+alt+arrow_up=resize_split:up,100
 keybind = super+control+shift+alt+arrow_left=resize_split:left,100
 keybind = super+control+shift+alt+arrow_right=resize_split:right,100
 # Create tabs/splits
-keybind = ctrl+a>t=new_tab
-keybind = ctrl+a>minus=new_split:down
-keybind = ctrl+a>shift+backslash=new_split:right
+keybind = alt+ctrl+a>t=new_tab
+keybind = alt+ctrl+a>minus=new_split:down
+keybind = alt+ctrl+a>shift+backslash=new_split:right
 # Close tabs/splits
-keybind = ctrl+a>shift+x=close_tab
-keybind = ctrl+a>x=close_surface
+keybind = alt+ctrl+a>shift+x=close_tab
+keybind = alt+ctrl+a>x=close_surface
 # Navigate tabs
-keybind = ctrl+a>bracket_left=previous_tab
-keybind = ctrl+a>bracket_right=next_tab
+keybind = alt+ctrl+a>bracket_left=previous_tab
+keybind = alt+ctrl+a>bracket_right=next_tab
 # Navigate splits
-keybind = ctrl+a>h=goto_split:left
-keybind = ctrl+a>j=goto_split:down
-keybind = ctrl+a>k=goto_split:up
-keybind = ctrl+a>l=goto_split:right
+keybind = alt+ctrl+a>h=goto_split:left
+keybind = alt+ctrl+a>j=goto_split:down
+keybind = alt+ctrl+a>k=goto_split:up
+keybind = alt+ctrl+a>l=goto_split:right
 # Zoom split
-keybind = ctrl+a>z=toggle_split_zoom
+keybind = alt+ctrl+a>z=toggle_split_zoom
+
+# Enter tmux-like scroll mode
+keybind = ctrl+b=activate_key_table:scroll
+
+# Scroll mode
+keybind = scroll/j=scroll_page_lines:3
+keybind = scroll/k=scroll_page_lines:-3
+keybind = scroll/ctrl+d=scroll_page_fractional:0.5
+keybind = scroll/ctrl+u=scroll_page_fractional:-0.5
+keybind = scroll/g>g=scroll_to_top
+keybind = scroll/shift+g=scroll_to_bottom
+
+# Search
+keybind = scroll/slash=start_search
+keybind = scroll/]=navigate_search:next
+keybind = scroll/[=navigate_search:previous
+
+# Open full scrollback in editor
+keybind = scroll/v=write_scrollback_file:open
+
+# Exit mode
+keybind = scroll/q=deactivate_key_table
+keybind = scroll/escape=deactivate_key_table
+keybind = scroll/catch_all=ignore
 
 # Quick terminal (Quake style)
 keybind = global:ctrl+backquote=toggle_quick_terminal
 
 # Slowdown mouse scrolling
 mouse-scroll-multiplier = 1.0
+
+# Fix general slowness on hyprland (https://github.com/ghostty-org/ghostty/discussions/3224)
+async-backend = epoll

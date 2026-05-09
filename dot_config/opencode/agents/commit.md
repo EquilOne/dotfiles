@@ -28,7 +28,7 @@ Rules:
 
 Workflow:
 
-1. Run `git diff --staged` via bash tool
+1. Run `git diff --staged`
 2. Identify change type, affected scope, and primary intent
 3. Output: one-line subject (required) + optional body if change is complex
 4. If multiple unrelated changes detected, warn user to split commits

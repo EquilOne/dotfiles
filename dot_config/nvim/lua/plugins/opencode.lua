@@ -4,7 +4,27 @@ return {
     -- Recommended for `ask()` and `select()`.
     -- Required for `snacks` provider.
     ---@module 'snacks' <- Loads `snacks.nvim` types for configuration intellisense.
-    { "folke/snacks.nvim", opts = { input = {}, picker = {}, terminal = {} } },
+    {
+      "folke/snacks.nvim",
+      optional = true,
+      opts = {
+        input = {},
+        picker = {
+          actions = {
+            opencode_send = function(...)
+              return require("opencode").snacks_picker_send(...)
+            end,
+          },
+          win = {
+            input = {
+              keys = {
+                ["<a-a>"] = { "opencode_send", mode = { "n", "i" } },
+              },
+            },
+          },
+        },
+      },
+    },
     -- Ensure which-key is told about our new "ai" group
     {
       "folke/which-key.nvim",
@@ -64,7 +84,7 @@ return {
     {
       "<S-C-u>",
       function()
-        require("opencode").command("session.half.page.up")
+        require("opencode").command("messages_half_page_up")
       end,
       desc = "Scroll AI Up",
       mode = "n",
@@ -72,19 +92,42 @@ return {
     {
       "<S-C-d>",
       function()
-        require("opencode").command("session.half.page.down")
+        require("opencode").command("messages_half_page_down")
       end,
       desc = "Scroll AI Down",
       mode = "n",
     },
   },
   config = function()
-    ---@type opencode.Opts
-    vim.g.opencode_opts = {
-      -- Your configuration, if any — see `lua/opencode/config.lua`, or "goto definition" on the type or field.
+    local opencode_cmd = "opencode --port"
+
+    ---@type snacks.terminal.Opts
+    local snacks_terminal_opts = {
+      win = {
+        position = "bottom", -- 'right', 'left', 'bottom', 'top', 'float'
+        enter = false,
+        on_win = function(win)
+          -- Required: sets up opencode keymaps + cleanup in the terminal
+          require("opencode.terminal").setup(win.win)
+        end,
+      },
     }
 
-    -- Required for `opts.events.reload`.
+    ---@type opencode.Opts
+    vim.g.opencode_opts = {
+      server = {
+        start = function()
+          require("snacks.terminal").open(opencode_cmd, snacks_terminal_opts)
+        end,
+        stop = function()
+          require("snacks.terminal").get(opencode_cmd, snacks_terminal_opts):close()
+        end,
+        toggle = function()
+          require("snacks.terminal").toggle(opencode_cmd, snacks_terminal_opts)
+        end,
+      },
+    }
+
     vim.o.autoread = true
   end,
 }

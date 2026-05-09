@@ -3,23 +3,49 @@
 # =============================================================================
 
 [mgr]
-ratio          = [ 1, 4, 3 ]
-sort_by        = "alphabetical"
+ratio = [1, 4, 3]
+sort_by = "alphabetical"
 sort_dir_first = true
-show_hidden    = false
-show_symlink   = true
+show_hidden = false
+show_symlink = true
+sort_sensitive = false
+sort_reverse = false
+linemode = "size"
+scrolloff = 3
 
 [opener]
-edit = [
-    { run = '$EDITOR "$1"', desc = "$EDITOR", block = true },
-]
-open = [
-    { run = 'xdg-open "$1"', desc = "Open" },
-]
+edit = [{ run = '$EDITOR "%s"', desc = "$EDITOR", block = true }]
+open = [{ run = 'xdg-open "%s"', desc = "Open" }]
 
 [open]
 rules = [
-    { mime = "text/*", use = [ "edit" ] },
-    { mime = "image/*", use = [ "open" ] },
-    { mime = "video/*", use = [ "open" ] },
+  { mime = "text/*", use = [
+    "edit",
+  ] },
+  { mime = "image/*", use = [
+    "open",
+  ] },
+  { mime = "video/*", use = [
+    "open",
+  ] },
 ]
+
+[preview]
+# Adjust these values for your display resolution:
+max_width = 1920  # For 1080p/4K displays
+max_height = 1080 # For 1080p displays
+# max_width    = 1200  # Default safe value
+# max_height   = 800   # Default safe value
+wrap = "no"
+tab_size = 4
+image_quality = 85
+image_filter = "lanczos3"
+
+[input]
+position = "bottom"
+
+[tasks]
+micro_workers = 8 # Matches 8-core CPU
+
+[select]
+position = "bottom"
