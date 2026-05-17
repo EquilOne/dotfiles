@@ -93,6 +93,7 @@ return {
 				"hadolint",
 				-- Misc
 				"codespell",
+				"oxlint",
 				-- Hyprland
 				"hyprls",
 			},
