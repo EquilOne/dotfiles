@@ -11,13 +11,13 @@
       "model": "openrouter/deepseek/deepseek-v4-flash"
     },
     "build": {
-      "model": "openrouter/moonshotai/kimi-k2.6"
+      "model": "openrouter/minimax/minimax-m3"
     },
     "explore": {
-      "model": "openrouter/google/gemini-3.1-flash-lite-preview"
+      "model": "openrouter/deepseek/deepseek-v4-flash"
     },
     "general": {
-      "model": "openrouter/google/gemini-3-flash-preview"
+      "model": "openrouter/deepseek/deepseek-v4-flash"
     }
   }
 }
