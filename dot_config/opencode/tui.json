@@ -1,6 +1,9 @@
 {
   "$schema": "https://opencode.ai/tui.json",
-  "theme": "system",
+  "theme": "rosepine",
+  "scroll_acceleration": {
+    "enabled": true,
+  },
   "keybinds": {
     "leader": "ctrl+x",
 
@@ -9,7 +12,6 @@
     "sidebar_toggle": "<leader>b",
     "status_view": "<leader>s",
     "scrollbar_toggle": "none",
-    "username_toggle": "none",
     "tool_details": "none",
     "terminal_title_toggle": "none",
 

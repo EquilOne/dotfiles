@@ -1,4 +1,4 @@
-"$schema" = 'https://starship.rs/config-schema.json'
+"$schema" = "https://starship.rs/config-schema.json"
 
 format = """
 $username\n\
@@ -20,9 +20,9 @@ $rust\
 $scala\
 $conda\
 $python\
-$custom\
 $line_break\
 $os\
+$custom\
 $shell\
 [](fg:text) \
 """
@@ -30,21 +30,21 @@ $shell\
 palette = "rose-pine-moon"
 
 [palettes.rose-pine-moon]
-overlay = '#393552'
-surface = '#2a273f'
-love = '#eb6f92'
-gold = '#f6c177'
+overlay = "#393552"
+surface = "#2a273f"
+love = "#eb6f92"
+gold = "#f6c177"
 # rose = '#ea9a97' # moon
-rose = '#d7827e' # dawn
+rose = "#d7827e"  # dawn
 # pine = '#3e8fb0' # moon
-pine = '#31748f' # main 
+pine = "#31748f"  # main
 # pine = '#286983' # dawn
-foam = '#9ccfd8'
-iris = '#c4a7e7'
-text = '#e0def4'
-hightlight = '#56526e'
-subtle = '#908caa'
-muted = '#6e6a86'
+foam = "#9ccfd8"
+iris = "#c4a7e7"
+text = "#e0def4"
+highlight = "#56526e"
+subtle = "#908caa"
+muted = "#6e6a86"
 
 [shell]
 disabled = false
@@ -60,6 +60,54 @@ cmd_indicator = ""
 disabled = false
 style = "bg:pine fg:text"
 format = "\n[](fg:pine)[ $symbol]($style)"
+
+[os.symbols]
+Alpaquita = " "
+Alpine = " "
+AlmaLinux = " "
+Amazon = " "
+Android = " "
+Arch = " "
+Artix = " "
+CachyOS = " "
+CentOS = " "
+Debian = " "
+DragonFly = " "
+Emscripten = " "
+EndeavourOS = " "
+Fedora = " "
+# Fedora = " "
+FreeBSD = " "
+Garuda = "󰛓 "
+Gentoo = " "
+HardenedBSD = "󰞌 "
+Illumos = "󰈸 "
+Kali = " "
+Linux = " "
+Mabox = " "
+Macos = " "
+Manjaro = " "
+Mariner = " "
+MidnightBSD = " "
+Mint = " "
+NetBSD = " "
+NixOS = " "
+Nobara = " "
+OpenBSD = "󰈺 "
+openSUSE = " "
+OracleLinux = "󰌷 "
+Pop = " "
+Raspbian = " "
+Redhat = " "
+RedHatEnterprise = " "
+RockyLinux = " "
+Redox = "󰀘 "
+Solus = "󰠳 "
+SUSE = " "
+Ubuntu = " "
+Unknown = " "
+Void = " "
+Windows = "󰍲 "
 
 [directory]
 format = "[](fg:muted)[$path]($style)[](fg:muted) "
@@ -126,13 +174,41 @@ disabled = false
 
 [custom.chezmoi]
 style = "bg:overlay fg:subtle"
-format = "[](fg:overlay)[$symbol$output]($style)[](fg:overlay)"
+format = "[ $output ]($style)"
 disabled = false
 symbol = "󰣫 "
 when = ''' [[ $PWD == $XDG_DATA_HOME/chezmoi* ]] '''
 command = """chezmoi --version | awk '{print $3}' | tr -d ','"""
 
 # Languages
+
+[custom.vi_mode_normal]
+disabled = false
+style = "bg:overlay fg:rose"
+format = "[ $output ]($style)"
+command = "echo $ZVM_CURRENT_MODE"
+when = ''' [[ -n "$ZVM_CURRENT_MODE" && "$ZVM_CURRENT_MODE" == "Normal" ]] '''
+
+[custom.vi_mode_visual]
+disabled = false
+style = "bg:overlay fg:iris"
+format = "[ $output ]($style)"
+command = "echo $ZVM_CURRENT_MODE"
+when = ''' [[ -n "$ZVM_CURRENT_MODE" && "$ZVM_CURRENT_MODE" == "Visual" || "$ZVM_CURRENT_MODE" == "v" ]] '''
+
+[custom.vi_mode_v-line]
+disabled = false
+style = "bg:overlay fg:iris"
+format = "[ $output ]($style)"
+command = "echo $ZVM_CURRENT_MODE"
+when = ''' [[ -n "$ZVM_CURRENT_MODE" && "$ZVM_CURRENT_MODE" == "V-Line" ]] '''
+
+[custom.vi_mode_replace]
+disabled = false
+style = "bg:overlay fg:love"
+format = "[ $output ]($style)"
+command = "echo $ZVM_CURRENT_MODE"
+when = ''' [[ -n "$ZVM_CURRENT_MODE" && "$ZVM_CURRENT_MODE" == "Replace" || "$ZVM_CURRENT_MODE" == "r" ]] '''
 
 [c]
 style = "bg:overlay fg:subtle"
@@ -203,63 +279,15 @@ symbol = " "
 [python]
 style = "bg:overlay fg:subtle"
 format = "[](fg:overlay)[$symbol]($style)[$version]($style)[](fg:overlay)"
-version_format = 'v${major}.${minor}'
+version_format = "v${major}.${minor}"
 disabled = false
-symbol = '󱔎 '
+symbol = "󱔎 "
 detect_files = ["uv.lock", "pyproject.toml", ".python-version"]
 
 [conda]
 style = "bg:overlay fg:subtle"
 format = "[](fg:overlay)[$symbol$environment]($style)[](fg:overlay)"
 disabled = false
-symbol = '🅒 '
+symbol = "🅒 "
 
 # Operating Systems
-
-[os.symbols]
-Alpaquita = " "
-Alpine = " "
-AlmaLinux = " "
-Amazon = " "
-Android = " "
-Arch = " "
-Artix = " "
-CachyOS = " "
-CentOS = " "
-Debian = " "
-DragonFly = " "
-Emscripten = " "
-EndeavourOS = " "
-Fedora = " "
-# Fedora = " "
-FreeBSD = " "
-Garuda = "󰛓 "
-Gentoo = " "
-HardenedBSD = "󰞌 "
-Illumos = "󰈸 "
-Kali = " "
-Linux = " "
-Mabox = " "
-Macos = " "
-Manjaro = " "
-Mariner = " "
-MidnightBSD = " "
-Mint = " "
-NetBSD = " "
-NixOS = " "
-Nobara = " "
-OpenBSD = "󰈺 "
-openSUSE = " "
-OracleLinux = "󰌷 "
-Pop = " "
-Raspbian = " "
-Redhat = " "
-RedHatEnterprise = " "
-RockyLinux = " "
-Redox = "󰀘 "
-Solus = "󰠳 "
-SUSE = " "
-Ubuntu = " "
-Unknown = " "
-Void = " "
-Windows = "󰍲 "

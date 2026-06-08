@@ -1,18 +1,32 @@
 @import "../omarchy/current/theme/waybar.css";
 
 * {
-  background-color: @background;
-  color: @foreground;
   border: none;
   border-radius: 0;
   min-height: 0;
-  font-family: 'MartianMono Nerd Font';
+  font-family: "MartianMono Nerd Font", "Font Awesome 6 Free";
   font-size: 12px;
 }
 
 window.DP-3 * {
   font-size: 16px;
+  /* font-weight: bold; */
 }
+
+window#waybar {
+  background-color: @background;
+  color: @foreground;
+  opacity: 0.85;
+  border-radius: 6px;
+}
+
+/* window#waybar.monitor { */
+/*   border-radius: 6px; */
+/* } */
+/**/
+/* window#waybar.laptop { */
+/*   border-radius: 6px; */
+/* } */
 
 .modules-left {
   margin-left: 8px;
@@ -24,23 +38,77 @@ window.DP-3 * {
 
 #workspaces button {
   all: initial;
-  padding: 0 6px;
-  margin: 0 1.5px;
+  background-color: @muted;
+  color: @foreground;
+  padding: 4px 8px;
+  padding-right: 8px;
+  margin: 8px 4px;
   min-width: 9px;
+  border-radius: 6px;
+  border: none;
+  box-shadow: none;
+  text-shadow: none;
+  transition: none;
+}
+
+#workspaces button.special {
+  padding: 4px 8px;
+}
+
+#workspaces button.active {
+  background-color: @rose;
+  color: @highlighthigh;
 }
 
 #workspaces button.empty {
-  opacity: 0.5;
+  opacity: 0.75;
+  padding: 4px 0;
+  padding-right: 0;
+  padding-left: 8px;
+}
+
+#workspaces .taskbar-window {
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+}
+
+#workspaces button image {
+  opacity: 1;
+  background: transparent;
+  box-shadow: none;
+}
+
+#workspaces .workspace-label {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-size: 18px;
 }
 
 #cpu,
 #battery,
 #pulseaudio,
-#custom-omarchy,
-
 #custom-update {
   min-width: 12px;
   margin: 0 7.5px;
+}
+
+#custom-omarchy {
+  all: initial;
+  background: transparent;
+  background-color: @highlightmed;
+  color: @pine;
+  padding: 4px 12px 4px 16px;
+  margin: 8px 4px;
+  min-width: 9px;
+  border-radius: 6px;
+  border: none;
+  box-shadow: none;
+  text-shadow: none;
+  transition: none;
 }
 
 #tray {
@@ -74,7 +142,6 @@ tooltip {
 .hidden {
   opacity: 0;
 }
-
 
 #custom-screenrecording-indicator,
 #custom-idle-indicator,
