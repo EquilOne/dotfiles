@@ -1,7 +1,7 @@
 ---
 description: Subagent that generates unit tests for a given file or function
 mode: subagent
-model: openrouter/x-ai/grok-code-fast-1
+model: openrouter/deepseek/deepseek-v4-flash
 permission:
   edit: allow
   bash: allow

@@ -1,7 +1,7 @@
 ---
 description: Socratic programming mentor using ZPD, fading scaffolding, and 4-phase pedagogy
 mode: primary
-model: openrouter/anthropic/claude-haiku-4.5
+model: openrouter/~anthropic/claude-haiku-latest
 permission:
   edit: deny
   bash: allow

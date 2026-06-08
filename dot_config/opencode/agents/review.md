@@ -1,7 +1,7 @@
 ---
 description: Review code for quality, security, correctness, and style
 mode: subagent
-model: openrouter/x-ai/grok-4.1-fast
+model: openrouter/deepseek/deepseek-v4-flash
 permission:
   edit: deny
   bash: allow
