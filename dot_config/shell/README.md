@@ -16,22 +16,29 @@ This configuration uses a **numbered loading system** for deterministic executio
 ├── 15_functions/             # Custom shell functions
 │   ├── 01_starship.sh        # Starship prompt integration
 │   ├── 02_yazi_shell_wrapper.sh  # Yazi shell wrapper
-│   ├── fzf_functions.sh      # FZF utility functions
-│   └── yazi_integration.sh   # Yazi file manager integration
+│   ├── 03_fzf_functions.sh   # FZF utility functions
+│   └── 04_yazi_integration.sh # Yazi file manager integration
 ├── 20_path.sh                # PATH management
 ├── 21_zsh_completions.sh     # Zsh completion system init
 ├── 22_alias_completions.sh   # Completion wrappers for aliases
 ├── 25_completions/           # Multi-shell completion bridge
-│   └── carapace.sh           # Carapace completions
+│   ├── 01_carapace.sh        # Carapace completions
+│   ├── 02_uv.sh              # UV completions
+│   └── 03_hyprctl.sh         # Hyprland completions
 ├── 30_tools/                 # Tool initializations
-│   ├── direnv_init.sh        # Direnv hook
-│   ├── fzf_init.sh           # FZF + keybindings
-│   └── zoxide_init.sh        # Zoxide + aliases
+│   ├── 01_direnv_init.sh     # Direnv hook
+│   ├── 02_fzf_init.sh        # FZF + keybindings
+│   ├── 03_keychain_init.sh   # SSH/GPG keychain
+│   ├── 04_zoxide_init.sh     # Zoxide + aliases
+│   └── 05_zsh_vi_mode.sh     # Zsh Vi mode
 ├── tests/                    # Modular test suite
 │   ├── helpers.sh            # Shared test helpers
 │   ├── test_env.sh           # Environment tests
 │   ├── test_functions.sh     # Function/Alias tests
-│   └── test_path.sh          # PATH integrity tests
+│   ├── test_path.sh          # PATH integrity tests
+│   └── test_zsh_completions.sh # Zsh completion tests
+├── AGENTS.md                 # LLM Agent instructions
+├── KEYBINDINGS.md            # Keyboard shortcut reference
 └── test_config.sh            # Test runner (delegates to tests/)
 ```
 
@@ -41,8 +48,9 @@ Files load in numerical order (00-89 for core, 90+ for future secrets):
 
 - **00-09**: Core environment setup
 - **10-19**: User conveniences (aliases, prompts)
-- **15**: Function libraries
-- **20-29**: System configuration (PATH, etc.)
+- **15**: Function libraries (sourced as a directory)
+- **20-29**: System configuration (PATH, completions)
+- **25**: Completion libraries (sourced as a directory)
 - **30-39**: Tool initializations
 - **90-99**: Reserved for local/secret configurations
 
@@ -52,6 +60,10 @@ Files load in numerical order (00-89 for core, 90+ for future secrets):
 
 1. **Bash**: `~/.bashrc` → `loader.sh` → numbered files
 2. **Zsh**: `~/.zshenv` → `$ZDOTDIR/.zshrc` → `loader.sh` → numbered files
+
+### Shell Detection
+
+The `loader.sh` script detects the current shell by checking `$ZSH_VERSION` and `$BASH_VERSION`, setting the `$CURRENT_SHELL` environment variable. This variable is used throughout the configuration for shell-specific logic and guards.
 
 ### Loader Features
 
@@ -64,24 +76,26 @@ Files load in numerical order (00-89 for core, 90+ for future secrets):
 
 | Tool | Purpose | Config Location | Status |
 |------|---------|-----------------|---------|
-| **FZF** | Fuzzy finder | `30_tools/fzf_init.sh` | ✅ Active |
-| **Zoxide** | Smart directory jumper | `30_tools/zoxide_init.sh` | ✅ Active |
+| **FZF** | Fuzzy finder | `30_tools/02_fzf_init.sh` | ✅ Active |
+| **Zoxide** | Smart directory jumper | `30_tools/04_zoxide_init.sh` | ✅ Active |
 | **Yazi** | Terminal file manager | `15_functions/` | ✅ Active |
 | **Starship** | Cross-shell prompt | `15_functions/01_starship.sh` | ✅ Active |
-| **Direnv** | Directory env loader | `30_tools/direnv_init.sh` | ✅ Active |
-| **Carapace** | Multi-shell completion bridge | `25_completions/carapace.sh` | ✅ Active |
+| **Direnv** | Directory env loader | `30_tools/01_direnv_init.sh` | ✅ Active |
+| **Carapace** | Multi-shell completion bridge | `25_completions/01_carapace.sh` | ✅ Active |
+| **Keychain** | SSH/GPG agent management | `30_tools/03_keychain_init.sh` | ✅ Active |
+| **Zsh Vi Mode** | Vi keybindings for Zsh | `30_tools/05_zsh_vi_mode.sh` | ✅ Zsh only |
 | **Vivid** | LS_COLORS generator | `00_rose_pine_colors.sh` | ✅ Optional |
 
 ### Key Functions
 
 | Command | Source | Description |
 |---------|--------|-------------|
-| `rgf` | `15_functions/fzf_functions.sh` | Ripgrep + FZF content search |
-| `fgb` | `15_functions/fzf_functions.sh` | Git branch switcher (FZF) |
-| `zi` | `30_tools/zoxide_init.sh` | Interactive directory picker |
+| `rgf` | `15_functions/03_fzf_functions.sh` | Ripgrep + FZF content search |
+| `fgb` | `15_functions/03_fzf_functions.sh` | Git branch switcher (FZF) |
+| `zi` | `30_tools/04_zoxide_init.sh` | Interactive directory picker |
 | `y` | `15_functions/02_yazi_shell_wrapper.sh` | Yazi with auto-cd |
-| `fy` | `15_functions/yazi_integration.sh` | FZF → Yazi integration |
-| `zy` | `15_functions/yazi_integration.sh` | Zoxide → Yazi integration |
+| `fy` | `15_functions/04_yazi_integration.sh` | FZF → Yazi integration |
+| `zy` | `15_functions/04_yazi_integration.sh` | Zoxide → Yazi integration |
 | `set_starship_width` | `15_functions/01_starship.sh` | Set Starship config based on terminal width (COLUMNS < 40: minimal, < 80: narrow, else full) |
 
 ### Available Aliases
@@ -95,9 +109,9 @@ Files load in numerical order (00-89 for core, 90+ for future secrets):
 | `~`, `home` | `z ~` | Jump to home directory |
 
 #### Git Aliases
-`g`, `gs`, `gsc`, `ga`, `gwd`, `gc`, `gcm`, `gst`, `gfo`, `gpsh`, `gpl`, `gl`, `gll`, `glg`, `glten`, `glgten`
+`g`, `gs`, `gsc`, `ga`, `gwd`, `gc`, `gcm`, `gst`, `gf`, `gfo`, `gpsh`, `gpsho`, `gpl`, `gplo`, `gl`, `gll`, `glg`, `glten`, `glgten`
 
-#### Chezmoi Aliases
+#### Chezmoi Aliases (requires `chezmoi` to be installed)
 `ch`, `cha`, `che`, `chd`, `chu`, `chst`, `chap`, `chz`
 
 #### File Listing (ls/eza)
@@ -204,4 +218,4 @@ All configurations respect XDG Base Directory specification:
 
 ## 🎓 References
 - [Shell Keybindings](KEYBINDINGS.md) - Quick reference card
-- [AI Context](LLM_CONTEXT.md) - Development assistance
+- [Agent Guidelines](AGENTS.md) - LLM Agent instructions and conventions

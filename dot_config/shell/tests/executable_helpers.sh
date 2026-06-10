@@ -102,10 +102,12 @@ load_config() {
         "22_alias_completions.sh"
         "25_completions/01_carapace.sh"
         "25_completions/02_uv.sh"
+        "25_completions/03_hyprctl.sh"
         "30_tools/01_direnv_init.sh"
         "30_tools/02_fzf_init.sh"
         "30_tools/03_keychain_init.sh"
         "30_tools/04_zoxide_init.sh"
+        "30_tools/05_zsh_vi_mode.sh"
     )
 
     for conf in "${configs[@]}"; do

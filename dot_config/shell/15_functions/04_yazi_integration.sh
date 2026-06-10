@@ -13,7 +13,12 @@ fy() {
         echo "FZF not installed"
         return 1
     fi
-    
+
+    if ! command -v fd >/dev/null 2>&1; then
+        echo "fd not installed"
+        return 1
+    fi
+     
     local target
     target=$(fd --type d --hidden --follow --exclude .git 2>/dev/null | \
         fzf --preview 'eza --tree --level=2 --color=always {} 2>/dev/null || ls -la {}' \

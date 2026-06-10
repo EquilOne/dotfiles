@@ -14,6 +14,8 @@ if command -v carapace >/dev/null 2>&1; then
     zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
     zstyle ':completion:*:git:*' group-order 'main commands' 'alias commands' 'external commands'
     source <(carapace _carapace)
+    # Exclude hyprctl from carapace to avoid conflicting with our custom completion
+    export CARAPACE_EXCLUDES='hyprctl,hyprpm'
   elif [[ "$CURRENT_SHELL" == "bash" ]]; then
     export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
     export CARAPACE_MATCH=1

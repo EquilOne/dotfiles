@@ -2,7 +2,7 @@
 
 ## What This Is
 
-Modular Bash/Zsh dotfiles at `~/.config/shell` with deterministic, numbered loading.
+Modular Bash/Zsh dotfiles at `~/.config/shell` with deterministic, numbered loading. See `README.md` for architecture details and `KEYBINDINGS.md` for keybindings.
 
 ## Architecture
 
@@ -13,6 +13,7 @@ Modular Bash/Zsh dotfiles at `~/.config/shell` with deterministic, numbered load
   - `10-19`: Aliases, prompts
   - `15`: Function libraries (sourced as a directory)
   - `20-29`: PATH, completions
+  - `25`: Completion libraries (sourced as a directory)
   - `30-39`: Tool initializations
 - **Shell detection**: `$CURRENT_SHELL` is set from `$ZSH_VERSION`/`$BASH_VERSION` in `loader.sh`
 - **Interactive guard**: `loader.sh` exits immediately if `[[ $- != *i* ]]`
@@ -26,6 +27,7 @@ Modular Bash/Zsh dotfiles at `~/.config/shell` with deterministic, numbered load
 
 ## Developer Commands
 
+- **Update dependencies**: `pnpm install` (for npm-based tooling)
 - **Run full test suite**: `~/.config/shell/test_config.sh`
 - **Run single test module** (bash only): `source ~/.config/shell/tests/helpers.sh && load_config && source ~/.config/shell/tests/test_<module>.sh && summary`
 - **Debug loading**: `export SHELL_DEBUG=1` then `source ~/.config/shell/loader.sh`
