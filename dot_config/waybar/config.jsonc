@@ -267,12 +267,14 @@
       "battery"
     ],
     "hyprland/workspaces": {
+      "active-only": true,
       "show-special": true,
       "all-outputs": false,
       "format": "{icon}{windows}",
       "format-icons": {
         "special": "",
         "default": "",
+        "empty": "󱂬",
         "1": "󰼏 ",
         "2": "󰼐 ",
         "3": "󰼑 ",
