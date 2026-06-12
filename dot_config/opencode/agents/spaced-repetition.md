@@ -1,7 +1,7 @@
 ---
 description: Subagent for researching and creating lessons and spaced-repetition suggestions from a given topic
 mode: subagent
-model: openrouter/qwen/qwen3.6-plus
+model: openrouter/minimax/minimax-m3
 permission:
   edit: deny
   bash: deny

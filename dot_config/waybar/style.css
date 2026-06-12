@@ -2,31 +2,34 @@
 
 * {
   border: none;
-  border-radius: 0;
+  /* border-radius: 0; */
   min-height: 0;
   font-family: "MartianMono Nerd Font", "Font Awesome 6 Free";
   font-size: 12px;
 }
 
-window.DP-3 * {
-  font-size: 16px;
-  /* font-weight: bold; */
-}
+/* window.DP-3 * { */
+/*   font-size: 16px; */
+/*   font-weight: bold; */
+/* } */
 
 window#waybar {
-  background-color: @background;
+  background-color: alpha(@background, 0.85);
   color: @foreground;
-  opacity: 0.85;
   border-radius: 6px;
 }
 
-/* window#waybar.monitor { */
-/*   border-radius: 6px; */
-/* } */
-/**/
-/* window#waybar.laptop { */
-/*   border-radius: 6px; */
-/* } */
+window#waybar.monitor {
+  border-radius: 6px;
+}
+
+window#waybar.monitor * {
+  font-size: 16px;
+}
+
+window#waybar.laptop {
+  border-radius: 6px;
+}
 
 .modules-left {
   margin-left: 8px;

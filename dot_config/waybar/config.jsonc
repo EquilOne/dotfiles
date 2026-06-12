@@ -56,19 +56,8 @@
           "hicolor"
         ],
         "on-click-window": "hyprctl dispatch focuswindow address:{address}"
-        // "app_ids-mapping": {
-        //   "chrome-perplexity.ai__-Default": "Perplexity AI"
-        // }
       }
     },
-    //   "persistent-workspaces": {
-    //     "1": [],
-    //     "2": [],
-    //     "3": [],
-    //     "4": [],
-    //     "5": []
-    //   }
-    // },
     "custom/omarchy": {
       "format": "<span> </span>",
       "on-click": "omarchy-menu",
@@ -274,7 +263,7 @@
       "format-icons": {
         "special": "",
         "default": "",
-        "empty": "󱂬",
+        // "empty": "󱂬",
         "1": "󰼏 ",
         "2": "󰼐 ",
         "3": "󰼑 ",
