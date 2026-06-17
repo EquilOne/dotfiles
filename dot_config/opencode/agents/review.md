@@ -1,7 +1,8 @@
 ---
 description: Review code for quality, security, correctness, and style
 mode: subagent
-model: openrouter/deepseek/deepseek-v4-flash
+model: openrouter/openai/gpt-5.4-mini
+reasoning_effort: xhigh
 permission:
   edit: deny
   bash: allow

@@ -1,15 +1,15 @@
 ---
 description: Generate concise, conventional Git commit messages from staged diffs
-mode: primary
+mode: subagent
 model: openrouter/inception/mercury-2
 permission:
   edit: deny
   bash:
+    "*": deny
     "git diff*": allow
     "git status*": allow
     "git log*": allow
     "git commit*": ask
-    "*": deny
   webfetch: deny
 ---
 
