@@ -1,8 +1,9 @@
 ---
 description: Subagent that writes, refactors, and implements new code
 mode: subagent
-model: openrouter/openai/gpt-5.4-mini
-reasoning_effort: xhigh
+model: openrouter/z-ai/glm-5.2
+reasoning:
+  effort: xhigh
 permission:
   edit: allow
   bash: allow

@@ -1,7 +1,7 @@
 ---
 description: Lightweight orchestrator for non-code tasks; delegates to specialist subagents
 mode: primary
-model: openrouter/deepseek/deepseek-v4-flash
+model: openrouter/minimax/minimax-m3
 permission:
   edit: deny
   bash: deny
