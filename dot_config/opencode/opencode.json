@@ -5,7 +5,7 @@
     "@franlol/opencode-md-table-formatter@latest"
   ],
   "autoupdate": false,
-  "default_agent": "chat",
+  "default_agent": "fixer",
   "agent": {
     "plan": {
       "model": "openrouter/xiaomi/mimo-v2.5-pro"
@@ -14,10 +14,14 @@
       "model": "openrouter/minimax/minimax-m3"
     },
     "explore": {
-      "model": "openrouter/deepseek/deepseek-v4-flash"
+      "model": "openrouter/minimax/minimax-m3"
     },
     "general": {
-      "model": "openrouter/deepseek/deepseek-v4-flash"
+      "model": "openrouter/minimax/minimax-m2.5"
+    },
+    "scout": {
+      "mode": "subagent",
+      "model": "openrouter/minimax/minimax-m2.5"
     }
   }
 }

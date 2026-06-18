@@ -1,7 +1,9 @@
 ---
 description: Subagent that generates unit tests for a given file or function
 mode: subagent
-model: openrouter/deepseek/deepseek-v4-flash
+model: openrouter/moonshotai/kimi-k2.7-code
+reasoning:
+  effort: high
 permission:
   edit: allow
   bash: allow

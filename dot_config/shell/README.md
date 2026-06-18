@@ -1,5 +1,36 @@
 # Shell Configuration System
 
+<!--toc:start-->
+
+- [Shell Configuration System](#shell-configuration-system)
+  - [🏗️ Architecture](#🏗️-architecture)
+  - [🔢 Numbering System](#🔢-numbering-system)
+  - [🚀 How It Works](#🚀-how-it-works)
+    - [Shell Startup Flow](#shell-startup-flow)
+    - [Shell Detection](#shell-detection)
+    - [Loader Features](#loader-features)
+  - [🛠️ Integrated Tools](#🛠️-integrated-tools)
+    - [Key Functions](#key-functions)
+    - [Available Aliases](#available-aliases)
+      - [Git Aliases](#git-aliases)
+      - [Chezmoi Aliases (requires `chezmoi` to be installed)](#chezmoi-aliases-requires-chezmoi-to-be-installed)
+      - [File Listing (ls/eza)](#file-listing-lseza)
+  - [🎨 Theme: Rose Pine Moon](#🎨-theme-rose-pine-moon)
+  - [🧪 Testing](#🧪-testing)
+  - [🍺 Homebrew](#🍺-homebrew)
+  - [🔧 Troubleshooting](#🔧-troubleshooting)
+    - [Shell doesn't load configuration](#shell-doesnt-load-configuration)
+    - [Wrong shell detected](#wrong-shell-detected)
+    - [Tool not working](#tool-not-working)
+    - [FZF keybindings not working](#fzf-keybindings-not-working)
+  - [📚 Maintenance](#📚-maintenance)
+    - [Adding New Configuration](#adding-new-configuration)
+    - [Modifying Existing Files](#modifying-existing-files)
+    - [Updating Tools](#updating-tools)
+  - [🔐 XDG Base Directory Compliance](#🔐-xdg-base-directory-compliance)
+  - [🎓 References](#🎓-references)
+  <!--toc:end-->
+
 Modern, modular shell configuration supporting both Bash and Zsh with XDG Base Directory compliance.
 
 ## 🏗️ Architecture
@@ -74,47 +105,50 @@ The `loader.sh` script detects the current shell by checking `$ZSH_VERSION` and 
 
 ## 🛠️ Integrated Tools
 
-| Tool | Purpose | Config Location | Status |
-|------|---------|-----------------|---------|
-| **FZF** | Fuzzy finder | `30_tools/02_fzf_init.sh` | ✅ Active |
-| **Zoxide** | Smart directory jumper | `30_tools/04_zoxide_init.sh` | ✅ Active |
-| **Yazi** | Terminal file manager | `15_functions/` | ✅ Active |
-| **Starship** | Cross-shell prompt | `15_functions/01_starship.sh` | ✅ Active |
-| **Direnv** | Directory env loader | `30_tools/01_direnv_init.sh` | ✅ Active |
-| **Carapace** | Multi-shell completion bridge | `25_completions/01_carapace.sh` | ✅ Active |
-| **Keychain** | SSH/GPG agent management | `30_tools/03_keychain_init.sh` | ✅ Active |
-| **Zsh Vi Mode** | Vi keybindings for Zsh | `30_tools/05_zsh_vi_mode.sh` | ✅ Zsh only |
-| **Vivid** | LS_COLORS generator | `00_rose_pine_colors.sh` | ✅ Optional |
+| Tool            | Purpose                       | Config Location                 | Status      |
+| --------------- | ----------------------------- | ------------------------------- | ----------- |
+| **FZF**         | Fuzzy finder                  | `30_tools/02_fzf_init.sh`       | ✅ Active   |
+| **Zoxide**      | Smart directory jumper        | `30_tools/04_zoxide_init.sh`    | ✅ Active   |
+| **Yazi**        | Terminal file manager         | `15_functions/`                 | ✅ Active   |
+| **Starship**    | Cross-shell prompt            | `15_functions/01_starship.sh`   | ✅ Active   |
+| **Direnv**      | Directory env loader          | `30_tools/01_direnv_init.sh`    | ✅ Active   |
+| **Carapace**    | Multi-shell completion bridge | `25_completions/01_carapace.sh` | ✅ Active   |
+| **Keychain**    | SSH/GPG agent management      | `30_tools/03_keychain_init.sh`  | ✅ Active   |
+| **Zsh Vi Mode** | Vi keybindings for Zsh        | `30_tools/05_zsh_vi_mode.sh`    | ✅ Zsh only |
+| **Vivid**       | LS_COLORS generator           | `00_rose_pine_colors.sh`        | ✅ Optional |
 
 ### Key Functions
 
-| Command | Source | Description |
-|---------|--------|-------------|
-| `rgf` | `15_functions/03_fzf_functions.sh` | Ripgrep + FZF content search |
-| `fgb` | `15_functions/03_fzf_functions.sh` | Git branch switcher (FZF) |
-| `zi` | `30_tools/04_zoxide_init.sh` | Interactive directory picker |
-| `y` | `15_functions/02_yazi_shell_wrapper.sh` | Yazi with auto-cd |
-| `fy` | `15_functions/04_yazi_integration.sh` | FZF → Yazi integration |
-| `zy` | `15_functions/04_yazi_integration.sh` | Zoxide → Yazi integration |
-| `set_starship_width` | `15_functions/01_starship.sh` | Set Starship config based on terminal width (COLUMNS < 40: minimal, < 80: narrow, else full) |
+| Command              | Source                                  | Description                                                                                  |
+| -------------------- | --------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `rgf`                | `15_functions/03_fzf_functions.sh`      | Ripgrep + FZF content search                                                                 |
+| `fgb`                | `15_functions/03_fzf_functions.sh`      | Git branch switcher (FZF)                                                                    |
+| `zi`                 | `30_tools/04_zoxide_init.sh`            | Interactive directory picker                                                                 |
+| `y`                  | `15_functions/02_yazi_shell_wrapper.sh` | Yazi with auto-cd                                                                            |
+| `fy`                 | `15_functions/04_yazi_integration.sh`   | FZF → Yazi integration                                                                       |
+| `zy`                 | `15_functions/04_yazi_integration.sh`   | Zoxide → Yazi integration                                                                    |
+| `set_starship_width` | `15_functions/01_starship.sh`           | Set Starship config based on terminal width (COLUMNS < 40: minimal, < 80: narrow, else full) |
 
 ### Available Aliases
 
-| Alias | Command | Description |
-|-------|---------|-------------|
-| `yz` | `yazi` | Standard yazi launcher |
-| `yw` | `yazi "$WORKSPACE"` | Open yazi in workspace |
-| `cat` | `bat` | Modern `cat` replacement (when `bat` is installed) |
-| `..`, `...` | `z ..`, `z ../..` | Directory navigation (zoxide-based) |
-| `~`, `home` | `z ~` | Jump to home directory |
+| Alias       | Command             | Description                                        |
+| ----------- | ------------------- | -------------------------------------------------- |
+| `yz`        | `yazi`              | Standard yazi launcher                             |
+| `yw`        | `yazi "$WORKSPACE"` | Open yazi in workspace                             |
+| `cat`       | `bat`               | Modern `cat` replacement (when `bat` is installed) |
+| `..`, `...` | `z ..`, `z ../..`   | Directory navigation (zoxide-based)                |
+| `~`, `home` | `z ~`               | Jump to home directory                             |
 
 #### Git Aliases
+
 `g`, `gs`, `gsc`, `ga`, `gwd`, `gc`, `gcm`, `gst`, `gf`, `gfo`, `gpsh`, `gpsho`, `gpl`, `gplo`, `gl`, `gll`, `glg`, `glten`, `glgten`
 
 #### Chezmoi Aliases (requires `chezmoi` to be installed)
+
 `ch`, `cha`, `che`, `chd`, `chu`, `chst`, `chap`, `chz`
 
 #### File Listing (ls/eza)
+
 - **Standard**: `ls`, `la`, `ll`, `lla`
 - **Tree**: `lt`, `lta`, `ltl`, `ltla`
 - **Smart**: `lzr` (recent), `lzs` (size), `lzg` (git), `lzgt` (git tree)
@@ -122,6 +156,7 @@ The `loader.sh` script detects the current shell by checking `$ZSH_VERSION` and 
 ## 🎨 Theme: Rose Pine Moon
 
 All tools use the Rose Pine Moon color scheme:
+
 - Colors defined in: `00_rose_pine_colors.sh`
 - Applied to: FZF, Yazi, shell prompt (via Starship)
 - Color variables: `$ROSE_PINE_TEXT`, `$ROSE_PINE_FOAM`, etc.
@@ -129,16 +164,19 @@ All tools use the Rose Pine Moon color scheme:
 ## 🧪 Testing
 
 Run the full test suite to verify configuration:
+
 ```bash
 ~/.config/shell/test_config.sh
 ```
 
 Run a single test module:
+
 ```bash
 source ~/.config/shell/tests/helpers.sh && load_config && source ~/.config/shell/tests/test_functions.sh && summary
 ```
 
 Or enable debug mode:
+
 ```bash
 export SHELL_DEBUG=1
 source ~/.config/shell/loader.sh
@@ -147,6 +185,7 @@ source ~/.config/shell/loader.sh
 ## 🍺 Homebrew
 
 The `05_brew.sh` script searches for the `brew` binary in multiple locations across Linux and macOS in priority order:
+
 1. `/home/linuxbrew/.linuxbrew/bin/brew`
 2. `$HOME/.linuxbrew/bin/brew`
 3. `/opt/homebrew/bin/brew`
@@ -155,6 +194,7 @@ The `05_brew.sh` script searches for the `brew` binary in multiple locations acr
 ## 🔧 Troubleshooting
 
 ### Shell doesn't load configuration
+
 ```bash
 # Check if loader exists and is readable
 ls -la ~/.config/shell/loader.sh
@@ -164,6 +204,7 @@ source ~/.config/shell/loader.sh
 ```
 
 ### Wrong shell detected
+
 ```bash
 # Check detection
 echo "Current: $CURRENT_SHELL"
@@ -172,6 +213,7 @@ echo "BASH_VERSION: $BASH_VERSION"
 ```
 
 ### Tool not working
+
 ```bash
 # Verify tool is installed
 command -v fzf zoxide yazi eza bat
@@ -181,6 +223,7 @@ ls -la ~/.config/shell/30_tools/
 ```
 
 ### FZF keybindings not working
+
 ```bash
 # In bash:
 bind -P | grep fzf
@@ -192,17 +235,21 @@ bindkey | grep fzf
 ## 📚 Maintenance
 
 ### Adding New Configuration
+
 1. Create file with appropriate number prefix (e.g., `35_newtool.sh`)
 2. Ensure it has proper shell guards if shell-specific
 3. Test with debug mode: `export SHELL_DEBUG=1`
 
 ### Modifying Existing Files
+
 1. Always test changes in a new shell session
 2. Use debug mode to trace issues
 3. Keep backups in `~/.config/backups/`
 
 ### Updating Tools
+
 After updating FZF, Zoxide, or other integrated tools:
+
 ```bash
 bash --login -c "type zi"
 zsh --login -c "type zi"
@@ -211,11 +258,13 @@ zsh --login -c "type zi"
 ## 🔐 XDG Base Directory Compliance
 
 All configurations respect XDG Base Directory specification:
+
 - `XDG_CONFIG_HOME` = `~/.config`
 - `XDG_DATA_HOME` = `~/.local/share`
 - `XDG_CACHE_HOME` = `~/.cache`
 - `XDG_STATE_HOME` = `~/.local/state`
 
 ## 🎓 References
+
 - [Shell Keybindings](KEYBINDINGS.md) - Quick reference card
 - [Agent Guidelines](AGENTS.md) - LLM Agent instructions and conventions

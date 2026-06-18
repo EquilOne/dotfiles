@@ -1,8 +1,9 @@
 ---
 description: Review code for quality, security, correctness, and style
 mode: subagent
-model: openrouter/openai/gpt-5.4-mini
-reasoning_effort: xhigh
+model: openrouter/z-ai/glm-5.2
+reasoning:
+  effort: high
 permission:
   edit: deny
   bash: allow
