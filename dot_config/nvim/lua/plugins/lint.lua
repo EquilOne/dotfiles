@@ -1,15 +1,28 @@
 return {
   {
-    "mfussenegger/nvim-lint",
+    "neovim/nvim-lspconfig",
     opts = {
-      linters_by_ft = {
-        markdown = { "markdownlint-cli2" },
-      },
-      linters = {
-        ["markdownlint-cli2"] = {
-          -- Points to your global rule config (Chezmoi-managed)
-          args = { "--config", vim.fn.expand("~/.markdownlint-cli2.jsonc"), "--" },
+      servers = {
+        biome = {
+          on_attach = function(client)
+            client.server_capabilities.documentFormattingProvider = false
+          end,
         },
+        oxlint = {
+          on_attach = function(client)
+            client.server_capabilities.documentFormattingProvider = false
+          end,
+        },
+      },
+      setup = {
+        biome = function(_, opts)
+          opts.root_dir = require("lspconfig.util").root_pattern("biome.json")
+          return false
+        end,
+        oxlint = function(_, opts)
+          opts.filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" }
+          return false
+        end,
       },
     },
   },

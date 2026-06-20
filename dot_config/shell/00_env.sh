@@ -31,6 +31,9 @@ export BUN_INSTALL="$HOME/.bun"
 # Go install location
 export GOPATH="$HOME/go"
 
+# OpenCode: enable EXA web search (required when not using OpenCode provider)
+export OPENCODE_ENABLE_EXA=1
+
 # Debug: Show what loaded
 if [[ -n "$SHELL_DEBUG" ]]; then
   echo "🔍 00_env.sh loaded - XDG_CONFIG_HOME=$XDG_CONFIG_HOME"

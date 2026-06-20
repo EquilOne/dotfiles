@@ -1,91 +1,49 @@
-# AGENTS.md - OpenCode Repository Guidelines
+# AGENTS.md — OpenCode Config Repository
 
-This repository contains OpenCode CLI configuration and plugin setup. This file provides guidelines for agentic coding agents working in this repository.
+This is `~/.config/opencode` — OpenCode CLI configuration and plugin setup.
+It is not a development project. Write no application code here.
 
-## Project Structure
+## Repo Structure
 
-This is an OpenCode configuration repository (`~/.config/opencode`) that contains:
-- OpenCode CLI configuration (`opencode.json`)
-- Plugin dependencies (`package.json`)
-- Node modules for OpenCode SDK and plugins
+| Path              | Purpose                                                                       |
+| ----------------- | ----------------------------------------------------------------------------- |
+| `opencode.json`     | Agent routing, models, `default_agent: "fixer"`                                 |
+| `tui.json`          | Keybindings, theme (`rosepine`), UI config                                      |
+| `agent_stack.md`    | Model-to-agent assignment table (16 entries)                                  |
+| `keybinds.md`       | Key reference (leader: `ctrl+x`)                                                |
+| `agents/*.md`       | Subagent config files (10 agents)                                             |
+| `skills/*/SKILL.md` | Loaded skills (8: 4 caveman, explain-code, find-docs, omarchy, skill-creator) |
+| `templates/`        | Project templates (e.g., `project-planner`)                                     |
+| `package.json`      | Plugin dep: `@opencode-ai/plugin@1.4.0` (single, pinned)                        |
 
-## Build/Lint/Test Commands
+## Critical Quirks
 
-Since this is a configuration repository rather than a development project, there are no traditional build, lint, or test commands. The repository primarily uses:
+- **`.gitignore` ignores `package.json`, `bun.lock`, and `node_modules`** — these are not committed. After clone, create/resolve `package.json` and run `npm install` to restore plugin deps.
+- **`autoupdate: false`** in `opencode.json` — plugins do not auto-update. Update pinned versions manually via `npm update`.
+- **Agents use explicit model overrides** — check `opencode.json` before assuming default model. Each subagent may route to a different model (e.g., `build` uses `minimax/m3`, not default).
 
-- **Package Management**: Uses npm/pnpm for dependency management
-- **Install Dependencies**: `npm install` or `pnpm install`
-- **Update Dependencies**: `npm update` or `pnpm update`
+## Commands
 
-No test framework is currently configured in this repository.
+| Action          | Command                        |
+| --------------- | ------------------------------ |
+| Install deps    | `npm install` (or `pnpm install`)  |
+| Update deps     | `npm update`                     |
+| Fetch live docs | Use `find-docs` skill (ctx7 CLI) |
 
-## Code Style Guidelines
+No build, lint, test, or typecheck commands exist.
 
-### General Principles
-- This is a configuration-first repository - minimal code should be added
-- Configuration files should be kept simple and focused
-- Follow JSON schema specifications for configuration files
+## Conventions
 
-### Configuration Files
-- Use `opencode.json` for OpenCode CLI settings
-- Follow the OpenCode configuration schema at `https://opencode.ai/config.json`
-- Keep configuration minimal and focused on essential settings
-- Theme should be set to "system" unless specifically required otherwise
+- Config files are kebab-case JSON. Validate against schema at `https://opencode.ai/config.json`.
+- No source code files in this repo. Only OpenCode config, skill files, and agent configs.
+- The `find-docs` skill uses `npx ctx7@latest` — prefer it over web search for library/API docs.
+- The `skill-creator` skill exists for saving workflows as reusable skills.
+- Keybind and agent-stack reference docs exist separately (`keybinds.md`, `agent_stack.md`) — do not duplicate them.
 
-### Package Management
-- Use `package.json` for OpenCode plugin dependencies
-- Pin dependency versions to ensure stability
-- Only include necessary OpenCode-related dependencies
-- Avoid adding unrelated development dependencies
+## Working Here
 
-### File Organization
-- Keep configuration files at the root level
-- Maintain clean separation between user config and generated files
-- Don't modify files in `node_modules/` directory
-
-### Naming Conventions
-- Configuration files: kebab-case (e.g., `opencode.json`)
-- Use descriptive but concise configuration keys
-- Follow OpenCode documentation for specific field names
-
-### Error Handling
-- Configuration files should be valid JSON
-- Use schema validation where available
-- Provide meaningful error messages for configuration issues
-
-## Working with OpenCode Plugins
-
-When modifying plugin configurations:
-1. Check the official OpenCode plugin documentation
-2. Verify plugin compatibility with current OpenCode version
-3. Test configuration changes with the OpenCode CLI
-4. Keep plugin versions synchronized
-
-## Security Considerations
-
-- Never commit sensitive configuration data
-- API keys and credentials should be managed through OpenCode's secure mechanisms
-- Regular review of plugin dependencies for security updates
-
-## Debugging Configuration Issues
-
-When troubleshooting OpenCode configuration:
-1. Validate JSON syntax of configuration files
-2. Check plugin compatibility matrix
-3. Verify OpenCode CLI version compatibility
-4. Review OpenCode logs for configuration parsing errors
-
-## Repository Maintenance
-
-- Regularly update OpenCode plugin dependencies
-- Test configuration changes with different OpenCode versions
-- Keep configuration backups before major changes
-- Document any custom configuration patterns
-
-## Notes for Agents
-
-- This is primarily a configuration repository, not a development project
-- Most changes should be limited to configuration files
-- Avoid adding source code files unless specifically required
-- Test configuration changes with the actual OpenCode CLI before committing
-- Consider the impact on OpenCode plugin ecosystem when making changes
+- Most changes touch `opencode.json`, `tui.json`, skills, or agent configs.
+- If editing skills or agent configs, verify changes with OpenCode CLI after saving.
+- `node_modules/` is gitignored — never modify it.
+- The `opencode-notifier-state.json` file is a runtime state file, not config. Do not commit or hand-edit it.
+- Theme in `tui.json` is `"rosepine"` — do not change to `"system"` (contradicts old AGENTS.md guidance).
