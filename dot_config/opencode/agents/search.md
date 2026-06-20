@@ -1,7 +1,7 @@
 ---
-description: Subagent that handles web search and retrieval tasks for a parent agent
+description: Web search and retrieval subagent
 mode: subagent
-model: openrouter/google/gemini-3.1-flash-lite-preview
+model: openrouter/google/gemini-3.1-flash-lite
 permission:
   edit: deny
   bash: deny

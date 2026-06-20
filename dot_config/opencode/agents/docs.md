@@ -1,7 +1,7 @@
 ---
 description: Write, edit, and format documents (markdown, reports, READMEs, specs)
 mode: subagent
-model: openrouter/~google/gemini-flash-latest
+model: openrouter/openai/gpt-4o-mini
 permission:
   edit: allow
   bash: deny

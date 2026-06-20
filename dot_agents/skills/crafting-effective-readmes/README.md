@@ -23,27 +23,24 @@ Use this skill when you need to:
 
 **Trigger phrases:**
 
-- "Write a README for this project"
-- "Help me document this"
-- "Create documentation for..."
+- "Write a README"
+- "Create a README"
+- "Document this project"
+- "Add documentation"
+- "README is stale"
+- "What sections should my README have?"
 - "Update the README"
 - "Review my README"
-- "What sections should my README have?"
+- "Improve my README"
+- "Project needs a README"
 
 ## How It Works
 
 The skill follows a three-step process:
 
-### Step 1: Identify the Task
+### Step 1: Identify the Task and Audience
 
-The skill determines what README task you are working on:
-
-| Task | When to Use |
-|------|-------------|
-| **Creating** | New project with no README yet |
-| **Adding** | Need to document something new in existing README |
-| **Updating** | Capabilities changed, content is stale |
-| **Reviewing** | Checking if README is still accurate |
+The skill asks two questions first to determine the task (creating, adding, updating, reviewing) and the primary reader/audience (contributors, future-you, teammates, users) to match templates and guidance correctly.
 
 ### Step 2: Gather Context
 
