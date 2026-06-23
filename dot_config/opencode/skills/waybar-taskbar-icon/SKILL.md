@@ -13,15 +13,22 @@ description: >
 
 ## Before you start
 
-Ask these questions before touching anything:
+waybar's icon resolution is NOT what you think it is. It does NOT use the `icon-theme`
+from waybar's config. It does NOT search user directories. It does NOT look at desktop
+files in `~/.local/share/applications/`. Before adding an icon, internalize this:
 
-- **What class does the window actually have?** Run `hyprctl clients -j` and check. Do not
-  assume — the class determines the icon name after prefix stripping.
-- **Does a system icon already exist?** Check `find /usr/share/icons -name '<name>*'`
-  before creating one. If it exists, the problem is elsewhere (class mismatch, wrong theme).
-- **Is Papirus-Dark installed?** This skill assumes Papirus-Dark is the icon theme. Check
-  the user's `icon-theme` in `~/.config/waybar/config.jsonc`. Adapt the target directory
-  if a different theme is in use.
+The ONLY thing that works is installing a PNG into the system Papirus-Dark theme with
+sudo. Everything else — user icon dirs, desktop files, icon cache updates on user dirs —
+is a dead end. We discovered each of these the hard way.
+
+Before touching anything:
+- **Confirm the actual window class** via `hyprctl clients -j`. Do not assume — the
+  class determines the icon name after prefix stripping.
+- **Check if a system icon already exists** for the derived name. If it does, the problem
+  is elsewhere (class mismatch, wrong theme).
+- **Verify Papirus-Dark is the active icon theme**. Check `gsettings get
+  org.gnome.desktop.interface icon-theme` or the user's `icon-theme` in
+  `~/.config/waybar/config.jsonc`. Adapt the target directory if a different theme is in use.
 
 ## How waybar resolves icons
 

@@ -89,6 +89,11 @@ alias chst='chezmoi status'
 alias chap='chezmoi apply'
 alias chz='chezmoi cd'
 
+# opencode
+if command -v opencode >/dev/null 2>&1; then
+  alias oc='opencode'
+fi
+
 # Cat --> Bat
 if command -v bat >/dev/null 2>&1; then
   alias cat='bat'
