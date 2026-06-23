@@ -1,8 +1,7 @@
 ---
 description: General chat for Q&A, research, and information requests
 mode: primary
-model: openrouter/google/gemini-3-flash-preview
-temperature: 1.0
+model: openrouter/xiaomi/mimo-v2.5-pro
 permission:
   edit: deny
   bash: deny
