@@ -11,17 +11,18 @@
       "model": "openrouter/xiaomi/mimo-v2.5-pro"
     },
     "build": {
-      "model": "openrouter/minimax/minimax-m3"
+      "model": "openrouter/z-ai/glm-5.2",
+      "reasoningEffort": "xhigh"
     },
     "explore": {
-      "model": "openrouter/minimax/minimax-m3"
+      "model": "openrouter/minimax/minimax-m2.7"
     },
     "general": {
-      "model": "openrouter/minimax/minimax-m2.5"
+      "model": "openrouter/minimax/minimax-m2.7"
     },
     "scout": {
       "mode": "subagent",
-      "model": "openrouter/minimax/minimax-m2.5"
+      "model": "openrouter/minimax/minimax-m2.7"
     }
   }
 }

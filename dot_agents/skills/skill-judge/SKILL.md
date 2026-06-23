@@ -372,6 +372,8 @@ Do NOT modify the script.
 - High consequence → Low freedom
 - Low consequence → High freedom
 
+**skill-judge's own calibration**: Scoring interpretation = medium freedom (judgment within the published bands). Report generation = low freedom (follow the report template exactly). Evidence selection = medium freedom.
+
 ---
 
 ### D7: Pattern Recognition (10 points)
@@ -457,10 +459,21 @@ Consider edge cases.
 - **NEVER** assume all procedures are valuable — distinguish domain-specific from generic
 - **NEVER** undervalue the description field — poor description = skill never gets used
 - **NEVER** put "when to use" info only in the body — Agent only sees description before loading
+- **NEVER** score before confirming you are reading the canonical SKILL.md — not a sibling README.md, an outdated copy, or a reference file. A wrong-file read silently manufactures false "critical issues" (e.g., reporting "no frontmatter" when the real SKILL.md has it).
 
 ---
 
 ## Evaluation Protocol
+
+### Step 0: Pin the subject
+
+Before any scoring, confirm you have the right file:
+1. Locate the canonical `SKILL.md` (verify it is not a sibling `README.md`, an outdated copy, or a reference file).
+2. Confirm the YAML frontmatter is present and parseable.
+3. Note the total line count.
+4. List all reference files bundled with the skill.
+
+All of the above MUST be done BEFORE scoring begins.
 
 ### Step 1: First Pass — Knowledge Delta Scan
 
@@ -494,6 +507,18 @@ For each of the 8 dimensions:
    **Load reference:** `references/common-failure-patterns.md`
 2. Assign score with one-line justification
 3. Note specific improvements if score < max
+
+#### How to score a dimension
+
+1. Read the target section(s) for that dimension.
+2. Tag each paragraph as **[E]** Expert / **[A]** Activation / **[R]** Redundant.
+3. Compute the E:A:R ratio.
+4. Map the ratio + that dimension's red-flag / green-flag indicators to a score band.
+5. Quote at least one line of evidence justifying the chosen band.
+
+> **D1-specific note:** Explicitly count Expert vs Activation vs Redundant paragraphs to derive the band — the E:A:R ratio is the primary driver of the D1 score.
+
+> **D8 fallback:** If you cannot decide whether content is Expert vs Redundant, default to Redundant (per D1 red flags) and flag the uncertainty in your notes.
 
 ### Step 4: Calculate Total & Grade
 
@@ -581,15 +606,15 @@ What gets compressed must be things the model doesn't have. Otherwise, it's garb
 
 ## Self-Evaluation Note
 
-This Skill (skill-judge) should itself pass evaluation:
+Any high-quality evaluator skill must demonstrate the following — audit skill-judge (and any evaluator skill) against them:
 
-- **Knowledge Delta**: Provides specific evaluation criteria the model wouldn't generate on its own
-- **Mindset**: Shapes how to think about Skill quality, not just checklist items
-- **Anti-Patterns**: "NEVER Do When Evaluating" section with specific don'ts
-- **Specification**: Valid frontmatter with comprehensive description
-- **Progressive Disclosure**: Self-contained core; common-failure-patterns, quick-reference-checklist, and example-evaluation loaded on demand via explicit triggers embedded in the Evaluation Protocol
-- **Freedom**: Medium freedom appropriate for evaluation task
-- **Pattern**: Follows Tool pattern with decision frameworks
-- **Usability**: Clear protocol, report template, on-demand references
+- **Knowledge Delta**: Does it provide specific evaluation criteria the model would not generate on its own?
+- **Mindset**: Does it shape how to think about Skill quality, not just list checklist items?
+- **Anti-Patterns**: Does it include a "NEVER Do When Evaluating" section with specific don'ts?
+- **Specification**: Does it have valid frontmatter with a comprehensive description?
+- **Progressive Disclosure**: Is the core self-contained, with references loaded on demand via explicit triggers embedded in the Evaluation Protocol?
+- **Freedom**: Is the freedom level appropriate for an evaluation task?
+- **Pattern**: Does it follow a recognizable official pattern (e.g., Tool) with decision frameworks?
+- **Usability**: Does it offer a clear protocol, report template, and on-demand references?
 
 Evaluate this Skill against itself as a calibration exercise.
