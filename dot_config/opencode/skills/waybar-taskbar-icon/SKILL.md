@@ -77,6 +77,9 @@ rsvg-convert -w 48 -h 48 /path/to/icon-light.svg \
   | sudo tee /usr/share/icons/Papirus-Dark/48x48/apps/<icon-name>.png > /dev/null
 ```
 
+If `rsvg-convert` is not installed: `sudo pacman -S librsvg` or use imagemagick as a
+fallback: `convert -resize 48x48 /path/to/icon.svg PNG:- | sudo tee ...`
+
 **5. Update cache and restart**
 
 ```bash
@@ -97,8 +100,16 @@ print(i.get_filename() if i else 'NOT FOUND')
 "
 ```
 
-If NOT FOUND: check that `rsvg-convert` produced a valid PNG (`file <path>.png`).
-If waybar still shows unknown: re-run step 1 to confirm the class matches.
+If NOT FOUND:
+- **PNG invalid?** → Check `file <path>.png` — must say "PNG image data". If it says
+  "SVG" or "empty", the rsvg-convert pipe failed. Install librsvg or use imagemagick.
+- **Class mismatch?** → Re-run step 1. Confirm the class starts with `org.omarchy.` and
+  the derived icon name matches the installed filename exactly.
+- **Wrong theme?** → Check `gsettings get org.gnome.desktop.interface icon-theme`. If it
+  returns something other than Papirus-Dark, the system theme differs from what this
+  skill assumes. Install the icon into whatever theme gsettings reports.
+- **Cache stale?** → Re-run `sudo gtk-update-icon-cache /usr/share/icons/Papirus-Dark/`
+  and restart waybar with `omarchy restart waybar`.
 
 ## Anti-patterns
 
@@ -124,3 +135,8 @@ If waybar still shows unknown: re-run step 1 to confirm the class matches.
 
 - **Using the dark logo variant on Papirus-Dark** — the dark background swallows dark
   logos. Always prefer the light/white variant of the logo if one exists.
+
+- **Using `ghostty --class=X` directly** — Ghostty on Wayland ignores `--class` values
+  without a dot (reverse-domain format). `ghostty --class=opencode` produces class
+  `com.mitchellh.ghostty`, not `opencode`. Always use `uwsm-app -- xdg-terminal-exec
+  --app-id=org.omarchy.X` or `omarchy-launch-tui X` to set the class correctly.
