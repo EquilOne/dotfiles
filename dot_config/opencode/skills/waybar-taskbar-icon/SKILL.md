@@ -21,6 +21,12 @@ The ONLY thing that works is installing a PNG into the system Papirus-Dark theme
 sudo. Everything else — user icon dirs, desktop files, icon cache updates on user dirs —
 is a dead end. We discovered each of these the hard way.
 
+Before adding an icon, ask: does the problem even need a new icon? If the window shows
+ghostty's icon, the class might be `com.mitchellh.ghostty` (Ghostty ignoring `--class`).
+Fix the class first — the icon might already exist in Papirus for the correct class. If
+the class is right but the icon is unknown, THEN install a new icon. Skipping this
+diagnosis wastes time installing icons for classes that should have been fixed upstream.
+
 Before touching anything:
 - **Confirm the actual window class** via `hyprctl clients -j`. Do not assume — the
   class determines the icon name after prefix stripping.
