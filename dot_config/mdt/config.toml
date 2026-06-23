@@ -9,8 +9,8 @@ help_menu = true
 # Inline styling
 bold_color = "#e0def4"
 bold_italic_color = "#e0def4"
-code_bg_color = "#44415a"
-code_fg_color = "#eb6f92"
+code_bg_color = "#393552"
+code_fg_color = "reset"
 italic_color = "#908caa"
 link_color = "#9ccfd8"
 link_selected_bg_color = "#56526e"
