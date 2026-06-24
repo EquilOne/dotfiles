@@ -1,7 +1,7 @@
 ---
 description: Write, edit, and format documents (markdown, reports, READMEs, specs)
 mode: subagent
-model: openrouter/openai/gpt-4o-mini
+model: openrouter/deepseek/deepseek-v4-flash
 permission:
   edit: allow
   bash: deny
