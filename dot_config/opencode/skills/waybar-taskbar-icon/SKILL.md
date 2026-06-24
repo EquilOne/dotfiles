@@ -11,6 +11,10 @@ description: >
 
 # Waybar Taskbar Icon
 
+**Do NOT load** this skill for waybar styling/CSS, waybar module config, system
+icon theme changes, or non-taskbar icon issues. This skill covers
+workspace-taskbar icon resolution only.
+
 ## How waybar actually resolves a taskbar icon (verified against Waybar 0.15.0 source)
 
 This is the mechanism. Internalize it before doing anything — every prior
@@ -39,24 +43,21 @@ This is the mechanism. Internalize it before doing anything — every prior
    Then it `load_icon`s that name; on failure it tries the name as a file path;
    else `image-missing`.
 4. **Which theme?** The per-module **`icon-theme`** from your waybar config
-   (`custom_icon_themes_`) is consulted FIRST, then a fallback default theme.
-
-### Two consequences that drive everything
-
-- **waybar uses the `icon-theme` set in `~/.config/waybar/config.jsonc`**
-  (under `hyprland/workspaces` → `workspace-taskbar` → `icon-theme`). It does
-  **not** depend on the GNOME/system gsettings icon theme for the configured
-  themes. **Do not change the system icon theme to fix a taskbar icon.**
-- **For an icon to appear you need BOTH:** (a) a desktop entry waybar can map the
-  window to — ideally a file whose **filename == the app_id** — and (b) an icon
-  that resolves in the configured theme (either named like the `StartupWMClass`,
-  or the desktop `Icon=` value).
+    (`custom_icon_themes_`) is consulted FIRST, then a fallback default theme.
 
 Omarchy's `omarchy-webapp-install` names `.desktop` files by app title
 (e.g. `Perplexity AI.desktop`) and sets `StartupWMClass` only when Chrome
 provides it during PWA install. If the field is absent, open the PWA and
 derive the class from `hyprctl clients` (Step 1), then add
 `StartupWMClass=<class>` before renaming.
+
+**Chrome PWA URL normalization:** Chrome derives the window class from the
+full URL. `https://www.perplexity.ai/` → class `chrome-www.perplexity.ai__-Default`;
+`https://perplexity.ai/` → `chrome-perplexity.ai__-Default`. If the Exec URL in the
+desktop file differs from the URL used to install the PWA (e.g. `www.` prefix), the
+class won't match and the icon won't resolve. Ensure the Exec URL, `StartupWMClass`,
+and filename all agree on the same URL form. When in doubt, check the live class with
+`hyprctl clients` (Step 1) while the PWA is open.
 
 ## ⚠️ Do NOT switch the system icon theme to Papirus-Dark on this setup
 
@@ -72,12 +73,34 @@ never need to touch the system theme anyway.
 
 ## Diagnose first
 
-| Symptom | Likely cause | Go to |
+**Key principle:** For an icon to appear you need BOTH: (a) a desktop entry waybar
+can map the window to — ideally a file whose **filename == the app_id** — and
+(b) an icon that resolves in the configured theme (either named like the
+`StartupWMClass`, or the desktop `Icon=` value). If either is missing, you get
+the generic placeholder.
+
+Before touching anything, answer these three questions in order:
+
+1. **PWA or native app?** Run `hyprctl clients -j | jq -r '.[] | .class'` while
+   the window is open. Class starts with `chrome-` → PWA. Otherwise → native.
+2. **Does a desktop file named after the app_id exist?** Check
+   `~/.local/share/applications/<app_id>.desktop` and
+   `/usr/share/applications/<app_id>.desktop`. If neither exists → the fix is
+   renaming/creating the desktop file (Step 3B), NOT installing an icon.
+3. **What icon theme does the taskbar actually use?** Check
+   `~/.config/waybar/config.jsonc` under `workspace-taskbar` → `icon-theme`.
+   Do NOT assume the system theme.
+4. **Verify BEFORE installing.** Use the `gjs` snippet (Step 4) to check whether
+   the icon name already resolves. Never install an icon without confirming it's
+   actually missing — the name may come from `StartupWMClass`, not the class you expect.
+
+| Symptom | Likely cause | Action |
 |---|---|---|
-| One PWA (class `chrome-…__-Default`) is generic | No desktop file named after the app_id; `Icon=`/class not mapped | Step 3B |
-| ALL PWAs generic, native apps fine | Same as above, systemic (PWA desktop files are named after the app title) | Step 3B (bulk) |
-| A native app is generic | Its `Icon=`/class name doesn't resolve in the configured theme | Step 3A |
-| Window shows the terminal's icon (e.g. ghostty) for a TUI | Class is `com.mitchellh.ghostty` (Ghostty ignores non-reverse-domain `--class`) | Fix the launch class: `omarchy-launch-tui X` or `uwsm-app -- xdg-terminal-exec --app-id=org.omarchy.X` |
+| One PWA (class `chrome-…__-Default`) is generic | No desktop file named after the app_id | Step 3B |
+| ALL PWAs generic, native apps fine | PWA desktop files are named by title, not app_id | Step 3B (bulk) |
+| A native app is generic | `Icon=`/class name doesn't resolve in the configured theme | Step 3A |
+| Window shows terminal icon (e.g. ghostty) for a TUI | Class is `com.mitchellh.ghostty` (Ghostty ignores non-reverse-domain `--class`) | Fix launch class: `omarchy-launch-tui X` or `uwsm-app -- xdg-terminal-exec --app-id=org.omarchy.X` |
+| PWA icon works from one launcher but not another | Exec URL differs between launchers (e.g. `www.` prefix) → Chrome assigns different class | Step 1: compare live classes; fix Exec URL to match |
 
 ## Steps
 
@@ -129,6 +152,13 @@ update-desktop-database ~/.local/share/applications
 omarchy restart waybar
 ```
 
+**Verify after renaming:** launch the PWA from walker AND from any hyprland
+keybind, then run `hyprctl clients -j | jq -r '.[] | .class' | grep chrome-`
+for each. Both must show the same class. If they differ, the Exec URL in the
+desktop file doesn't match the URL used to install the PWA — fix the Exec to
+use the installed URL (check with `hyprctl clients` while the PWA is open
+from the keybind).
+
 Note: if `StartupWMClass` is missing from a PWA's desktop file, open the
 PWA, find its class with `hyprctl clients` (Step 1), add
 `StartupWMClass=<class>` to the file, then rename. Renaming ensures walker
@@ -175,7 +205,7 @@ is also found (GTK searches user dirs), and needs no sudo.
 
 - **Changing the system gsettings icon theme to fix a taskbar icon.** The taskbar
   uses its own `icon-theme` from `config.jsonc`. Changing the system theme is
-  unnecessary — and switching it to Papirus-Dark crashes Ghostty + all TUIs.
+  unnecessary — and switching it to Papirus-Dark crashes Ghostty + all TUIs (see the dedicated section above for the technical cause).
 - **Dropping a PNG named after the window class into a theme and expecting it to
   show, when no desktop entry maps the window.** If `app_info` is NULL, waybar
   loads `image-missing` and never reaches the theme lookup. For PWAs you must
@@ -190,9 +220,7 @@ is also found (GTK searches user dirs), and needs no sudo.
 - **Using `convert`** — deprecated in ImageMagick v7; use `magick`.
 - **Guessing instead of verifying.** Confirm name resolution with the `gjs`
   snippet (Step 4) before installing anything.
-
-## Scope
-
-This skill covers waybar workspace-taskbar icon resolution only. It does NOT
-require changing the system icon theme. If the problem is a window-class mismatch
-(e.g. a TUI showing Ghostty's icon), fix the launch class instead of the icon.
+- **Restarting waybar after installing an icon without running `gtk-update-icon-cache`.**
+  GTK reads from the compiled icon cache, not raw files. Without rebuilding the
+  cache, the new icon is invisible to waybar. Always run `sudo gtk-update-icon-cache -f`
+  before `omarchy restart waybar`.
