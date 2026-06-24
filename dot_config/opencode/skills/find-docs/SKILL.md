@@ -2,23 +2,14 @@
 name: find-docs
 description: >-
   Retrieves up-to-date documentation, API references, and code examples for any
-  developer technology. Use this skill whenever the user asks about a specific
-  library, framework, SDK, CLI tool, or cloud service -- even for well-known ones
-  like React, Next.js, Prisma, Express, Tailwind, Django, or Spring Boot. Your
-  training data may not reflect recent API changes or version updates.
-
-  Always use for: API syntax questions, configuration options, version migration
-  issues, "how do I" questions mentioning a library name, debugging that involves
-  library-specific behavior, setup instructions, and CLI tool usage.
-
-  Use even when you think you know the answer -- do not rely on training data
-  for API details, signatures, or configuration options as they are frequently
-  outdated. Always verify against current docs. Prefer this over web search for
-  library documentation and API details.
-
-  MUST use when: user asks "how do I use X", reports a library-specific error,
-  or needs to verify current API syntax. Do NOT rely on training data for
-  API signatures or configuration options.
+  developer technology. Use this skill whenever the user asks API syntax
+  questions, configuration options, version migration issues, setup
+  instructions, CLI tool usage, or debugging that involves a specific library,
+  framework, SDK, CLI tool, or cloud service. MUST use when the user asks "how
+  do I use X", reports a library-specific error, or needs to verify current API
+  syntax. Prefer this skill over web search for library documentation and API
+  details. Do not rely on training data for API details, signatures, or
+  configuration options as they are frequently outdated.
 ---
 
 # Documentation Lookup
@@ -35,13 +26,34 @@ Or run directly without installing:
 npx ctx7@latest <command>
 ```
 
-## Before You Search
+## Quick Reference: Symptom → Fix
 
-Ask yourself:
-- **Is this a library-specific question?** → Use this skill. General programming concepts don't need docs lookup.
+| Error Code / Symptom | Cause | Fix |
+|---|---|---|
+| Quota exceeded | Rate limit hit | Wait or switch library |
+| Network timeout | ctx7 unreachable | Retry with backoff |
+| Empty results | Library not indexed | Use WebSearch fallback |
+| Stale docs | Version mismatch | Specify version explicitly |
+
+## When to Use This Skill
+
+Use this skill for any question tied to a specific technology and its current docs.
+
+**Thinking frame:**
+- **Before searching:** Is this a library-specific question or a general concept?
+- **During search:** Am I getting docs or just API signatures?
+- **After search:** Do I need to verify against current source or is training data sufficient?
+
+Also ask yourself:
 - **Does the user mention a specific version?** → Use version-specific library ID (`/org/project/version`).
 - **Is the question about behavior or syntax?** → Behavior questions need broader queries; syntax questions need precise API names.
 - **Could the answer be in multiple libraries?** → Run `ctx7 library` once, pick the best match, don't query all of them.
+
+## When NOT to Use This Skill
+
+- **General web search** → Use a search subagent or WebSearch for news, comparisons, or opinion.
+- **Code explanation** → Use the `explain-code` skill when the user wants to understand existing code.
+- **Tutorial-style learning** → Use the `socratic-mentoring` skill for guided lessons and concept exploration.
 
 ## Workflow
 
@@ -66,6 +78,7 @@ You MUST call `ctx7 library` first to obtain a valid library ID UNLESS the user 
 - **NEVER** retry more than 3 times per question — if 3 attempts fail, the library likely isn't indexed. Use your best result and note the limitation.
 - **NEVER** silently fall back to training data on quota errors — always tell the user Context7 was unavailable and why.
 - **NEVER** query the same library twice with slightly different phrasing — ctx7 results are deterministic per query; rephrasing wastes your 3 attempts.
+- **NEVER** assume the indexed version is the latest release — always check returned version metadata.
 
 ## Step 1: Resolve a Library
 
@@ -128,6 +141,13 @@ ctx7 docs /prisma/prisma "How to define one-to-many relations with cascade delet
 
 Results contain two types of content: **code snippets** (titled, with language-tagged blocks) and **info snippets** (prose explanations with breadcrumb context).
 
+## Expert Tips: Coverage, Querying, and Staleness
+
+- **Coverage varies by ecosystem.** Large, well-documented projects with public GitHub-hosted docs tend to have good coverage (e.g., React, Next.js, Prisma, Tailwind, Django, Spring Boot). Smaller npm packages, private libraries, and brand-new releases are often absent or only partially indexed.
+- **Query strategy matters.** Combine the library name with the specific API, option, or error message. "Prisma relationMode" or "Next.js middleware matcher" returns focused results; "database config" or "routing" returns noise.
+- **Detect stale docs by version.** If the returned snippet mentions an older version than the user is running, or if the API shape conflicts with the library's current source, the index is lagging. Check the version field in `ctx7 library` output and prefer an explicit `/org/project/version` ID.
+- **Handle unindexed libraries.** If `ctx7 library` returns nothing after a broader query and alternative names, the library is likely not indexed. Fall back to WebSearch for current docs, or answer from training knowledge with a clear "not indexed" caveat.
+
 ## Authentication
 
 Works without authentication. For higher rate limits:
@@ -162,4 +182,3 @@ ctx7 login
 2. If repeated, treat as quota error (suggest authentication)
 
 Do not silently fall back to training data — always tell the user why Context7 was not used.
-
