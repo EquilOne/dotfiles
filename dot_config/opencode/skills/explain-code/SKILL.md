@@ -38,7 +38,7 @@ Explain code at a depth the user can actually use.
 
 When in doubt, default to `intermediate` and ask if they want more or less depth.
 
-Pick the level that matches the user. Default to `intermediate` when in doubt.
+Use the table above to pick the level that matches the user.
 
 - `beginner` — Conceptual. Real-world analogies. Plain language. Assumes the user is new to the language, the framework, or the domain. Define jargon inline when it can't be avoided.
 - `intermediate` — Logic, control flow, data transformations, library usage, inputs/outputs, edge cases. Assumes the user can read code but didn't write this particular piece.
