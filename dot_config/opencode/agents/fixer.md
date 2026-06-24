@@ -1,7 +1,7 @@
 ---
 description: Lightweight orchestrator for non-code tasks; delegates to specialist subagents
 mode: primary
-model: openrouter/xiaomi/mimo-v2.5-pro
+model: openrouter/minimax/minimax-m3
 reasoning:
   enabled: true
 permission:

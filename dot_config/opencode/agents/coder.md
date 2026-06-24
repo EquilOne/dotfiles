@@ -1,7 +1,7 @@
 ---
 description: Subagent that writes, refactors, and implements new code
 mode: subagent
-model: openrouter/z-ai/glm-5.2
+model: openrouter/moonshotai/kimi-k2.7-code
 reasoning:
   effort: xhigh
 permission:
