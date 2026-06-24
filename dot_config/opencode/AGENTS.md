@@ -11,7 +11,7 @@ It is not a development project. Write no application code here.
 | `tui.json`          | Keybindings, theme (`rosepine`), UI config                                      |
 | `agent_stack.md`    | Model-to-agent assignment table (16 entries)                                  |
 | `keybinds.md`       | Key reference (leader: `ctrl+x`)                                                |
-| `agents/*.md`       | Subagent config files (10 agents)                                             |
+| `agents/*.md`       | Subagent config files (11 agents)                                             |
 | `skills/*/SKILL.md` | Loaded skills (8: 4 caveman, explain-code, find-docs, omarchy, skill-creator) |
 | `templates/`        | Project templates (e.g., `project-planner`)                                     |
 | `package.json`      | Plugin dep: `@opencode-ai/plugin@1.4.0` (single, pinned)                        |
