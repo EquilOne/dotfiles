@@ -14,11 +14,12 @@ description: >
 
 ## Do NOT Load
 
-Use this skill ONLY for explaining existing code. Do NOT use when:
-- The user wants API reference or library docs → use `find-docs`
-- The user wants to learn by discovery (Socratic questioning) → use `socratic-mentoring`
-- The user wants to write new code → use `coder` subagent
-- The user wants a code review → use `review` subagent
+- Do NOT use for API reference or library docs — use `find-docs`
+- Do NOT use for learning by discovery (Socratic) — use `socratic-mentoring`
+- Do NOT use for writing new code — use `coder`
+- Do NOT use for code review — use `review`
+
+**Progressive disclosure:** This skill is self-contained (no reference files needed). The depth-selection table at the top routes to the right level. For complex multi-file explanations, ask the user which file to start with rather than explaining all at once.
 
 The distinction: explain-code gives a direct explanation at a chosen depth. socratic-mentoring makes the user reason to the answer themselves.
 
@@ -45,6 +46,15 @@ Use the table above to pick the level that matches the user.
 - `expert` — Architecture decisions, trade-offs, performance (Big O when relevant), security concerns, alternative approaches, refactoring opportunities.
 
 The user can prefix their request ("explain this like I'm 5", "explain at an expert level"). If they didn't specify, ask before starting.
+
+## Expert Explanation Patterns
+
+These patterns separate expert explanations from generic ones:
+
+- **The "why not" pattern:** After explaining what code does, explain why it DOESN'T do the obvious alternative. "Uses `for` loop instead of `forEach` because early `return` inside `forEach` doesn't break the loop." This reveals the design decision.
+- **The failure-mode preview:** Before the user encounters the edge case, name it. "Note: this will throw if `config` is null — the caller is expected to validate." Experts see the failure before it happens.
+- **The dependency map:** For non-trivial code, map what it depends on and what depends on it. "This function is called by X and Y; it reads from Z. Changing its signature breaks X and Y." This gives architectural context the code alone doesn't show.
+- **The performance footnote:** Only when relevant. "This is O(n²) — fine for <100 items, problematic at 10k. The alternative (hash map) would be O(n) but uses more memory." Experts know when NOT to mention performance.
 
 ## Calibration
 
