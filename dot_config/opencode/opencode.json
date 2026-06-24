@@ -33,19 +33,28 @@
         "z-ai/glm-5.2": {
           "options": {
             "reasoningEffort": "xhigh",
-            "verbosity": "low"
+            "verbosity": "low",
+            "provider": {
+              "sort": "throughput"
+            }
           }
         },
         "deepseek/deepseek-v4-flash": {
           "options": {
             "reasoningEffort": "high",
-            "verbosity": "low"
+            "verbosity": "low",
+            "provider": {
+              "sort": "throughput"
+            }
           }
         },
         "xiaomi/mimo-v2.5-pro": {
           "options": {
             "reasoningEffort": "medium",
-            "verbosity": "low"
+            "verbosity": "low",
+            "provider": {
+              "sort": "throughput"
+            }
           }
         }
       }

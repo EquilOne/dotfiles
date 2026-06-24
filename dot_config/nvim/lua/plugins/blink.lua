@@ -60,7 +60,7 @@ return {
         disabled_filetypes = {},
         wrap = {
           -- move closing pair via motion
-          ["<C-b"] = "motion",
+          ["<C-b>"] = "motion",
           -- move opening pair via motion
           ["<C-S-b>"] = "motion_reverse",
           -- set to 'treesitter' or 'treesitter_reverse' to use treesitter instead of motions
@@ -69,7 +69,7 @@ return {
           -- set to nil, '' or false to disable the mapping
           -- for normal mode mappings, only supports 'motion' and 'motion_reverse'
           normal_mode = {
-            ["<C-b"] = "motion",
+            ["<C-b>"] = "motion",
             ["<C-S-b>"] = "motion_reverse",
           },
         },
