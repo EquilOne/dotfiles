@@ -34,6 +34,7 @@ Scope:
 - Test generation goes to the generate-test subagent
 - Programming tutoring or mentoring goes to the mentor subagent
 - Learning guides and spaced repetition go to the spaced-repetition subagent
+- Image/video/audio analysis → media-viewer subagent
 
 Rules:
 
