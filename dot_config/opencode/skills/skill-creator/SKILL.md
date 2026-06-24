@@ -27,6 +27,11 @@ Ask:
 
 If the current conversation already shows the workflow the user wants captured, extract answers from it first — tools used, steps taken, corrections made. Confirm the extracted understanding before drafting.
 
+Before writing anything, ask yourself:
+- **Indispensability**: What would make this skill indispensable vs. redundant with AGENTS.md or another skill? If the answer is "nothing," the skill shouldn't exist.
+- **Smallest viable scope**: What's the smallest scope that covers 80% of the user's use cases? Start there. Scope creep kills skills faster than bad content.
+- **Expert validation**: Would an expert in this domain say "yes, this captures how I think"? If not, you're writing a tutorial, not a skill.
+
 ## Create from Chat Context
 
 When the user says "turn this into a skill" or "make a skill from what we just did":
@@ -51,33 +56,27 @@ Pick the pattern that matches the task before writing. Pattern sets length, tone
 
 Mindset and Navigation stay short. Tool and Process can run longer, but split into reference files once they cross the line budget. Misreading the pattern wastes a draft: a Tool skill written as Mindset will lack the exact steps that make it reliable.
 
-## Write the SKILL.md
+## Draft the SKILL.md
 
-Skills live in `skills/<name>/SKILL.md`. Match the style of existing skills in this repo (caveman, find-docs) — they're the reference examples.
+Skills live in `skills/<name>/SKILL.md`. Match the style of existing skills in this repo (caveman, find-docs).
 
-Structure:
-
-```yaml
----
-name: <kebab-case>
-description: >
-  <What the skill does. When to trigger — include specific phrases and contexts
-  the user might say. Be a little pushy here. The description is how the skill
-  gets picked up, so include edge cases and adjacent phrases.>
----
-```
-
-Body rules:
+Rules:
 - Imperative tone ("Do X", not "You should do X").
 - No emojis.
 - Concise sections, each focused on one thing.
 - Examples when the output format matters — show input and output.
 - Keep under 200 lines. If approaching that, split into reference files and link to them.
+- Embed loading triggers at the decision point where the reference is needed, not in a list at the end.
 
-Bundled resources (optional):
-- `scripts/` for deterministic or repetitive work the model would otherwise reinvent each time.
-- `references/` for docs the model should read on demand.
-- `assets/` for templates, icons, files used in the output.
+## Bundled Resources (scripts/, references/, assets/)
+
+Skills can bundle additional files in subdirectories. Knowing when to use each is expert knowledge:
+
+- **scripts/** — Use for executable workflows that must run identically every time (e.g., a Python script that processes files in a specific order). The skill invokes the script; the script does the work. Trade-off: harder to debug, but guarantees consistency.
+- **references/** — Use for documentation loaded on-demand (e.g., a 200-line scoring rubric, platform-specific syntax rules). The skill loads it conditionally. Trade-off: requires explicit MANDATORY loading triggers or it sits unused.
+- **assets/** — Use for templates, examples, or static files the skill copies or references (e.g., a README template, an example plan).
+
+**Anti-pattern:** Don't put content in references/ that's always needed — that forces an extra read every invocation. If it's always needed, inline it in SKILL.md.
 
 ## Craft the Description
 
@@ -117,36 +116,29 @@ Changes can be to SKILL.md content or to directory structure (adding `scripts/`,
 
 ## Iteration Loop
 
-The user tests the skill, reports what went wrong or what they wish it did differently, and you update the skill based on the new context. Repeat until the user is happy.
+The user tests the skill on a real prompt, reports what went wrong, and you update based on the signal. Repeat until satisfied.
 
-Encourage the user to try the skill on a few real prompts before judging it. The first draft will rarely be right — that's expected.
+Heuristics for each iteration:
+- **First draft will be wrong** — encourage the user to try 2-3 real prompts before judging.
+- **Same correction twice** → the skill has a wrong constraint. Find it and fix it, don't just polish.
+- **Vague feedback** ("it's not quite right") → ask which specific output was wrong and what they expected instead.
+- **Skill works on simple prompts but fails on complex ones** → the skill is under-specified. Add decision trees or edge case handling.
+- **User keeps overriding the skill** → the skill conflicts with their mental model. Ask what they'd do without the skill, then align to that.
 
-## When Iteration Fails
+## When Iteration Fails / Edge Cases
 
-The skill will not be right on the first draft. When the user reports problems, diagnose before fixing:
+**MANDATORY - READ ENTIRE FILE**: If iteration hits friction, the user reports persistent problems, or the request is ambiguous, read [`references/diagnostic-tables.md`](references/diagnostic-tables.md) completely. It contains symptom/cause/fix tables and edge case decision trees.
 
-| Symptom | Likely Cause | Fix |
-|---------|--------------|-----|
-| Skill fires when it shouldn't | Description is too broad, no negative triggers | Tighten KEYWORDS; add "Use ONLY when..." to description |
-| Skill doesn't fire when it should | Description missing WHEN or specific phrases | Add 3+ concrete user phrases; remove generic verbs |
-| Skill fires but output is wrong | Body has generic advice, not domain-specific knowledge | Rewrite body with concrete procedures only the model would not know |
-| User keeps correcting the same thing | Skill is over-constrained or under-constrained | Find the constraint that is wrong — loosen rigid MUSTs, tighten vague advice |
-| Description is fine but skill feels redundant | Skill duplicates content already in AGENTS.md or another skill | Cut the duplication; point to the canonical source |
+**Do NOT load** on every invocation — only when diagnosis is needed.
 
-Do not auto-loop. Each fix needs user confirmation before applying.
+## Expert Validation Questions
 
-## Handle Edge Cases
+Before finalizing a skill, validate against these expert questions:
 
-Use this decision tree when the request is unclear or the iteration hits friction:
-
-| Situation | First Move | If That Fails |
-|-----------|-----------|---------------|
-| Request is ambiguous | Ask one clarifying question about WHAT the skill should enable. | Propose 2-3 candidate scopes and let the user pick. Default to the smallest viable scope rather than guessing wide. |
-| Skill exists but is bad | Read it first. Identify what's wrong (description? structure? triggers?). Propose specific fixes. | If the user disagrees with the diagnosis, ask which symptom they want fixed first. Do not rewrite from scratch unless the structure is fundamentally broken. |
-| User wants a one-off | Push back. The bar is: "you'd use this 3+ times across different prompts." | If under that, suggest chat-only or a slash command instead. If the user insists, make it anyway but mark it `experimental` in frontmatter metadata. |
-| Forking a skill | Copy the directory, rename in frontmatter, update triggers to match the new scope, keep the parent's good parts. | If the parent changes later, note the divergence so the user can rebase manually. |
-| User rejects iteration changes | Ask which specific change they reject and why. Update only that part — do not revert everything. | If the user rejects 2+ iterations on the same section, that section needs a different approach, not more polish. |
-| Skill passes validation but never triggers | Description is the problem. Apply the three-question framework — usually WHEN or KEYWORDS are missing. | Add 2-3 more trigger phrases the user might say. Bias toward over-triggering. |
+1. **Knowledge delta test:** "Would a general-purpose LLM without this skill produce the same output?" If yes, the skill has no value — it's compressing what the model knows.
+2. **Trigger precision test:** "Does the description contain the exact words the user would say?" Vague descriptions ("helps with X") never trigger; specific ones ("when user says 'format this markdown'") always trigger.
+3. **Anti-pattern authenticity test:** "Would an expert say 'I learned this the hard way'?" If the anti-pattern is obvious to everyone, it's not expert knowledge.
+4. **Progressive disclosure test:** "Is the SKILL.md body under 500 lines?" If over, move detail to references/ with loading triggers.
 
 ## Validate Before Declaring Done
 
@@ -178,3 +170,6 @@ Run these checks before telling the user the skill is ready:
 
 - NEVER duplicate content already in AGENTS.md or another skill — each skill owns one workflow. Duplication drifts apart and both copies rot.
   - Example failure: two skills both explain "how to commit" — one updates to use commit-work, the other stays stale.
+
+- NEVER explain what a skill is or how skills work — the skill body is for domain knowledge the model lacks, not skill mechanics. Opening with "a skill is a markdown file that..." is pure token waste.
+  - Example failure: skill opens with "Skills are knowledge externalization mechanisms that allow you to..." — the model skips this, tokens wasted, no knowledge transferred.
