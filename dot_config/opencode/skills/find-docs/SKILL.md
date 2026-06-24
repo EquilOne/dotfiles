@@ -15,11 +15,13 @@ description: >-
   for API details, signatures, or configuration options as they are frequently
   outdated. Always verify against current docs. Prefer this over web search for
   library documentation and API details.
+
+  MUST use when: user asks "how do I use X", reports a library-specific error,
+  or needs to verify current API syntax. Do NOT rely on training data for
+  API signatures or configuration options.
 ---
 
 # Documentation Lookup
-
-Retrieve current documentation and code examples for any library using the Context7 CLI.
 
 Make sure the CLI is up to date before running commands:
 
@@ -32,6 +34,14 @@ Or run directly without installing:
 ```bash
 npx ctx7@latest <command>
 ```
+
+## Before You Search
+
+Ask yourself:
+- **Is this a library-specific question?** → Use this skill. General programming concepts don't need docs lookup.
+- **Does the user mention a specific version?** → Use version-specific library ID (`/org/project/version`).
+- **Is the question about behavior or syntax?** → Behavior questions need broader queries; syntax questions need precise API names.
+- **Could the answer be in multiple libraries?** → Run `ctx7 library` once, pick the best match, don't query all of them.
 
 ## Workflow
 
@@ -47,7 +57,15 @@ ctx7 docs <libraryId> <query>
 
 You MUST call `ctx7 library` first to obtain a valid library ID UNLESS the user explicitly provides a library ID in the format `/org/project` or `/org/project/version`.
 
-IMPORTANT: Do not run these commands more than 3 times per question. If you cannot find what you need after 3 attempts, use the best result you have.
+## NEVER
+
+- **NEVER** run `ctx7 docs` without first running `ctx7 library` — the command requires a resolved library ID, not a package name. It will fail silently or return garbage.
+- **NEVER** omit the `/` prefix on library IDs — `/facebook/react` works, `facebook/react` does not. This is the #1 cause of "library not found" errors.
+- **NEVER** use single-word queries like "hooks" or "auth" — ctx7 ranks results by query specificity. Vague queries return generic, unhelpful snippets. Use the user's full question.
+- **NEVER** include API keys, passwords, or proprietary code in queries — queries are sent to Context7's servers.
+- **NEVER** retry more than 3 times per question — if 3 attempts fail, the library likely isn't indexed. Use your best result and note the limitation.
+- **NEVER** silently fall back to training data on quota errors — always tell the user Context7 was unavailable and why.
+- **NEVER** query the same library twice with slightly different phrasing — ctx7 results are deterministic per query; rephrasing wastes your 3 attempts.
 
 ## Step 1: Resolve a Library
 
@@ -73,18 +91,14 @@ Each result includes:
 - **Benchmark Score** — Quality indicator (100 is the highest score)
 - **Versions** — List of versions if available. Use one of those versions if the user provides a version in their query. The format is `/org/project/version`.
 
-### Selection process
+### Selection rules
 
-1. Analyze the query to understand what library/package the user is looking for
-2. Select the most relevant match based on:
-   - Name similarity to the query (exact matches prioritized)
-   - Description relevance to the query's intent
-   - Documentation coverage (prioritize libraries with higher Code Snippet counts)
-   - Source reputation (consider libraries with High or Medium reputation more authoritative)
-   - Benchmark score (higher is better, 100 is the maximum)
-3. If multiple good matches exist, acknowledge this but proceed with the most relevant one
-4. If no good matches exist, clearly state this and suggest query refinements
-5. For ambiguous queries, request clarification before proceeding with a best-guess match
+When multiple libraries match:
+1. Prefer **exact name match** over partial
+2. Prefer **higher benchmark score** (max 100) — indicates doc quality
+3. Prefer **higher code snippet count** — more examples available
+4. Prefer **High/Medium source reputation** over Low/Unknown
+5. If still ambiguous, acknowledge alternatives but proceed with the best match
 
 ### Version-specific IDs
 
@@ -110,20 +124,9 @@ ctx7 docs /vercel/next.js "How to add authentication middleware to app router"
 ctx7 docs /prisma/prisma "How to define one-to-many relations with cascade delete"
 ```
 
-### Writing good queries
+### Output format
 
-The query directly affects the quality of results. Be specific and include relevant details. Do not include any sensitive or confidential information such as API keys, passwords, credentials, personal data, or proprietary code in your query.
-
-| Quality | Example |
-|---------|---------|
-| Good | `"How to set up authentication with JWT in Express.js"` |
-| Good | `"React useEffect cleanup function with async operations"` |
-| Bad | `"auth"` |
-| Bad | `"hooks"` |
-
-Use the user's full question as the query when possible, vague one-word queries return generic results.
-
-The output contains two types of content: **code snippets** (titled, with language-tagged blocks) and **info snippets** (prose explanations with breadcrumb context).
+Results contain two types of content: **code snippets** (titled, with language-tagged blocks) and **info snippets** (prose explanations with breadcrumb context).
 
 ## Authentication
 
@@ -139,16 +142,24 @@ ctx7 login
 
 ## Error Handling
 
-If a command fails with a quota error ("Monthly quota reached" or "quota exceeded"):
+**Quota error** ("Monthly quota reached" / "quota exceeded"):
 1. Inform the user their Context7 quota is exhausted
-2. Suggest they authenticate for higher limits: `ctx7 login`
-3. If they cannot or choose not to authenticate, answer from training knowledge and clearly note it may be outdated
+2. Suggest `ctx7 login` for higher limits
+3. If they decline, answer from training knowledge and clearly note it may be outdated
+
+**No results** (`ctx7 library` returns empty):
+1. Try a broader query — drop specific version or feature details
+2. Try alternative names — ctx7 indexes by GitHub org/project, not npm names (e.g., "vue" → "vuejs", "svelte" → "sveltejs", "nextjs" → "next.js", "react-router" → "react router dom")
+3. If still empty, the library isn't indexed — answer from training knowledge with a note
+
+**Network error** (timeout, connection refused):
+1. Check if `npx ctx7@latest --version` works — confirms CLI is reachable
+2. Retry once after a brief pause
+3. If persistent, answer from training knowledge and note the outage
+
+**Rate limiting** (429 errors):
+1. Slow down — space queries apart
+2. If repeated, treat as quota error (suggest authentication)
 
 Do not silently fall back to training data — always tell the user why Context7 was not used.
 
-## Common Mistakes
-
-- Library IDs require a `/` prefix — `/facebook/react` not `facebook/react`
-- Always run `ctx7 library` first — `ctx7 docs react "hooks"` will fail without a valid ID
-- Use descriptive queries, not single words — `"React useEffect cleanup function"` not `"hooks"`
-- Do not include sensitive information (API keys, passwords, credentials) in queries
