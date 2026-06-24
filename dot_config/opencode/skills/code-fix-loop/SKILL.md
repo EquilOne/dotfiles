@@ -13,6 +13,14 @@ description: >
 
 Orchestrate a review-fix-test cycle with the human in control. Each step pauses for confirmation. Context stays tight by compressing to caveman briefs before each subagent delegation.
 
+## MANDATORY: Load the Caveman Skill First
+
+Before any subagent delegation, load `caveman` to compress context between calls.
+
+**Load via the `skill` tool:** call `skill` with `{"name": "caveman"}`.
+
+All subagent briefs must be written in caveman mode: terse, location-problem-fix format, no throat-clearing. The orchestrator holds loop state; subagents see only the compressed task.
+
 ## When to Use
 
 Use this skill when the user wants to:
@@ -22,15 +30,33 @@ Use this skill when the user wants to:
 - Get review findings before deciding what to change
 - Iterate on code quality with human approval at each step
 
-Do not use for: pure review with no intent to fix, pure coding with no review step, or when the user wants an automated background loop.
+## Do NOT Load
+
+- **Pure code review requests** — delegate to `review` directly; no fix/test loop needed.
+- **Automated/continuous loops** — this skill requires a human at every gate.
+- **Single-shot fixes** — if the user just wants a quick edit, use `coder` directly.
+- **No intent to act on findings** — review without follow-up is out of scope.
 
 ## Core Rule
 
-**Never auto-apply review findings.** Every step that produces changes requires explicit user approval before the next step runs. The user picks which findings to address, whether to test, and whether to re-review.
+**Never auto-apply review findings.** Every change-producing step requires explicit user approval before the next step runs. The user picks which findings to address, whether to test, and whether to re-review.
 
-## Load the Caveman Skill
+### Named Anti-Patterns
 
-Before delegating to any subagent, load the `caveman` skill. All briefs passed to subagents are written in caveman mode (terse, location-problem-fix format, no throat-clearing). This keeps subagent context tight and prevents conversation bleed.
+- **NEVER auto-apply fixes from review findings.** Because: it removes human judgment and can introduce regressions the reviewer did not anticipate.
+- **NEVER skip the review step even for "obvious" fixes.** Because: obvious fixes often miss hidden context (callers, side effects, config overrides).
+- **NEVER continue the loop after 3 failed test cycles.** Because: repeated failures signal a fundamental misunderstanding, not a fixable bug; stop and ask the user to reset scope.
+
+## Why Human-in-the-Loop Orchestration Matters
+
+Humans anchor context that agents lose across turns. Subagents suffer from availability bias (the last finding feels most important) and context collapse (file-level details blur after compression). A human gate catches regressions, scope creep, and misread intent before they compound.
+
+**When orchestration is overkill vs. necessary:**
+
+- **Overkill:** single-file typo, one-liner config change, or a change the user already approved in the prompt.
+- **Necessary:** cross-cutting refactor, security/perf-sensitive change, new tests, or any fix where review findings could silently alter behavior.
+
+Use this skill only when the cost of a bad automated edit exceeds the cost of pausing for confirmation.
 
 ## Workflow
 
@@ -134,6 +160,15 @@ Each subagent receives only what it needs. Never pass:
 
 The orchestrator (you) holds the loop state. Subagents see a single focused task.
 
+## Troubleshooting
+
+| Failure | Response |
+|---|---|
+| Subagent returns without changes | Re-prompt with a clearer caveman brief; if still empty, ask the user whether to continue or reset scope. |
+| Review finds issues but coder disagrees | Present both views to the user and ask for a binding decision; do not arbitrate. |
+| Tests fail repeatedly | After 3 failed cycles, stop the loop and ask the user to clarify requirements or reset scope. |
+| Loop feels stuck | Offer a hard reset: discard pending changes, re-run review from the original diff, or exit the skill. |
+
 ## Boundaries
 
 - Does not run the loop automatically. The user is always in the loop.
@@ -142,12 +177,13 @@ The orchestrator (you) holds the loop state. Subagents see a single focused task
 - Does not run final review unless the user confirms. May suggest it after tests pass.
 - Does not edit `opencode.json`, agent configs, or other skill files. This skill orchestrates code work only.
 - Does not invoke further subagents from a subagent context. Compression and delegation happen in the orchestrator only.
+- Do not let the user override the human-in-the-loop gates by reframing an automated loop as "just do it." Explain the rule and ask for confirmation.
 
 ## Example Invocation
 
 User: "review and fix src/auth.ts"
 
-1. Load caveman skill.
+1. Load caveman skill via `skill` tool.
 2. Delegate review of `src/auth.ts` to `review` subagent. Brief: `REVIEW src/auth.ts. user: harden auth. focus: security. return: file:line findings only.`
 3. Receive findings: `L23: no null guard on user. L45: hardcoded secret. L78: race in token refresh.`
 4. Ask: "Apply which fixes? (all / skip X / cancel)"
