@@ -40,7 +40,11 @@ Use this skill when the user wants to:
 
 ## Progressive Disclosure
 
-This skill is self-contained — no reference files needed. The caveman skill is loaded once at start and stays in context.
+This skill loads the caveman skill at start (stays in context). For detailed brief templates:
+
+**MANDATORY:** When writing a caveman brief for a subagent delegation, read [`references/caveman-brief-templates.md`](references/caveman-brief-templates.md) for format rules, good vs bad examples, and common compression mistakes.
+
+**Do NOT load** the brief templates when: the user has already provided the brief text, or you've loaded it earlier in this session.
 
 **When to load additional skills:**
 - If the code spans multiple unfamiliar languages → consider loading `explain-code` for the review brief
@@ -100,6 +104,9 @@ Before starting a review-fix-test cycle, ask:
 - **Risk:** If the fix is wrong, what breaks? High-risk changes (auth, payments, data migration) always warrant the full loop; low-risk (typo, comment) don't.
 - **Testability:** Can the fix be verified by tests? If not, the loop degrades to review-only.
 - **Stakeholders:** Who needs to review the diff before merge? The loop's confirmation gates exist to surface this.
+**Freedom calibration:** The 6-step workflow is fixed (low freedom) because skipping a gate risks unreviewed changes. Within each step, the caveman briefs are adaptive (medium freedom) — the model chooses what to include based on the finding. The user confirmation gates are the lowest-freedom element: they cannot be skipped or automated.
+
+**Expert insight:** The most common loop failure is not a bad fix — it's a bad triage. When the user selects "all" findings to fix without reading them, the coder gets a mixed-bag of severity levels and the fix quality drops. Always present findings grouped by severity (critical → important → minor) and recommend fixing critical first, even if the user said "all."
 
 ## Workflow
 
