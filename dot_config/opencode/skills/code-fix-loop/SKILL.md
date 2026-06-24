@@ -37,6 +37,15 @@ Use this skill when the user wants to:
 - **Single-shot fixes** — if the user just wants a quick edit, use `coder` directly.
 - **No intent to act on findings** — review without follow-up is out of scope.
 
+## Progressive Disclosure
+
+This skill is self-contained — no reference files needed. The caveman skill is loaded once at start and stays in context.
+
+**When to load additional skills:**
+- If the code spans multiple unfamiliar languages → consider loading `explain-code` for the review brief
+- If the fix involves config files → the `customize-opencode` skill may provide schema context
+- If tests need a specific framework → let the `generate-test` subagent detect it
+
 ## Core Rule
 
 **Never auto-apply review findings.** Every change-producing step requires explicit user approval before the next step runs. The user picks which findings to address, whether to test, and whether to re-review.
@@ -57,6 +66,14 @@ Humans anchor context that agents lose across turns. Subagents suffer from avail
 - **Necessary:** cross-cutting refactor, security/perf-sensitive change, new tests, or any fix where review findings could silently alter behavior.
 
 Use this skill only when the cost of a bad automated edit exceeds the cost of pausing for confirmation.
+
+## Thinking Frame
+
+Before starting a review-fix-test cycle, ask:
+- **Scope:** Is this a single-file fix or a cross-cutting refactor? Single-file may not need the full loop.
+- **Risk:** If the fix is wrong, what breaks? High-risk changes (auth, payments, data migration) always warrant the full loop; low-risk (typo, comment) don't.
+- **Testability:** Can the fix be verified by tests? If not, the loop degrades to review-only.
+- **Stakeholders:** Who needs to review the diff before merge? The loop's confirmation gates exist to surface this.
 
 ## Workflow
 
@@ -168,6 +185,14 @@ The orchestrator (you) holds the loop state. Subagents see a single focused task
 | Review finds issues but coder disagrees | Present both views to the user and ask for a binding decision; do not arbitrate. |
 | Tests fail repeatedly | After 3 failed cycles, stop the loop and ask the user to clarify requirements or reset scope. |
 | Loop feels stuck | Offer a hard reset: discard pending changes, re-run review from the original diff, or exit the skill. |
+
+### Why Loops Fail
+
+Review-fix-test loops have three characteristic failure modes that only experience reveals:
+
+1. **Finding drift:** The coder "fixes" a finding by reframing it as a non-issue rather than addressing it. Detect by checking if the diff actually changes the flagged line.
+2. **Test theater:** Tests pass but don't cover the edge case that triggered the finding. Detect by asking: "Does this test fail if I revert the fix?"
+3. **Scope creep via findings:** Each review cycle generates new findings, creating an endless loop. Detect by tracking finding count per cycle — if it's not converging toward zero, stop and reset scope.
 
 ## Boundaries
 
