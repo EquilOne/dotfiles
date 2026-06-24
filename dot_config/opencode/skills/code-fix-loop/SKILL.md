@@ -1,12 +1,13 @@
 ---
 name: code-fix-loop
 description: >
-  Human-in-the-loop review → fix → test cycle. Orchestrates coder, review, and
-  generate-test subagents with caveman-compressed context. Use when user says
-  "review and fix", "review cycle", "review loop", "code fix loop", "review then
-  fix", "/review-fix", "review before changes", or asks to review code before
-  applying changes. Always pauses for user confirmation between steps. Does not
-  auto-loop, does not auto-apply fixes from review findings.
+  Human-in-the-loop review → fix → test cycle. Conventional review-fix cycle
+  for code review then fix workflows. Orchestrates coder, review, and generate-test
+  subagents with caveman-compressed context. MUST use when user says "review and fix"
+  or "review then fix". Also use when user says "review cycle", "review loop",
+  "code fix loop", "/review-fix", "review before changes", or asks to review
+  findings before changes and then apply fixes. Always pauses for user confirmation
+  between steps. Does not auto-loop, does not auto-apply fixes from review findings.
 ---
 
 # Code Fix Loop
@@ -45,6 +46,31 @@ This skill is self-contained — no reference files needed. The caveman skill is
 - If the code spans multiple unfamiliar languages → consider loading `explain-code` for the review brief
 - If the fix involves config files → the `customize-opencode` skill may provide schema context
 - If tests need a specific framework → let the `generate-test` subagent detect it
+
+## Pattern: Process
+
+This skill follows the Process pattern because the review-fix-test cycle is a phased workflow:
+- **Phase 1:** Review (delegate to review subagent)
+- **Phase 2:** Triage (user selects which findings to fix)
+- **Phase 3:** Fix (delegate to coder subagent)
+- **Phase 4:** Test (delegate to generate-test subagent, optional)
+- **Phase 5:** Final review (confirm fixes resolved findings, optional)
+- **Phase 6:** Summary (report what changed)
+
+Checkpoints between every phase — user confirmation required to advance. Medium freedom: the 6-step sequence is fixed, but the caveman briefs within each step are adaptive. The human-in-the-loop gate is the core safety mechanism that distinguishes this from an automated loop.
+
+**Why Process, not Tool:** A Tool pattern requires exact scripts and low freedom — but the caveman briefs are adaptive templates, not fixed scripts. The skill's value isn't "run this exact command" (Tool); it's "orchestrate these subagents in this order with these confirmation gates" (Process). The caveman compression is a MEDIUM-freedom mechanism: it constrains format (terse, location-problem-fix) but adapts content per finding. This is structurally Process, not Tool.
+
+**Why Process, not Mindset:** Mindset skills transfer thinking patterns with no workflow (~50 lines, high freedom). This skill's value is the WORKFLOW itself — the 6-step sequence with gates is the expert knowledge, not just a thinking frame. Remove the workflow and you have nothing; that's the signature of Process, not Mindset. The human-in-the-loop gate is the non-obvious structural insight: it converts an automated loop (which would be a Tool) into a Process by inserting judgment checkpoints that require human confirmation.
+
+**Why Process, not Navigation:** Navigation skills route to sub-files for distinct scenarios (~30 lines). This skill has ONE scenario (review-fix-test) with a fixed sequence — there's nothing to navigate between. The 6 steps aren't alternative routes; they're a mandatory pipeline.
+
+**Pattern mapping:**
+- Phased workflow: 6 steps with mandatory confirmation gates ✓
+- Checkpoints: User confirms scope, findings, tests, and final review at each gate ✓
+- Medium freedom: Caveman briefs constrain format, adapt content ✓
+- ~247 lines (within Process range) ✓
+- Non-obvious insight: The human-in-the-loop gate is what makes this Process not Tool ✓
 
 ## Core Rule
 
