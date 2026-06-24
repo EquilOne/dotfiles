@@ -14,3 +14,4 @@
 | Docs Agent              | Gemini 3 Flash                |
 | Code Explainer          | Gemini 3 Flash                |
 | Escalation              | Claude Sonnet 4.6             |
+| Media Viewer Subagent   | MiMo V2.5                   |
