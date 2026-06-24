@@ -35,14 +35,31 @@ npx ctx7@latest <command>
 | Empty results | Library not indexed | Use WebSearch fallback |
 | Stale docs | Version mismatch | Specify version explicitly |
 
+## Progressive Disclosure
+
+**This skill is self-contained** — no reference files needed. The ctx7 CLI is invoked directly.
+
+**When to load additional context:**
+- If the user asks about a library NOT in ctx7's index → load WebSearch as fallback
+- If ctx7 returns version-specific docs → check the user's package.json/requirements.txt for the exact version
+- If the user asks "how do I use X" for a framework → also check if there's a relevant skill (e.g., omarchy for Hyprland)
+
+## Do NOT Load
+
+- Do NOT use for general web search (non-library queries) — use the search subagent
+- Do NOT use for explaining existing code — use explain-code
+- Do NOT use for tutorial-style learning — use socratic-mentoring
+
 ## When to Use This Skill
 
 Use this skill for any question tied to a specific technology and its current docs.
 
-**Thinking frame:**
-- **Before searching:** Is this a library-specific question or a general concept?
-- **During search:** Am I getting docs or just API signatures?
-- **After search:** Do I need to verify against current source or is training data sufficient?
+## Thinking Frame (Expert)
+
+- **Before searching:** Is this a library-specific question or a general concept? Library-specific → ctx7. General concept → answer directly or use search. The distinction matters: ctx7 returns API docs, not conceptual explanations.
+- **During search:** Am I getting docs or just API signatures? If only signatures, query with "guide" or "tutorial" keywords. If getting stale docs, specify the version explicitly: `resolve-library-id --library "react@18"`.
+- **After search:** Do I need to verify against current source or is the doc sufficient? For version-specific behavior, cross-check with the changelog. For stable APIs, the doc is enough.
+- **Failure mode:** If ctx7 returns nothing, DON'T fall back to training data silently. Tell the user: "ctx7 has no index for this library. I can search the web or use my training data — which do you prefer?"
 
 Also ask yourself:
 - **Does the user mention a specific version?** → Use version-specific library ID (`/org/project/version`).
