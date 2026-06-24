@@ -11,10 +11,7 @@ description: >
 ---
 
 # Skill Creator
-
-Create new skills and iteratively improve them from chat context.
-
-The loop: draft a skill, test it, improve based on what went wrong, repeat.
+Create new skills and iteratively improve them from chat context. The loop: draft a skill, test it, improve based on what went wrong, repeat.
 
 ## Capture Intent
 
@@ -42,6 +39,18 @@ When the user says "turn this into a skill" or "make a skill from what we just d
 4. Synthesize a draft SKILL.md.
 5. Present the draft to the user before writing it. Ask if anything's missing or wrong.
 
+## Do NOT Load
+- Do NOT use skill-creator for evaluating skills — use skill-judge instead
+- Do NOT use for editing opencode config — use customize-opencode
+- Do NOT use for refactoring agent instruction files — use agent-md-refactor
+
+## Progressive Disclosure Template
+When a skill needs >150 lines, split into:
+- `SKILL.md` — core workflow, description, anti-patterns (<150 lines)
+- `references/<topic>.md` — detailed examples, extended decision trees
+- `scripts/<name>.sh` — executable workflows (if any)
+Add MANDATORY loading triggers in SKILL.md for each reference file.
+
 ## Choose the Right Pattern
 
 Pick the pattern that matches the task before writing. Pattern sets length, tone, and structure.
@@ -56,8 +65,9 @@ Pick the pattern that matches the task before writing. Pattern sets length, tone
 
 Mindset and Navigation stay short. Tool and Process can run longer, but split into reference files once they cross the line budget. Misreading the pattern wastes a draft: a Tool skill written as Mindset will lack the exact steps that make it reliable.
 
-## Draft the SKILL.md
+**Why Process pattern:** Skill creation is a multi-step workflow (analyze → choose pattern → draft → validate → iterate) with checkpoints (validation gate). Medium freedom — the workflow is fixed but content is creative.
 
+## Draft the SKILL.md
 Skills live in `skills/<name>/SKILL.md`. Match the style of existing skills in this repo (caveman, find-docs).
 
 Rules:
@@ -69,7 +79,6 @@ Rules:
 - Embed loading triggers at the decision point where the reference is needed, not in a list at the end.
 
 ## Bundled Resources (scripts/, references/, assets/)
-
 Skills can bundle additional files in subdirectories. Knowing when to use each is expert knowledge:
 
 - **scripts/** — Use for executable workflows that must run identically every time (e.g., a Python script that processes files in a specific order). The skill invokes the script; the script does the work. Trade-off: harder to debug, but guarantees consistency.
@@ -98,6 +107,20 @@ Checklist:
 - KEYWORDS are specific user phrases, not generic
 - Includes edge cases and adjacent phrases
 - Reads as a little pushy, not tentative
+
+## Freedom Calibration
+
+Skill creation requires different freedom at different stages:
+
+| Stage | Freedom | Why |
+|-------|---------|-----|
+| Choosing a pattern (Mindset/Tool/Process) | Low | Wrong pattern = structural failure. Follow the decision tree. |
+| Writing the description | Low | Description quality is binary — it either triggers or doesn't. Follow the checklist. |
+| Writing expert knowledge | High | Domain expertise is creative — let the expert flow. |
+| Writing anti-patterns | Medium | Specific rules needed, but the model chooses which landmines to include. |
+| Validation | Low | Follow the validation checklist exactly. Don't skip steps. |
+
+**Key insight:** The description and pattern choice are low-freedom because they're load-bearing. The expert content is high-freedom because that's where value lives. Don't over-constrain the expert content with rigid templates.
 
 ## Improve from Chat Context
 
@@ -141,7 +164,6 @@ Before finalizing a skill, validate against these expert questions:
 4. **Progressive disclosure test:** "Is the SKILL.md body under 500 lines?" If over, move detail to references/ with loading triggers.
 
 ## Validate Before Declaring Done
-
 Run these checks before telling the user the skill is ready:
 - Description has WHAT, WHEN, and KEYWORDS (all three, not just one)
 - Description includes multiple specific user phrases the model can pattern-match
@@ -151,25 +173,27 @@ Run these checks before telling the user the skill is ready:
 - No generic advice Claude would derive on its own without the skill
 - Bundled resources only when the skill genuinely needs them
 
+## Common Skill Creation Failure Patterns
+
+1. **Tutorial creep:** The skill explains HOW to do something the model already knows (e.g., "write clean code"). Test: would a general LLM produce this without the skill? If yes, delete it.
+2. **Description vagueness:** "Helps with X" never triggers. The description must contain the exact phrases users say. Mine the user's actual words.
+3. **Pattern mismatch:** Using a Mindset pattern (50 lines) for a complex workflow, or a Process pattern (200 lines) for a simple mindset. Pattern drives structure; wrong pattern = structural debt.
+4. **Anti-pattern absence:** No NEVER list = the model falls into every trap the expert has already mapped. Anti-patterns are half the value.
+5. **Progressive disclosure failure:** Everything in SKILL.md. Test: is it over 500 lines? Move detail to references/ with loading triggers.
+
 ## Anti-Patterns
 
 - NEVER write a skill that only handles the conversation's specific examples — generalization test: read the skill without the conversation, do the procedures still make sense? If no, it is too narrow. The skill must work on prompts the user has not run yet.
   - Example failure: skill says "if the user pastes a function, format it with prettier" — fails when the user pastes a class, JSON, or config.
-
 - NEVER over-constrain with rigid MUSTs without reasoning — the model follows the letter and misses the spirit. Explain *why* each constraint matters so the model adapts when context shifts.
   - Example failure: skill says "MUST use tab indentation" with no reason — model tab-indents a project that uses spaces, breaking the codebase.
-
 - NEVER add features the user did not ask for — a focused skill beats a kitchen-sink skill. Extra features dilute the trigger and add surface area for bugs.
   - Example failure: skill for "explain this code" gains a "refactor" mode because the user asked once — now the skill fires on every refactor request and explains less.
-
 - NEVER create a skill for a one-off task — the bar is "you would use this 3+ times across different prompts." One-offs belong in chat, not in a skill directory.
   - Example failure: skill for "format this CSV" with one column shape — when the CSV has different columns, the skill fails and the user has to re-explain every time.
-
 - NEVER write a description with only WHAT — the skill will rarely trigger. WHEN and KEYWORDS are what make the model pick it up.
   - Example failure: description "Skill for code refactoring" — never fires because the model has no signal for when to load it.
-
 - NEVER duplicate content already in AGENTS.md or another skill — each skill owns one workflow. Duplication drifts apart and both copies rot.
   - Example failure: two skills both explain "how to commit" — one updates to use commit-work, the other stays stale.
-
 - NEVER explain what a skill is or how skills work — the skill body is for domain knowledge the model lacks, not skill mechanics. Opening with "a skill is a markdown file that..." is pure token waste.
   - Example failure: skill opens with "Skills are knowledge externalization mechanisms that allow you to..." — the model skips this, tokens wasted, no knowledge transferred.
