@@ -12,11 +12,31 @@ description: >
   programming session and asks for help making sense of it.
 ---
 
+## Do NOT Load
+
+Use this skill ONLY for explaining existing code. Do NOT use when:
+- The user wants API reference or library docs → use `find-docs`
+- The user wants to learn by discovery (Socratic questioning) → use `socratic-mentoring`
+- The user wants to write new code → use `coder` subagent
+- The user wants a code review → use `review` subagent
+
+The distinction: explain-code gives a direct explanation at a chosen depth. socratic-mentoring makes the user reason to the answer themselves.
+
 # Explain Code
 
 Explain code at a depth the user can actually use.
 
 ## Depth Levels
+
+**Quick depth selection:**
+
+| User Signal | Depth | Format |
+|-------------|-------|--------|
+| "ELI5" / "I'm new to this" / "explain like I'm 5" | beginner | Analogy + simple example, define jargon |
+| "How does X work?" / "what does this do" (no qualifier) | intermediate | Summary + breakdown + notable details |
+| "Walk me through the internals" / "architecture" / "trade-offs" | expert | Full architecture + trade-offs + edge cases + alternatives |
+
+When in doubt, default to `intermediate` and ask if they want more or less depth.
 
 Pick the level that matches the user. Default to `intermediate` when in doubt.
 
@@ -25,6 +45,21 @@ Pick the level that matches the user. Default to `intermediate` when in doubt.
 - `expert` — Architecture decisions, trade-offs, performance (Big O when relevant), security concerns, alternative approaches, refactoring opportunities.
 
 The user can prefix their request ("explain this like I'm 5", "explain at an expert level"). If they didn't specify, ask before starting.
+
+## Calibration
+
+Before explaining, ask yourself (don't ask the user unless depth is unclear):
+1. **What does the user already know?** (language, framework, codebase familiarity)
+2. **What do they need to do after understanding this?** (debug, refactor, review, learn)
+3. **What's the one thing they'd miss without help?** (that's where you add value)
+
+## Explanation Failure Modes
+
+Three cognitive biases ruin code explanations. Watch for them:
+
+- **Curse of knowledge:** Once you understand something, you can't remember what it was like not to. This makes you skip steps that the reader needs. Fix: always include a "why this matters" framing before diving into mechanics. If you can't explain why it matters to a beginner, you don't understand it well enough.
+- **False consensus:** Assuming the reader knows the same background you do. This produces explanations that reference unstated concepts. Fix: explicitly state prerequisites at the top ("This assumes you know what a callback is"). If unsure, ask the calibration questions.
+- **Anchoring bias:** Leading with implementation details when the reader needs the concept first. The first thing you say becomes the reader's anchor — if that's a line of code, they'll think in code, not in concepts. Fix: start with the "what" and "why" before the "how." Summary-first format exists to break this bias.
 
 ## Output Format
 
@@ -55,12 +90,16 @@ When the user shares a full file:
 
 If the conversation already discussed this code before the "explain" request, use that history. The user has been thinking about this — earlier confusion, related files they showed, corrections they made — all of it sharpens the explanation. Don't treat the request as isolated.
 
-## Boundaries
+## NEVER Do
 
-- Does not write new code or refactor unless the user asks. The skill explains; it does not edit.
-- Does not run analysis tools, linters, or formatters.
-- When the code is ambiguous or could mean multiple things, flag the ambiguity rather than guessing.
-- For library or framework behavior you're not certain about, use the `find-docs` skill to verify before explaining. Bad explanations of framework quirks are worse than no explanation.
+- **NEVER guess when code is ambiguous.** If a variable name could mean two things, a function call could be sync or async, or a pattern could be intentional or accidental — flag the ambiguity explicitly. "This could mean X or Y; I'll assume X but confirm" is honest. Guessing silently erodes trust.
+- **NEVER explain what the code does when the user asks why.** "What" is syntax — the reader can see that. "Why" is intent — the design decision, the trade-off, the constraint that made this approach necessary. If they ask "what does this do," they want the "why" underneath.
+- **NEVER explain at the wrong depth.** A beginner asking "what does this do" doesn't need Big O analysis. An expert asking "walk me through this" doesn't need a for-loop explanation. The depth levels exist for a reason — match the user's level, not your default.
+- **NEVER use the `find-docs` skill to verify library behavior you're confident about.** Only verify when genuinely uncertain about framework quirks, version-specific behavior, or undocumented edge cases. Over-verification wastes time and signals lack of confidence.
+- **NEVER explain the entire file when the user points at a function.** If they paste a snippet or point at specific lines, explain those. Drilling into unrelated code is scope creep. Note what's relevant and move on.
+- **NEVER produce explanations longer than the code itself** (unless the code is trivially short and the user needs conceptual grounding). If your explanation is 3x the code's length, you're probably explaining syntax, not intent.
+- **NEVER explain without first checking the user's level.** Because: explaining at the wrong depth wastes everyone's time — too shallow bores the expert, too deep confuses the beginner. The calibration questions take 5 seconds and save a useless explanation.
+- **NEVER use jargon without defining it on first use.** Because: undefined jargon creates false understanding — the reader nods along but didn't actually follow. Define on first use even at expert depth, because "expert" in one domain may be "beginner" in another.
 
 ## Example
 
@@ -74,3 +113,25 @@ Same function at three depths — a JWT auth middleware in Express.
 
 **Expert:**
 > Synchronous `verify()` on the request path blocks the event loop on every call — `jsonwebtoken` supports a callback form if you want async. The secret is loaded from `process.env.JWT_SECRET` without a startup check, so a missing secret will only surface as a runtime throw on the first request. No `audience` or `issuer` validation means the same signing key could be reused across services without isolation. The split error messages (line 18 vs 23) are a minor timing/info-leak vector but probably acceptable for an internal API. Consider wrapping in `try` and returning a single generic 401 if you want to harden it.
+
+## Example 2: Python Data Pipeline
+
+**Beginner:**
+> This function takes messy data from a spreadsheet and cleans it up. It removes empty rows, fixes inconsistent date formats, and makes sure all the numbers are actually numbers (not text that looks like numbers). Think of it as a quality-control checkpoint before the data gets used.
+
+**Intermediate:**
+> A pandas pipeline that chains three transformations: `dropna()` on the index to remove empty rows, `pd.to_datetime()` with `format='mixed'` to normalize date strings, and `pd.to_numeric(errors='coerce')` to convert non-numeric values to NaN. The `pipe()` pattern keeps it composable — each step receives and returns a DataFrame. Note that `errors='coerce'` silently converts bad values to NaN, which may hide data quality issues.
+
+**Expert:**
+> The `format='mixed'` flag on `pd.to_datetime` (pandas 2.0+) parses heterogeneous date strings without a fixed format — useful but slower than specifying an exact format. The `errors='coerce'` on `to_numeric` is a deliberate choice to degrade gracefully rather than fail, but it means downstream code must handle NaN. Consider adding a logging step that counts coerced values so data quality doesn't silently deteriorate. The `pipe()` chain is clean but doesn't short-circuit — if the first step eliminates 90% of rows, the subsequent steps still process the full DataFrame before filtering.
+
+## Example 3: Rust Memory Ownership
+
+**Beginner:**
+> This code handles a book in a library. When you check out a book, only one person can have it at a time. When you're done, you give it back. The rules make sure no one tries to read a book that doesn't belong to them, and the library always knows who has it.
+
+**Intermediate:**
+> The function takes ownership of a `String`, lends it temporarily as a read-only reference (`&String`) to a helper, and then returns the original value so the caller keeps owning it. Rust's borrow checker enforces that only one mutable reference can exist at a time, so this pattern avoids data races without a garbage collector.
+
+**Expert:**
+> Ownership is transferred into `process()` and then back out via the return value, a common RAII idiom. The immutable borrow inside `helper()` is scoped to the call, so it cannot outlive the owned value; the compiler proves this statically with lifetimes. No `Clone` or `Rc` is needed because the single-owner discipline is sufficient. If this were a hot loop, returning the owned value avoids heap allocation overhead compared to cloning, but it forces the caller to handle the moved value explicitly.
