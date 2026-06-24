@@ -38,15 +38,7 @@ return {
   -- Define keys here for lazy-loading and Which-Key integration
   keys = {
     {
-      "<leader>aa",
-      function()
-        require("opencode").ask("@this: ", { submit = true })
-      end,
-      desc = "Ask OpenCode",
-      mode = { "n", "x" },
-    },
-    {
-      "<leader>ax",
+      "<leader>ao",
       function()
         require("opencode").select()
       end,
@@ -60,25 +52,6 @@ return {
       end,
       desc = "Toggle OpenCode",
       mode = { "n", "t" },
-    },
-    -- Operator binds (unchanged for easy access)
-    {
-      "go",
-      function()
-        return require("opencode").operator("@this ")
-      end,
-      desc = "Add range to OpenCode",
-      expr = true,
-      mode = { "n", "x" },
-    },
-    {
-      "goo",
-      function()
-        return require("opencode").operator("@this ") .. "_"
-      end,
-      desc = "Add line to OpenCode",
-      expr = true,
-      mode = "n",
     },
     -- Scrolling (unchanged for easy access)
     {

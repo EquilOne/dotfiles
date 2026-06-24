@@ -9,7 +9,8 @@
   "default_agent": "fixer",
   "agent": {
     "plan": {
-      "model": "openrouter/xiaomi/mimo-v2.5-pro"
+      "model": "openrouter/xiaomi/mimo-v2.5-pro",
+      "reasoningEffort": "high"
     },
     "build": {
       "model": "openrouter/z-ai/glm-5.2",
@@ -24,6 +25,30 @@
     "scout": {
       "mode": "subagent",
       "model": "openrouter/minimax/minimax-m2.7"
+    }
+  },
+  "provider": {
+    "openrouter": {
+      "models": {
+        "z-ai/glm-5.2": {
+          "options": {
+            "reasoningEffort": "xhigh",
+            "verbosity": "low"
+          }
+        },
+        "deepseek/deepseek-v4-flash": {
+          "options": {
+            "reasoningEffort": "high",
+            "verbosity": "low"
+          }
+        },
+        "xiaomi/mimo-v2.5-pro": {
+          "options": {
+            "reasoningEffort": "medium",
+            "verbosity": "low"
+          }
+        }
+      }
     }
   }
 }
