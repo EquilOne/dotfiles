@@ -44,6 +44,18 @@ npx ctx7@latest <command>
 - If ctx7 returns version-specific docs → check the user's package.json/requirements.txt for the exact version
 - If the user asks "how do I use X" for a framework → also check if there's a relevant skill (e.g., omarchy for Hyprland)
 
+## Pattern: Tool
+
+**Why Tool, not Process:** Doc retrieval is a precise operation on ctx7's index — one wrong library ID returns wrong docs. A Process pattern would add unnecessary workflow phases. Tool is correct because the value is in the decision tree (which library? which doc type?) and exact CLI commands.
+
+**Why Tool, not Mindset:** The value is in ctx7 operational knowledge (coverage gaps, stale docs detection, version-specific queries), not a thinking framework. Mindset is ~50 lines; find-docs needs ~200 for the command reference and error handling.
+
+**Pattern mapping:**
+- Decision trees: library selection rules, error → fix table ✓
+- Code examples: exact ctx7 CLI commands ✓
+- Low freedom: wrong library ID = wrong docs ✓
+- ~200 lines (within Tool range) ✓
+
 ## Do NOT Load
 
 - Do NOT use for general web search (non-library queries) — use the search subagent
@@ -164,6 +176,7 @@ Results contain two types of content: **code snippets** (titled, with language-t
 - **Query strategy matters.** Combine the library name with the specific API, option, or error message. "Prisma relationMode" or "Next.js middleware matcher" returns focused results; "database config" or "routing" returns noise.
 - **Detect stale docs by version.** If the returned snippet mentions an older version than the user is running, or if the API shape conflicts with the library's current source, the index is lagging. Check the version field in `ctx7 library` output and prefer an explicit `/org/project/version` ID.
 - **Handle unindexed libraries.** If `ctx7 library` returns nothing after a broader query and alternative names, the library is likely not indexed. Fall back to WebSearch for current docs, or answer from training knowledge with a clear "not indexed" caveat.
+- **Version drift detection:** When ctx7 returns docs for "react" without a version, it defaults to the latest indexed version. If the user's package.json specifies react@17 but ctx7 returns react@18 docs, the API signatures may differ (e.g., `useEffect` cleanup timing changed in 18). Always cross-check: if the user mentions a version, pass it explicitly: `resolve-library-id --library "react@17"`.
 
 ## Authentication
 
@@ -197,5 +210,7 @@ ctx7 login
 **Rate limiting** (429 errors):
 1. Slow down — space queries apart
 2. If repeated, treat as quota error (suggest authentication)
+
+**Edge case: Library name collisions:** Some library names collide across ecosystems (e.g., "redis" exists in npm, pip, and go modules). When resolving, include the ecosystem: `resolve-library-id --library "redis" --topic "python"` to disambiguate. If the user doesn't specify the ecosystem, infer from the project's package manager.
 
 Do not silently fall back to training data — always tell the user why Context7 was not used.
