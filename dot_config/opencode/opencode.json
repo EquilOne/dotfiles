@@ -4,7 +4,8 @@
     "@mohak34/opencode-notifier@latest",
     "@franlol/opencode-md-table-formatter@latest"
   ],
-  "autoupdate": false,
+  "formatter": true,
+  "autoupdate": true,
   "default_agent": "fixer",
   "agent": {
     "plan": {
