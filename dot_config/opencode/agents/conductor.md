@@ -43,6 +43,7 @@ Delegation protocol:
   - Code changes → coder subagent (requires user-approved plan first, unless `@coder` prefix present)
   - Code review → review subagent
   - Test generation → generate-test subagent
+  - Media analysis (images, video, audio) → media-viewer subagent
 - Parallelize independent phases. Sequence dependent phases. Do not start B until A returns if B depends on A's output.
 - Validate each subagent result before marking its todo complete.
 
