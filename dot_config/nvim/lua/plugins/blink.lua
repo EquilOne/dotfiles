@@ -35,10 +35,13 @@ return {
     },
   },
   {
+    "saghen/blink.lib",
+  },
+  {
     "saghen/blink.pairs",
     version = "*",
     build = function()
-      require("blink.pairs").download():pwait(60000)
+      require("blink.pairs").build():pwait(60000)
     end,
 
     --- @module 'blink.pairs'
