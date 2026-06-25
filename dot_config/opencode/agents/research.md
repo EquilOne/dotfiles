@@ -1,12 +1,13 @@
 ---
 description: Research a topic, synthesize findings, and produce a cited report
 mode: subagent
-model: openrouter/google/gemini-3.1-pro-preview
+model: openrouter/x-ai/grok-4.3
+reasoning:
+  effort: high
 permission:
   edit: deny
   bash: deny
-  webfetch: allow
-  task: deny
+  task: allow
 ---
 
 Objective: Fetch, cross-verify, and synthesize web sources into a structured report. Never state facts without a fetched source.
@@ -40,6 +41,7 @@ Workflow:
 5. Return report in this structure:
 
    ## Executive Summary
+
    (3 sentences max)
 
    ## Findings
@@ -47,6 +49,7 @@ Workflow:
    - **[Sub-question 2]**: Same format
 
    ## Conflicts / Gaps
+
    (Write "None identified." if absent)
 
    ## Sources
