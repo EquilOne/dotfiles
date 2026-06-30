@@ -15,9 +15,9 @@ description: >-
   planning before any code is written. Enters read-only plan mode — explores
   constraints, decomposes into milestones with dependencies (DAG), adds
   verification checkpoints, and presents the plan for user approval before any
-  execution begins. Use ONLY for project planning — not for converting plans
-  into lessons (use plan-to-lessons), not for writing code (that's coder), and
-  not for planning tutoring sessions (use socratic-mentoring).
+execution begins. Use ONLY for project planning — not for converting plans
+into lessons (use teach-from-plan), not for writing code (that's coder), and
+not for planning tutoring sessions (use socratic-mentoring).
 ---
 
 # Project Planner
@@ -25,6 +25,10 @@ description: >-
 ## Why Process Pattern
 
 Project planning is a phased workflow with explicit validation gates. Each phase feeds into the next: gather constraints before decomposing, decompose before structuring dependencies, validate before presenting. Skipping a phase produces a plan the agent cannot execute on.
+
+**Why Process, not Tool:** Planning is a phased workflow with creative judgment — constraint gathering, milestone decomposition, verification. A Tool pattern would collapse these into a rigid script, losing the adaptive constraint-gathering and verification checkpoints that make plans context-appropriate.
+
+**Why Process, not Mindset:** Mindset skills are ~50 lines with high freedom — they transfer thinking patterns. Planning needs ~180 lines for structured phase guidance, DAG validation rules, and an explicit approval gate. The workflow structure itself is the value, not just the thinking.
 
 **Pattern mapping:**
 - Ordered phases with checkpoints: 7-step workflow with validation at gate 5 and approval at gate 7
@@ -45,6 +49,17 @@ Restrict yourself to read-only exploration. You may read files, search the codeb
 - Ask the user clarifying questions about scope and constraints
 
 **Output of this phase:** A summary of what you found and what still needs clarification.
+
+### Adapting by Scenario
+
+Before Phase 2, identify which scenario applies to calibrate your approach:
+
+| Scenario                            | Emphasis                                                  |
+| ----------------------------------- | --------------------------------------------------------- |
+| Unknown domain / research-heavy     | Phase 2: deep risk analysis; Phase 3: exploration milestones first |
+| Existing codebase with partial work | Phase 1: document current state before planning new work  |
+| Tight deadline                      | Phase 2: define MVP scope, identify cuttable milestones   |
+| Greenfield + clear requirements     | Standard 7-phase workflow                                 |
 
 ### Phase 2: Gather Constraints
 
@@ -96,6 +111,8 @@ Integrate verification into the plan itself. Each milestone's verification gate 
 - [ ] No unrealistic sequencing (milestone ordering respects preconditions)
 - [ ] No scope creep (all tasks map to stated scope boundaries)
 - [ ] No ambiguous success criteria (each verification gate is testable)
+
+> **MANDATORY — Diagnostic support:** If the plan failed during execution in a prior round and you need to diagnose why, load `references/research-backing.md`. It contains research backing for each design decision, failure mode analysis, and recovery guidance.
 
 **Output of this phase:** The validated plan ready for storage.
 
@@ -150,16 +167,14 @@ Do NOT begin execution until the user explicitly approves. If the user requests 
 
 ## Do NOT Load
 
-- Do NOT use for converting plans into learning paths — use plan-to-lessons for that
+- Do NOT use for converting plans into learning paths — use teach-from-plan for that
 - Do NOT use for planning tutoring sessions — use socratic-mentoring
 - Do NOT use for writing code — use the coder subagent
 - Do NOT use for planning meetings or schedules — that's outside this skill's scope
 
 ## Reference Files
 
-**MANDATORY:** If the user asks about the research backing for this skill, or if you need help diagnosing why a plan failed in execution, load `references/research-backing.md`.
-
-**Do NOT load** the reference file on every invocation — only on explicit request or when the plan failed during execution and you need diagnostic support.
+**Do NOT load** `references/research-backing.md` by default — only on the mandatory diagnostic trigger in Phase 5.
 
 ## NEVERS
 
