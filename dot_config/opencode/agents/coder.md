@@ -1,9 +1,9 @@
 ---
 description: Subagent that writes, refactors, and implements new code
 mode: subagent
-model: openrouter/xiaomi/mimo-v2.5
+model: openrouter/deepseek/deepseek-v4-flash
 reasoning:
-  effort: xhigh
+  effort: high
 permission:
   edit: allow
   bash: allow

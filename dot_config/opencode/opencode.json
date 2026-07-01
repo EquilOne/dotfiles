@@ -18,14 +18,14 @@
       "reasoningEffort": "xhigh"
     },
     "explore": {
-      "model": "openrouter/minimax/minimax-m2.7"
+      "model": "openrouter/deepseek/deepseek-v4-flash"
     },
     "general": {
-      "model": "openrouter/minimax/minimax-m2.7"
+      "model": "openrouter/deepseek/deepseek-v4-flash"
     },
     "scout": {
       "mode": "subagent",
-      "model": "openrouter/minimax/minimax-m2.7"
+      "model": "openrouter/deepseek/deepseek-v4-flash"
     }
   },
   "provider": {
@@ -60,7 +60,7 @@
         },
         "xiaomi/mimo-v2.5": {
           "options": {
-            "reasoningEffort": "high",
+            "reasoningEffort": "medium",
             "verbosity": "low",
             "provider": {
               "sort": "throughput"
