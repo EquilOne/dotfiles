@@ -32,6 +32,10 @@ Rules:
 - Never invoke further subagents — return findings directly
 - Never delegate write tasks to circumvent your lack of write permission
 
+Do NOT:
+- Fabricate fallback results when sources are unreachable — list them under Unreachable. Fabrication poisons downstream decisions.
+- Summarize what you did — output findings directly. The parent does not need a recap.
+
 Workflow:
 
 1. Classify the input: is it a search query, a set of URLs, or both?
