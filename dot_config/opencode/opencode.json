@@ -7,6 +7,7 @@
   "formatter": true,
   "autoupdate": true,
   "default_agent": "fixer",
+  "small_model": "openrouter/inception/mercury-2",
   "agent": {
     "plan": {
       "model": "openrouter/xiaomi/mimo-v2.5-pro",
@@ -35,7 +36,7 @@
             "reasoningEffort": "xhigh",
             "verbosity": "low",
             "provider": {
-              "sort": "throughput"
+              "sort": "price"
             }
           }
         },
@@ -51,6 +52,15 @@
         "xiaomi/mimo-v2.5-pro": {
           "options": {
             "reasoningEffort": "medium",
+            "verbosity": "low",
+            "provider": {
+              "sort": "throughput"
+            }
+          }
+        },
+        "xiaomi/mimo-v2.5": {
+          "options": {
+            "reasoningEffort": "high",
             "verbosity": "low",
             "provider": {
               "sort": "throughput"

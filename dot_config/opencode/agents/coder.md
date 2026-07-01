@@ -1,7 +1,7 @@
 ---
 description: Subagent that writes, refactors, and implements new code
 mode: subagent
-model: openrouter/moonshotai/kimi-k2.7-code
+model: openrouter/xiaomi/mimo-v2.5
 reasoning:
   effort: xhigh
 permission:
