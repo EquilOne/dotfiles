@@ -49,7 +49,7 @@
             "field": "reasoning_content"
           },
           "options": {
-            "reasoningEffort": "high",
+            "reasoning": { "effort": "high" },
             "verbosity": "low",
             "provider": {
               "sort": "throughput"
