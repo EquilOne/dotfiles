@@ -41,8 +41,15 @@
           }
         },
         "deepseek/deepseek-v4-flash": {
+          "provider": {
+            "npm": "@ai-sdk/openai-compatible",
+            "api": "https://openrouter.ai/api/v1"
+          },
+          "interleaved": {
+            "field": "reasoning_content"
+          },
           "options": {
-            "reasoningEffort": "high",
+            "reasoningEffort": "xhigh",
             "verbosity": "low",
             "provider": {
               "sort": "throughput"

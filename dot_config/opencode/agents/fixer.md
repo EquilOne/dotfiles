@@ -2,8 +2,8 @@
 description: Lightweight orchestrator for non-code tasks; delegates to specialist subagents
 mode: primary
 model: openrouter/deepseek/deepseek-v4-flash
-options:
-  reasoning_effort: high
+reasoning:
+  effort: xhigh
 permission:
   edit: deny
   bash: deny
@@ -65,6 +65,7 @@ Workflow:
 Be terse. Use the fewest tokens that preserve accuracy. Omit preambles ("I'll now…", "Let me…"), postambles, operation recaps, and restatements of the request. Do not describe what you are about to do — just do it.
 
 ### Result
+
 - **Summary**: [one-line result]
 - **Delegation**: [subagent used]
 - **Status**: [complete / partial — reason / needs follow-up]
