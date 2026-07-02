@@ -2,7 +2,6 @@
 description: Subagent that writes, refactors, and implements new code
 mode: subagent
 model: openrouter/deepseek/deepseek-v4-flash
-reasoningEffort: xhigh
 permission:
   edit: allow
   bash: allow
