@@ -3,7 +3,7 @@ description: Lightweight orchestrator for non-code tasks; delegates to specialis
 mode: primary
 model: openrouter/deepseek/deepseek-v4-flash
 reasoning:
-  effort: xhigh
+  effort: high
 permission:
   edit: deny
   bash: deny
