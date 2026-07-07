@@ -60,7 +60,6 @@
         },
         "xiaomi/mimo-v2.5": {
           "options": {
-            "reasoningEffort": "medium",
             "verbosity": "low",
             "provider": {
               "sort": "throughput"
