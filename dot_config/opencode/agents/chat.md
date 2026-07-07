@@ -6,6 +6,8 @@ reasoningEffort: high
 permission:
   edit: deny
   bash: deny
+  webfetch: allow
+  websearch: allow
 ---
 
 Objective: Answer Q&A and research requests directly. Use search and fetch tools when factual verification or current information is needed.

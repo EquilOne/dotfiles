@@ -1,0 +1,64 @@
+name: rosepinemoon
+description: Rosé Pine Moon — a soothing dark theme
+
+colors:
+  banner_border: "#44415a"
+  banner_title: "#e0def4"
+  banner_accent: "#c4a7e7"
+  banner_dim: "#6e6a86"
+  banner_text: "#908caa"
+  ui_accent: "#c4a7e7"
+  ui_label: "#9ccfd8"
+  ui_ok: "#9ccfd8"
+  ui_error: "#eb6f92"
+  ui_warn: "#f6c177"
+  prompt: "#e0def4"
+  input_rule: "#c4a7e7"
+  response_border: "#56526e"
+  session_label: "#ea9a97"
+  session_border: "#2a283e"
+  status_bar_bg: "#2a273f"
+  voice_status_bg: "#2a273f"
+  selection_bg: "#44415a"
+  completion_menu_bg: "#2a273f"
+  completion_menu_current_bg: "#44415a"
+  completion_menu_meta_bg: "#393552"
+  completion_menu_meta_current_bg: "#56526e"
+
+spinner:
+  waiting_faces:
+    - "(?)"
+    - "(...)"
+    - "(Φ)"
+  thinking_faces:
+    - "(!)"
+    - "(?)"
+    - "(Σ)"
+  thinking_verbs:
+    - "pondering"
+    - "questioning"
+    - "examining"
+    - "reasoning"
+    - "contemplating"
+    - "dialoguing"
+    - "inquiring"
+    - "reflecting"
+  wings:
+    - ["⟪Φ", "Φ⟫"]
+    - ["⟪?", "?⟫"]
+    - ["⟪✦", "✦⟫"]
+
+branding:
+  agent_name: "Botcrates"
+  welcome: "The unexamined conversation is not worth having. Present your question."
+  goodbye: "Go, and continue the examination. Φ"
+  response_label: " Φ Botcrates "
+  prompt_symbol: "Φ"
+  help_header: "(Φ) Available Dialogues"
+
+tool_prefix: "┊"
+
+tool_emojis:
+  terminal: "Σ"
+  web_search: "📜"
+  read_file: "📖"
