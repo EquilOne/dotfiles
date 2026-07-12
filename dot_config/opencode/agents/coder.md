@@ -1,7 +1,7 @@
 ---
 description: Subagent that writes, refactors, and implements new code
 mode: subagent
-model: openrouter/deepseek/deepseek-v4-flash
+model: openrouter/moonshotai/kimi-k2.6
 permission:
   edit: allow
   bash: allow
@@ -53,4 +53,3 @@ Output:
 - Do not include diffs inline in the response — diffs are in the edit tool output.
 
 Be terse. Use the fewest tokens that preserve correctness. Omit preambles ("I'll now...", "Let me..."), postambles, and recaps of the request. Do not restate the input before acting.
-

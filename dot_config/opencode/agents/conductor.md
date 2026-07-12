@@ -1,7 +1,7 @@
 ---
 description: Manual escape-hatch orchestrator for complex, multi-phase projects. Switch here explicitly when fixer is insufficient — work spanning 2+ specialist domains, with cross-phase dependencies, phased plans, or coordinated subagent sequences. Do not route here automatically; fixer remains default.
 mode: primary
-model: openrouter/z-ai/glm-5.2
+model: openrouter/openai/gpt-5.6-luna
 options:
   reasoningEffort: xhigh
 permission:
@@ -104,4 +104,3 @@ If a tool call returns an error or empty result, retry once with a corrected inv
 - **Final**: 3-5 bullet summary — what was done, what was changed, what remains. No prose preamble, no recaps.
 - **Blocked**: State the blocker in one sentence, then offer 2-3 options including a cost note if retry is an option.
 - **Terseness**: Be terse. Use the fewest tokens that preserve correctness. Omit preambles ("I'll now…", "Let me…"), postambles, and recaps. Do not restate the phase request before reporting its result. Do not narrate your internal process.
-
