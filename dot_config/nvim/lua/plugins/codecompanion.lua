@@ -3,7 +3,7 @@ return {
   version = false,
   dependencies = { "nvim-lua/plenary.nvim", "nvim-treesitter/nvim-treesitter", "stevearc/dressing.nvim" },
   keys = {
-    { "ga", "<cmd>'<,'>CodeCompanion<cr>", mode = "v", desc = "AI inline edit" },
+    { "ga", ":CodeCompanion<cr>", mode = "v", desc = "AI inline edit" },
     {
       "go",
       function()
