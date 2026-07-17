@@ -52,6 +52,9 @@ for item in "$CONFIG_DIR"/[0-8][0-9]*; do
         fi
 done
 
+# Source private/local env file (not tracked by chezmoi)
+[[ -f "$HOME/.config/shell/env.local" ]] && source "$HOME/.config/shell/env.local"
+
 # Load shell-specific files
 SHELL_SPECIFIC_DIR="$CONFIG_DIR/${CURRENT_SHELL}_specific"
 if [[ -d "$SHELL_SPECIFIC_DIR" ]]; then
