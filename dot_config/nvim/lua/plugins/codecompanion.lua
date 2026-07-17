@@ -3,7 +3,7 @@ return {
   version = false,
   dependencies = { "nvim-lua/plenary.nvim", "nvim-treesitter/nvim-treesitter", "stevearc/dressing.nvim" },
   keys = {
-    { "ga", "<cmd>'<,'>CodeCompanion<cr>", mode = "v", desc = "CodeCompanion inline edit" },
+    { "ga", "<cmd>'<,'>CodeCompanion<cr>", mode = "v", desc = "AI inline edit" },
     {
       "go",
       function()
@@ -11,7 +11,7 @@ return {
       end,
       expr = true,
       mode = { "n", "x" },
-      desc = "CodeCompanion operator",
+      desc = "AI operator",
     },
   },
   config = function()
@@ -26,10 +26,24 @@ return {
             })
           end,
         },
+        http = {
+          openrouter = function()
+            return require("codecompanion.adapters").extend("openrouter", {
+              env = {
+                api_key = os.getenv("OPENROUTER_API_KEY"),
+              },
+              schema = {
+                model = {
+                  default = "qwen/qwen3-coder-30b-a3b-instruct",
+                },
+              },
+            })
+          end,
+        },
       },
       interactions = {
         inline = {
-          adapter = "opencode",
+          adapter = "openrouter",
         },
       },
     })
