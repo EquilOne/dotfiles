@@ -2,6 +2,8 @@
 description: Subagent that writes, refactors, and implements new code
 mode: subagent
 model: openrouter/openai/gpt-5.6-luna
+reasoning:
+  effort: high
 permission:
   edit: allow
   bash: allow
