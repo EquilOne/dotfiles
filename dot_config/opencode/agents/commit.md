@@ -1,7 +1,7 @@
 ---
 description: Generate concise, conventional Git commit messages from staged diffs
 mode: subagent
-model: openrouter/inception/mercury-2
+model: openrouter/deepseek/deepseek-v4-flash
 permission:
   edit: deny
   bash:

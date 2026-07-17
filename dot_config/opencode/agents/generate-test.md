@@ -1,7 +1,7 @@
 ---
 description: Subagent that generates unit tests for a given file or function
 mode: subagent
-model: openrouter/moonshotai/kimi-k2.7-code
+model: openrouter/z-ai/glm-5.2
 reasoning:
   effort: high
 permission:

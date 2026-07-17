@@ -1,7 +1,7 @@
 ---
 description: Orchestrate research by decomposing queries, delegating to search subagent, cross-verifying sources, and producing a cited report
 mode: subagent
-model: openrouter/x-ai/grok-4.3
+model: openrouter/z-ai/glm-5.2
 reasoning:
   effort: high
 permission:

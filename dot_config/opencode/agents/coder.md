@@ -1,7 +1,7 @@
 ---
 description: Subagent that writes, refactors, and implements new code
 mode: subagent
-model: openrouter/moonshotai/kimi-k2.6
+model: openrouter/openai/gpt-5.6-luna
 permission:
   edit: allow
   bash: allow
