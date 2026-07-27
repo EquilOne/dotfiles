@@ -1,7 +1,7 @@
 ---
 description: Subagent that generates unit tests for a given file or function
 mode: subagent
-model: openrouter/z-ai/glm-5.2
+model: openrouter/openai/gpt-5.6-luna
 reasoning:
   effort: high
 permission:

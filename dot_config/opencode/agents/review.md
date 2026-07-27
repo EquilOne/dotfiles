@@ -1,7 +1,7 @@
 ---
 description: Review code for quality, security, correctness, and style
 mode: subagent
-model: openrouter/z-ai/glm-5.2
+model: openrouter/openai/gpt-5.6-terra
 reasoning:
   effort: high
 permission:
