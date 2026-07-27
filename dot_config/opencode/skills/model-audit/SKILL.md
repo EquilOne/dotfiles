@@ -2,7 +2,7 @@
 name: model-audit
 description: >
   Audit opencode agent model config against live OpenRouter pricing and benchmarks.
-  Recommends model swaps at three tiers (budget, value, best) so you can choose per agent.
+  Recommends model swaps across five budget-to-best tiers so you can choose per agent.
   MUST use when the user asks to review, audit, or optimize their opencode agent models.
   Use when the user asks: "review my models", "audit my models", "model suggestions",
   "better model for X", "cheaper model", "model pricing", "optimize model spend",
@@ -31,6 +31,8 @@ OpenRouter MCP must be configured and enabled in `opencode.json`:
 ```
 If disabled, tell the user and offer to enable it (with authorization).
 
+**Note on ZDR:** The `zdr: true` filter on `list-models` requires ZDR (Zero Data Retention) preferences to be configured in the user's OpenRouter account settings. This is not part of the MCP or opencode config. If the user hasn't configured ZDR in their OpenRouter dashboard, the filter will return unfiltered results. Verify by checking whether `list-models` with `zdr: true` returns fewer results than without.
+
 ## Why Process, Not Tool or Mindset
 
 **Why Process, not Tool:** Model auditing is a multi-phase workflow with ordered steps and checkpoints (read config → query → assign tiers → present → apply). A Tool pattern would collapse this into a single decision tree, but each phase has its own sub-decisions and the output of one phase feeds the next. The value is in the workflow orchestration, not in a single precise operation.
@@ -40,7 +42,7 @@ If disabled, tell the user and offer to enable it (with authorization).
 **Pattern mapping:**
 - Ordered phases with checkpoints ✓
 - Medium freedom (judgment within fixed structure) ✓
-- ~163 lines (within Process range) ✓
+- ~266 lines (within Process range) ✓
 - Output of one phase feeds the next ✓
 - Authorization gate in Phase 5 as a checkpoint ✓
 
@@ -58,6 +60,9 @@ Then read these files:
 - `agent_stack.md` — extract agent-to-model mapping table
 - `agents/*.md` — extract any `model:` frontmatter overrides per agent
 
+- Extract `provider.openrouter.models.*.options.provider` from `opencode.json` — fields: `sort` (latency/throughput/price), any `allow`/`block` lists
+- For each model, note its `reasoningEffort` and `verbosity` settings — these must be preserved if switching to a new model that supports them
+
 Build a map of: agent name → current model slug → role category.
 
 Classify each agent into one role:
@@ -70,23 +75,49 @@ Classify each agent into one role:
 | lightweight | Simple lookups, search, exploration | low price, low latency | search, explore, scout |
 | general | Chat, docs, explanation | balanced across all | docs, chat, mentor |
 
-### Phase 2: Query OpenRouter
+### Phase 2: Query OpenRouter (ZDR-aware dual queries)
 
 **Before Phase 2, ask yourself:**
 - Which benchmark matters most for THIS agent? (coding for coder, intelligence for plan, price for search)
 - Is this agent latency-sensitive or throughput-sensitive? (latency → prefer near providers, throughput → sort by throughput)
 - Does this agent use structured outputs or tool calling? (if yes, must filter for those)
 
-Then fan out these queries in parallel via OpenRouter MCP tools:
+Define:
+```
+ZDR_EXEMPT_AUTHORS = [openai, anthropic, google, meta]
+# ^ Configurable — the user said this may change. When in doubt, ask.
+```
 
-1. **list-models** with `sort=coding-high-to-low` (for coding role), `sort=intelligence-high-to-low` (for reasoning), `sort=agentic-high-to-low` (for agentic), `sort=pricing-low-to-high` (for lightweight). Use `limit=20` per query.
-2. **get-model** for the current model to get its benchmarks and pricing.
-3. **list-model-endpoints** for the current model to see provider-level pricing and uptime.
+Run TWO parallel `list-models` queries per role:
+
+**Track A — Non-frontier models (ZDR-filtered):**
+```
+list-models(sort=..., zdr: true, limit=20)
+# Exclude authors in ZDR_EXEMPT_AUTHORS
+```
+
+**Track B — Frontier models (ZDR-exempt):**
+```
+list-models(sort=..., author: [openai, anthropic, google, meta], limit=20)
+# No zdr parameter — these are exempt
+```
+
+Use per-role sort logic:
+- coding role → `sort=coding-high-to-low`
+- reasoning role → `sort=intelligence-high-to-low`
+- agentic role → `sort=agentic-high-to-low`
+- lightweight role → `sort=pricing-low-to-high`
+- general role → `sort=coding-high-to-low` (balanced default)
 
 For candidate models, filter by:
 - Supports reasoning_effort if agent uses reasoning
 - Supports structured_outputs and tools if agent is agentic/coding
 - Context length >= 32K for all agents, >= 128K for reasoning/agentic
+
+Also query for current model:
+```
+get-model(author: <author>, slug: <slug>)
+```
 
 **Error recovery:**
 - If `list-models` returns an error or empty results: fall back to `get-model` for the current model only, and use known alternatives from training data. Note the data source in the output.
@@ -94,25 +125,65 @@ For candidate models, filter by:
 - If `list-model-endpoints` fails: proceed with base pricing from `get-model` and note that provider-level pricing is unavailable.
 - If the user has zero credits: warn them and suggest checking their account before proceeding.
 - If rate limited: wait 1 second and retry once. If rate limited again, fall back to `get-model` for the current model only and note the data source.
+- If `list-models` with `zdr: true` returns empty for non-frontier authors: fall back to query without ZDR filter and note "No ZDR-compliant endpoints found for this category — showing all providers"
+- If `list-model-endpoints` fails for a candidate: fall back to base pricing from `get-model` with `input_cache_read_price = input_price × 0.5` and note "Endpoint pricing unavailable — used estimated cache pricing"
+- If the ZDR exemption list needs updating: present the current list (openai, anthropic, google, meta) and ask the user to confirm or adjust
 
-### Phase 3: Tier Assignment
+### Phase 2b: Compute effective cost per 100 requests
 
-For each agent role, pick candidates from the query results:
+For each top candidate model (top 10-15), call:
+```
+list-model-endpoints(author: <author>, slug: <slug>)
+```
 
-**Budget tier** (lowest price):
-- For lightweight role: cheapest model with any benchmark > 10
-- For other roles: cheapest model with the relevant benchmark > 30
-- Flag if the model lacks tool support or structured outputs
+From the endpoints, extract:
+- For non-frontier models: filter to ZDR-compliant endpoints only
+- For frontier models: use all endpoints
+- From each endpoint's `pricing` object: `prompt`, `completion`, `input_cache_read`, `input_cache_write`
+- Pick the cheapest eligible endpoint
 
-**Value tier** (best perf/$ - default recommendation):
-- Compute rough perf/$ = (relevant benchmark score) / (avg prompt+completion price per M tokens)
-- Pick the model with highest perf/$ ratio
-- Must support all features the agent needs (tools, structured_outputs, reasoning_effort if applicable)
+Use role-specific token profiles to estimate real-world cost:
 
-**Best tier** (highest quality):
-- Highest relevant benchmark score regardless of price
-- Must support all features the agent needs
-- Note the price delta vs. current model
+| Role | Avg Input Tokens | Avg Output Tokens | Cache Hit Rate |
+|------|-----------------|-------------------|----------------|
+| coding | 8,000 | 3,000 | 30% |
+| reasoning | 12,000 | 4,000 | 20% |
+| agentic | 6,000 | 2,000 | 25% |
+| lightweight | 1,500 | 500 | 40% |
+| general | 4,000 | 1,500 | 35% |
+
+**Cost formula:**
+```
+# Cache-adjusted per-request cost
+non_cache_input_cost = input_tokens × (1 - cache_hit_rate) × input_price
+cached_input_cost   = input_tokens × cache_hit_rate × input_cache_read_price
+output_cost         = output_tokens × completion_price
+eff_cost_per_req    = non_cache_input_cost + cached_input_cost + output_cost
+
+cost_per_100_req    = eff_cost_per_req × 100
+```
+
+If `input_cache_read_price` is not available from the endpoint, fall back to `input_price × 0.5` (standard OpenRouter cache discount) and note the estimate.
+
+### Phase 3: 5-Tier Ladder
+
+For each agent role, pick candidates from the query results. Use `cost_per_100_req` as the primary cost metric for all tier calculations. Keep raw $/M tokens in the output table for reference.
+
+Define 6 ladder rungs:
+
+| Tier | Selection Rule |
+|------|---------------|
+| **Budget** | Cheapest model (lowest cost_per_100_req) with relevant benchmark > 10. No feature requirements. |
+| **Budget+** | Next cheapest with relevant benchmark > 20. |
+| **Budget++** | Best perf/$ under an affordability threshold (e.g., cost_per_100_req < 2× Budget's cost or < $2). |
+| **Value ★** | Highest perf/$ — must support ALL features the agent needs (tools, structured_outputs, reasoning_effort if applicable). This is the default recommendation. |
+| **Value+** | Near-best quality. Benchmark score within 90% of Best, cost_per_100_req < 2× Value's cost. |
+| **Best** | Highest relevant benchmark score regardless of price. Full feature support required. |
+
+**perf/$ formula:**
+```
+perf_per_dollar = relevant_benchmark_score / cost_per_100_req
+```
 
 **Error recovery:**
 - If no candidates meet the budget tier threshold: relax the benchmark minimum by 10 points and retry. Note the relaxation in the output.
@@ -125,25 +196,32 @@ Output format per agent:
 
 ```
 ## Agent: {name}
-Role: {role} | Current: {current_model} (${prompt_price}/$M in, ${completion_price}/$M out)
+Role: {role} | Current: {current_model}
 Benchmarks: coding {n}, intelligence {n}, agentic {n}
 
-| Tier | Model | Prompt $/M | Output $/M | Coding | Intel | Agentic | Context |
-|------|-------|-----------|------------|--------|-------|---------|---------|
-| Current | {slug} | {price} | {price} | {n} | {n} | {n} | {n} |
-| Budget | {slug} | {price} | {price} | {n} | {n} | {n} | {n} |
-| Value ★ | {slug} | {price} | {price} | {n} | {n} | {n} | {n} |
-| Best | {slug} | {price} | {price} | {n} | {n} | {n} | {n} |
+| Tier | Model | Provider | Eff $/100req | Prompt $/M | Out $/M | CacheSav | Coding | Intel | Agentic |
+|------|-------|----------|-------------|-----------|---------|---------|--------|-------|---------|
+| Current | {slug} | {prov} | {n} | {n} | {n} | {n}% | {n} | {n} | {n} |
+| Budget | {slug} | {prov} | {n} | {n} | {n} | {n}% | {n} | {n} | {n} |
+| Budget+ | ... | ... | ... | ... | ... | ... | ... | ... | ... |
+| Budget++ | ... | ... | ... | ... | ... | ... | ... | ... | ... |
+| Value ★ | {slug} | {prov} | {n} | ... | ... | ... | ... | ... | ... |
+| Value+ | ... | ... | ... | ... | ... | ... | ... | ... | ... |
+| Best | {slug} | {prov} | {n} | ... | ... | ... | ... | ... | ... |
 
 >> Recommendation: {tier} — {reason}
+>> Cheapest ZDR provider: {provider_name} at ${price}/$M prompt ({discount}% off base)
+>> Cache savings: ~{n}% per request at {cache_hit_rate}% hit rate
 ```
 
-If the current model is already the best pick for its tier, say so and skip the recommendation.
-
-If the cheapest provider endpoint has notably better pricing (e.g., 40%+ discount via a specific provider), note it:
-```
->> Cheapest provider: {provider_name} at ${price} prompt (${discount}% off base)
-```
+Rules:
+- Show all 6 rungs per agent
+- Sort agents by cost impact (biggest savings first) in full audits
+- If current model is already best in its tier, say so
+- Include absolute benchmark numbers, not relative ranks
+- Note if model is new (<30 days old)
+- Note if cheapest provider has low uptime (<95% in last 3m)
+- If any data source was a fallback (e.g., known alternatives from training data instead of live MCP), note it in the output
 
 ### Phase 5: Apply Changes (if authorized)
 
@@ -153,16 +231,6 @@ If the user says "apply" or "write changes" or equivalent:
 2. Add the new model to `provider.openrouter.models` with appropriate options (copy reasoning_effort, verbosity from the old model's config if applicable)
 3. Remove the old model from `provider.openrouter.models` if no longer used by any agent
 4. Report the diff: "Changed N models, saved ~$X/M tokens estimated"
-
-## Output Rules
-
-- Show all three tiers per agent even when the recommendation is clear. Give the user choice.
-- Sort agents by potential savings (biggest cost impact first) when doing a full audit.
-- When the user asks about one specific agent, only audit that one.
-- Include absolute benchmark numbers, not relative ranks. Ranks change daily; index scores are more stable.
-- Note when a model is new (< 30 days old) — higher risk of instability.
-- Note when a model's cheapest provider has low uptime (< 95% in last 30m) — reliability trade-off.
-- If any data source was a fallback (e.g., known alternatives from training data instead of live MCP), note it in the output.
 
 ## Freedom Calibration
 
@@ -189,3 +257,10 @@ Each phase constrains the model differently. The consequence of a mistake determ
 - Do NOT write changes without explicit authorization. Present the table first, then ask "Apply these changes?" with a summary of what changes.
 - Do NOT recommend models with < 8K context for any agent — opencode agents regularly exceed this.
 - Do NOT silently use fallback data — if you used known alternatives because MCP failed, say so in the output.
+- Do NOT recommend a non-frontier model without verifying ZDR-compliant endpoint availability. A model with good benchmarks but no ZDR-compliant provider is unusable for this user's setup.
+- Do NOT use raw $/M tokens as the primary cost comparator for tier ranking — use per-100-request cost which reflects real-world caching and token efficiency patterns.
+- Do NOT hardcode the ZDR exemption list as a constant in the middle of the workflow — define it as a configurable variable at the top of Phase 2.
+- Do NOT collapse the 5-tier ladder — the user explicitly wants all rungs (Budget, Budget+, Budget++, Value, Value+, Best) for informed decision-making.
+- Do NOT assume frontier exemptions are permanent — the user said this may change. When in doubt between ZDR-filtered and unfiltered options for a model, show both and let the user decide.
+
+(End of file — total 266 lines)
