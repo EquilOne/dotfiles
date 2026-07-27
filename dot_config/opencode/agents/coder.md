@@ -1,7 +1,7 @@
 ---
 description: Subagent that writes, refactors, and implements new code
 mode: subagent
-model: openrouter/openai/gpt-5.6-luna
+model: openrouter/meta/muse-spark-1.1
 reasoning:
   effort: high
 permission:
