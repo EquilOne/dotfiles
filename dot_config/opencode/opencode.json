@@ -13,7 +13,7 @@
     },
     "exa": {
       "type": "remote",
-      "url": "https://exa.openrouter.ai/mcp",
+      "url": "https://mcp.exa.ai/mcp",
       "enabled": true
     }
   },
