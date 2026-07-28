@@ -8,3 +8,8 @@ nvim/*
 !nvim/lua
 !nvim/lua/**
 !nvim/.gitignore
+
+# Environment files
+**/*.env
+**/env.local
+**/env.*
