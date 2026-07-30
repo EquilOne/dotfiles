@@ -59,6 +59,7 @@
             "verbosity": "low",
             "provider": {
               "order": ["fireworks"],
+              "sort": "throughput",
               "allow_fallbacks": true
             }
           }
