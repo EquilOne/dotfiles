@@ -58,7 +58,8 @@
             "reasoningEffort": "high",
             "verbosity": "low",
             "provider": {
-              "sort": "throughput"
+              "order": ["fireworks"],
+              "allow_fallbacks": true
             }
           }
         },
