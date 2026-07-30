@@ -1,9 +1,7 @@
 ---
 description: Orchestrate research by decomposing queries, delegating to search subagent, cross-verifying sources, and producing a cited report
 mode: subagent
-model: openrouter/z-ai/glm-5.2
-reasoning:
-  effort: high
+model: openrouter/openai/gpt-5.6-luna
 permission:
   edit: deny
   bash: deny
@@ -30,11 +28,11 @@ Rules:
 
 Query decomposition:
 
-| Query type | Action |
-|---|---|
-| Direct factual (one question, one likely answer) | 1 search dispatch, skip decomposition |
-| Multi-faceted (requires synthesis across domains) | 2-4 sub-questions, N dispatches |
-| Broad / vague | Ask user to clarify, 0 dispatches |
+| Query type                                        | Action                                |
+| ------------------------------------------------- | ------------------------------------- |
+| Direct factual (one question, one likely answer)  | 1 search dispatch, skip decomposition |
+| Multi-faceted (requires synthesis across domains) | 2-4 sub-questions, N dispatches       |
+| Broad / vague                                     | Ask user to clarify, 0 dispatches     |
 
 When input is ambiguous:
 
