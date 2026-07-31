@@ -165,11 +165,23 @@ install_eza
 install_starship
 install_uv
 
-if ! command -v opencode >/dev/null 2>&1 && [ ! -x "$HOME/.opencode/bin/opencode" ]; then
-    run_installer "OpenCode" "https://opencode.ai/install" bash --no-modify-path
-    if [ ! -x "$HOME/.opencode/bin/opencode" ] && ! command -v opencode >/dev/null 2>&1; then
-        fail "OpenCode was not installed"
+if [ ! -x "$HOME/.local/bin/opencode" ]; then
+    if [ -x "$HOME/.opencode/bin/opencode" ]; then
+        if ! cp "$HOME/.opencode/bin/opencode" "$HOME/.local/bin/opencode"; then
+            fail "could not place OpenCode in $HOME/.local/bin"
+        fi
+    elif ! command -v opencode >/dev/null 2>&1; then
+        run_installer "OpenCode" "https://opencode.ai/install" bash --env "OPENCODE_INSTALL_DIR=$HOME/.local/bin" --no-modify-path
+        if [ ! -x "$HOME/.local/bin/opencode" ] && [ -x "$HOME/.opencode/bin/opencode" ]; then
+            if ! cp "$HOME/.opencode/bin/opencode" "$HOME/.local/bin/opencode"; then
+                fail "could not place OpenCode in $HOME/.local/bin"
+            fi
+        fi
     fi
+fi
+
+if [ ! -x "$HOME/.local/bin/opencode" ] && ! command -v opencode >/dev/null 2>&1; then
+    fail "OpenCode was not installed"
 fi
 
 if ! command -v herdr >/dev/null 2>&1 && [ ! -x "$HOME/.local/bin/herdr" ]; then

@@ -74,7 +74,7 @@ These tools are installed via dnf when available in Fedora repos; the URLs below
 | uv                | `https://astral.sh/uv/install.sh`                               | `sh`      |
 | Carapace          | Go install (`github.com/carapace-sh/carapace-bin/cmd/carapace@latest`) | `go install` |
 
-OpenCode and uv installers receive `--no-modify-path` / `--env UV_NO_MODIFY_PATH=1` respectively, because PATH management is handled by chezmoi's shell config, not by installer shell-profile edits.
+The OpenCode installer receives `OPENCODE_INSTALL_DIR="$HOME/.local/bin"` and `--no-modify-path`; the uv installer receives `--env UV_NO_MODIFY_PATH=1`. PATH management is handled by chezmoi's shell config, not by installer shell-profile edits. Existing OpenCode installs at `~/.opencode/bin` remain supported.
 
 ### Eza Installation
 
@@ -176,6 +176,6 @@ Replace `~/.local/share/chezmoi` with the actual source path if different.
 | `pass-cli` not found | Install failed silently | Re-run manually: `curl -fsSL https://proton.me/download/pass-cli/install.sh \| env PROTON_PASS_CLI_INSTALL_CHANNEL=stable PROTON_PASS_CLI_INSTALL_DIR="$HOME/.local/bin" bash` |
 | Proton Pass login fails | No TTY or missing biometric device | Run `pass-cli login` directly in an interactive terminal |
 | Neovim plugins not loaded on first launch | lazy.nvim sync incomplete | Run `nvim --headless "+Lazy! sync" +qa` |
-| OpenCode not found | Install binary location not in PATH | Add `export PATH="$HOME/.opencode/bin:$PATH"` or re-source shell config |
+| OpenCode not found | Install binary location not in PATH | Verify `$HOME/.local/bin/opencode` or run `command -v opencode`; re-source shell config if needed |
 | `run_once_before` script fails | Dependency not met or network issue | Fix the error and run `chezmoi apply` again; the script retries automatically |
 | Droplet has no `sudo` | Base image variation | Log in as root, install sudo (`dnf install -y sudo`), log out, then run `chezmoi apply` as the intended non-root user |
