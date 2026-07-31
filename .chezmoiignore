@@ -13,3 +13,40 @@ nvim/*
 **/*.env
 **/env.local
 **/env.*
+
+# Repository documentation (not deployed).
+docs/**
+
+{{- if eq (index . "profile") "remote" }}
+# Desktop session and presentation state.
+.config/hypr
+.config/hypr/**
+.config/waybar
+.config/waybar/**
+.config/omarchy
+.config/omarchy/**
+.config/ghostty
+.config/ghostty/**
+.config/mako
+.config/mako/**
+.config/gh
+.config/gh/**
+.config/*/assets
+.config/*/assets/**
+.config/*/backgrounds
+.config/*/backgrounds/**
+.config/*/wallpaper*
+.config/*/wallpapers
+.config/*/wallpapers/**
+.hermes
+.hermes/**
+.config/zsh/.zhistory
+
+# Desktop-only generated completions.
+.config/shell/25_completions/03_hyprctl.sh
+
+# Tmux remains in the source tree as a manual fallback, but is not installed remotely.
+.config/tmux
+.config/tmux/**
+.config/nvim/lua/plugins/vim-tmux-navigator.lua
+{{- end }}

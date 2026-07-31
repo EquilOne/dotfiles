@@ -2,11 +2,9 @@ return {
   "lmilojevicc/herdr-splits.nvim",
   -- For local development, swap the repo line for `dir = '/path/to/herdr-splits'`
   -- (see "Local development" below).
-  cond = vim.env.HERDR_ENV == "1",
+  cond = vim.fn.executable("herdr") == 1{{ if eq (index . "profile") "remote" }}{{ else }} and vim.env.HERDR_ENV == "1"{{ end }},
   event = "VeryLazy",
-  -- Optional: auto-sync the Herdr-side scripts when lazy updates this plugin.
-  -- Requires `auto_sync_herdr = true` in setup() below to take effect.
-  -- build = 'lua require("herdr-splits").sync_herdr()',
+  build = 'lua require("herdr-splits").sync_herdr()',
   config = function()
     require("herdr-splits").setup({
       -- Defaults shown. All fields optional.
@@ -35,7 +33,7 @@ return {
       herdr_bin = nil, -- auto-detected from HERDR_BIN_PATH
       floating_zindex_max = 50, -- floats with zindex < this are treated as embedded sidebars
       ignore_previewwindows = false, -- opt-in: also treat previewwindow windows (e.g. .dbout) as sidebars
-      -- auto_sync_herdr = true,      -- opt-in: sync Herdr-side scripts on update
+      auto_sync_herdr = true,
       -- Managed keys — written to the generated herdr-splits.conf so the
       -- Herdr-side scripts agree. Pass Neovim notation (e.g. <M-Left>).
       nav_keys = { left = "<C-h>", down = "<C-j>", up = "<C-k>", right = "<C-l>" },

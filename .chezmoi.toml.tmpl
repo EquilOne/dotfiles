@@ -1,0 +1,6 @@
+{{- $profile := promptStringOnce . "profile" "Profile (desktop or remote)" "desktop" -}}
+{{- if not (or (eq $profile "desktop") (eq $profile "remote")) -}}
+{{- fail "profile must be desktop or remote" -}}
+{{- end -}}
+[data]
+profile = {{ $profile | quote }}

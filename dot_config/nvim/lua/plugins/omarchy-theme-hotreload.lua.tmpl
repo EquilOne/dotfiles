@@ -1,3 +1,4 @@
+{{- if ne (index . "profile") "remote" -}}
 return {
 	{
 		name = "theme-hotreload",
@@ -89,3 +90,4 @@ return {
 		end,
 	},
 }
+{{ end -}}

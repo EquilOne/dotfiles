@@ -1,0 +1,296 @@
+{{- if eq (index . "profile") "remote" -}}
+#!/usr/bin/env bash
+
+set -u
+set -o pipefail
+
+failed=0
+
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.opencode/bin:$PATH"
+
+log() {
+    printf '[remote-profile] %s\n' "$*"
+}
+
+warn() {
+    printf '[remote-profile] warning: %s\n' "$*" >&2
+}
+
+fail() {
+    failed=1
+    warn "$*"
+}
+
+run_privileged() {
+    command -v sudo >/dev/null 2>&1 || return 127
+    sudo "$@"
+}
+
+run_installer() {
+    local label="$1"
+    local url="$2"
+    local shell="$3"
+    local installer
+    shift 3
+
+    local env_assignment=""
+    if [ "${1:-}" = "--env" ]; then
+        env_assignment="${2:-}"
+        shift 2
+    fi
+
+    if ! command -v curl >/dev/null 2>&1; then
+        fail "$label requires curl; see $url"
+        return
+    fi
+
+    installer=$(mktemp) || {
+        fail "could not create a temporary file for $label"
+        return
+    }
+
+    if ! curl -fsSL --retry 3 --connect-timeout 10 --max-time 120 "$url" -o "$installer"; then
+        rm -f "$installer"
+        fail "could not download $label installer from $url"
+        return
+    fi
+
+    if [ -n "$env_assignment" ]; then
+        if ! env "$env_assignment" "$shell" "$installer" "$@"; then
+            fail "$label installer failed; see $url"
+        fi
+    elif ! "$shell" "$installer" "$@"; then
+        fail "$label installer failed; see $url"
+    fi
+    rm -f "$installer"
+}
+
+if [ "$(id -u)" -eq 0 ]; then
+    fail "refusing to run as root; run chezmoi as the intended user"
+    exit 1
+fi
+
+if ! mkdir -p "$HOME/.local/bin"; then
+    fail "could not create $HOME/.local/bin"
+fi
+
+fedora=false
+if [ -f /etc/fedora-release ] || grep -qE '^ID(_LIKE)?=.*(fedora|rhel|centos|rocky|alma)' /etc/os-release 2>/dev/null; then
+    fedora=true
+fi
+
+if [ "$fedora" != true ]; then
+    fail "remote profile setup requires a Fedora-family system"
+elif ! command -v dnf >/dev/null 2>&1; then
+    fail "dnf is required for Fedora-family package setup"
+elif ! command -v sudo >/dev/null 2>&1; then
+    fail "sudo is required for Fedora package setup"
+else
+    packages=(
+        git curl jq zsh neovim fzf ripgrep fd-find bat zoxide direnv gh
+        dnf-plugins-core gawk golang rust cargo
+        gcc gcc-c++ make cmake pkgconf-pkg-config openssl-devel libffi-devel
+        zlib-ng-compat-devel bzip2-devel xz-devel sqlite-devel readline-devel
+        libyaml-devel tar unzip patch findutils ca-certificates
+    )
+    missing_packages=()
+    for package in "${packages[@]}"; do
+        if ! rpm -q "$package" >/dev/null 2>&1; then
+            missing_packages+=("$package")
+        fi
+    done
+    if [ "${#missing_packages[@]}" -gt 0 ] && ! run_privileged dnf install -y "${missing_packages[@]}"; then
+        fail "Fedora package transaction failed"
+    fi
+fi
+
+try_optional_dnf_package() {
+    local package="$1"
+
+    if rpm -q "$package" >/dev/null 2>&1; then
+        return 0
+    fi
+    if [ "$fedora" != true ] || ! command -v dnf >/dev/null 2>&1 || ! command -v sudo >/dev/null 2>&1; then
+        return 1
+    fi
+    run_privileged dnf install -y "$package"
+}
+
+install_eza() {
+    if command -v eza >/dev/null 2>&1; then
+        return
+    fi
+    if try_optional_dnf_package eza && command -v eza >/dev/null 2>&1; then
+        return
+    fi
+    if command -v cargo >/dev/null 2>&1; then
+        if ! cargo install --locked --root "$HOME/.local" eza; then
+            fail "eza installation failed; see https://github.com/eza-community/eza/blob/main/INSTALL.md"
+        fi
+    else
+        fail "eza requires Fedora dnf or Cargo; see https://github.com/eza-community/eza/blob/main/INSTALL.md"
+    fi
+    if ! command -v eza >/dev/null 2>&1; then
+        fail "eza was not installed; see https://github.com/eza-community/eza/blob/main/INSTALL.md"
+    fi
+}
+
+install_starship() {
+    if command -v starship >/dev/null 2>&1; then
+        return
+    fi
+    if try_optional_dnf_package starship && command -v starship >/dev/null 2>&1; then
+        return
+    fi
+    run_installer "Starship" "https://starship.rs/install.sh" sh --yes --bin-dir "$HOME/.local/bin"
+    if ! command -v starship >/dev/null 2>&1; then
+        fail "Starship was not installed; see https://starship.rs/guide/#%F0%9F%9A%80-installation"
+    fi
+}
+
+install_uv() {
+    if command -v uv >/dev/null 2>&1; then
+        return
+    fi
+    if try_optional_dnf_package uv && command -v uv >/dev/null 2>&1; then
+        return
+    fi
+    run_installer "uv" "https://astral.sh/uv/install.sh" sh --env UV_NO_MODIFY_PATH=1
+    if ! command -v uv >/dev/null 2>&1; then
+        fail "uv was not installed; see https://docs.astral.sh/uv/getting-started/installation/"
+    fi
+}
+
+install_eza
+install_starship
+install_uv
+
+if ! command -v opencode >/dev/null 2>&1 && [ ! -x "$HOME/.opencode/bin/opencode" ]; then
+    run_installer "OpenCode" "https://opencode.ai/install" bash --no-modify-path
+    if [ ! -x "$HOME/.opencode/bin/opencode" ] && ! command -v opencode >/dev/null 2>&1; then
+        fail "OpenCode was not installed"
+    fi
+fi
+
+if ! command -v herdr >/dev/null 2>&1 && [ ! -x "$HOME/.local/bin/herdr" ]; then
+    run_installer "Herdr" "https://herdr.dev/install.sh" sh
+    if [ ! -x "$HOME/.local/bin/herdr" ] && ! command -v herdr >/dev/null 2>&1; then
+        fail "Herdr was not installed"
+    fi
+fi
+
+herdr_splits_state() {
+    local plugins
+
+    command -v herdr >/dev/null 2>&1 || return 1
+    command -v jq >/dev/null 2>&1 || return 1
+    if ! plugins=$(herdr plugin list --json 2>/dev/null); then
+        return 1
+    fi
+
+    printf '%s\n' "$plugins" | jq -r '
+        if (.result.plugins? | type) != "array" then
+            error("unexpected plugin list response")
+        else
+            [.result.plugins[] | select(.plugin_id == "herdr-splits")]
+            | if length == 0 then "absent"
+              elif any(.[]; .enabled == true) then "enabled"
+              else "disabled"
+              end
+        end
+    ' 2>/dev/null
+}
+
+ensure_herdr_splits_plugin() {
+    local state
+
+    if ! state=$(herdr_splits_state); then
+        fail "cannot verify Herdr's herdr-splits plugin; herdr plugin list --json and jq are required (https://herdr.dev/docs/cli-reference/)"
+        return
+    fi
+    case "$state" in
+        enabled)
+            return
+            ;;
+        disabled)
+            fail "Herdr's herdr-splits plugin is installed but disabled; enable it with: herdr plugin enable herdr-splits"
+            return
+            ;;
+        absent)
+            ;;
+        *)
+            fail "cannot interpret Herdr's herdr-splits plugin status"
+            return
+            ;;
+    esac
+
+    log "installing Herdr's herdr-splits plugin"
+    if ! herdr plugin install lmilojevicc/herdr-splits.nvim --yes; then
+        fail "could not install Herdr's herdr-splits plugin; see https://github.com/lmilojevicc/herdr-splits.nvim"
+        return
+    fi
+    if [ "$(herdr_splits_state 2>/dev/null || true)" != "enabled" ]; then
+        fail "Herdr's herdr-splits plugin install could not be verified; see https://herdr.dev/docs/cli-reference/"
+    fi
+}
+
+ensure_herdr_splits_plugin
+
+if ! command -v pass-cli >/dev/null 2>&1 && [ ! -x "$HOME/.local/bin/pass-cli" ]; then
+    if ! command -v jq >/dev/null 2>&1; then
+        fail "Proton Pass CLI requires jq; see https://proton.me/download/pass-cli/install.sh"
+    else
+        installer=$(mktemp) || {
+            fail "could not create a temporary file for Proton Pass CLI"
+            installer=""
+        }
+        if [ -n "$installer" ]; then
+            if curl -fsSL --retry 3 --connect-timeout 10 --max-time 120 \
+                https://proton.me/download/pass-cli/install.sh -o "$installer" && \
+                env PROTON_PASS_CLI_INSTALL_CHANNEL=stable \
+                    PROTON_PASS_CLI_INSTALL_DIR="$HOME/.local/bin" bash "$installer"; then
+                :
+            else
+                fail "Proton Pass CLI installer failed; see https://proton.me/download/pass-cli/install.sh"
+            fi
+            rm -f "$installer"
+        fi
+    fi
+    if [ ! -x "$HOME/.local/bin/pass-cli" ] && ! command -v pass-cli >/dev/null 2>&1; then
+        fail "Proton Pass CLI was not installed"
+    fi
+fi
+
+if ! command -v carapace >/dev/null 2>&1 && [ ! -x "$HOME/.local/bin/carapace" ]; then
+    if command -v go >/dev/null 2>&1; then
+        if ! GOBIN="$HOME/.local/bin" go install github.com/carapace-sh/carapace-bin/cmd/carapace@latest; then
+            fail "Carapace installation failed; see https://carapace-sh.github.io/carapace-bin/install.html"
+        fi
+    else
+        fail "Go is required for Carapace; see https://carapace-sh.github.io/carapace-bin/install.html"
+    fi
+    if [ ! -x "$HOME/.local/bin/carapace" ] && ! command -v carapace >/dev/null 2>&1; then
+        fail "Carapace was not installed"
+    fi
+fi
+
+if ! command -v yazi >/dev/null 2>&1 || ! command -v ya >/dev/null 2>&1; then
+    if [ "$fedora" != true ] || ! command -v dnf >/dev/null 2>&1 || ! command -v sudo >/dev/null 2>&1; then
+        fail "Yazi requires Fedora dnf and the documented COPR path: https://yazi-rs.github.io/docs/installation/"
+    elif ! rpm -q dnf-plugins-core >/dev/null 2>&1; then
+        fail "dnf-plugins-core is required for the documented Yazi COPR path"
+    elif ! run_privileged dnf copr enable -y lihaohong/yazi; then
+        fail "could not enable the documented Yazi COPR"
+    elif ! run_privileged dnf install -y yazi; then
+        fail "could not install Yazi from the documented Fedora COPR"
+    fi
+    if ! command -v yazi >/dev/null 2>&1 || ! command -v ya >/dev/null 2>&1; then
+        fail "Yazi was not installed"
+    fi
+fi
+
+if [ "$failed" -ne 0 ]; then
+    warn "remote profile setup incomplete; chezmoi will retry"
+fi
+exit "$failed"
+{{ end }}
