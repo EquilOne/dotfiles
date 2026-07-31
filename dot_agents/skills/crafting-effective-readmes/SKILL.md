@@ -11,6 +11,15 @@ READMEs answer questions your audience will have. Different audiences need diffe
 
 **Always ask:** Who will read this, and what do they need to know?
 
+## Thinking Frame
+
+Before drafting any README section, ask:
+1. **Who is reading this right now?** (contributor evaluating the project, user trying to install, future-you debugging, new hire onboarding)
+2. **What question brought them here?** (what does this do, how do I install, how do I contribute, why is this broken)
+3. **What's the minimum info to answer that question?** (one paragraph, not a page)
+
+Every section should pass this test: if a reader lands on this section from a search engine, can they answer their question without reading the rest of the README?
+
 ## Process
 
 ### Step 1: Identify the Task and Audience
@@ -82,9 +91,21 @@ After drafting, ask: **"Anything else to highlight or include that I might have 
 
 Every README needs at minimum:
 
-1. **Name** - Self-explanatory title
-2. **Description** - What + why in 1-2 sentences  
-3. **Usage** - How to use it (examples help)
+1. **Name** - Self-explanatory title. If the name doesn't describe what it does, add a one-line subtitle.
+2. **Description** - What + why in 1-2 sentences. Not "a tool for X" but "Does X so that Y. Replaces Z because Z lacks W."
+3. **Usage** - How to use it. One working example is worth ten paragraphs of explanation.
+
+These three alone cover 80% of what a reader needs. Everything else is context-dependent — see the template for your project type.
+
+## NEVER Do
+
+- **NEVER assume OSS defaults for every project.** A config folder for dotfiles doesn't need a Contributing section or CI badges. A personal project doesn't need a License section. Match the template to the audience, not to "what READMEs usually have."
+- **NEVER write a README longer than the codebase warrants.** A 200-line README for a 50-line utility is noise. If the project is simple, the README should be simple. Scale depth to complexity.
+- **NEVER copy-paste boilerplate sections.** "This project uses the MIT License" without a link to the license file. "See CONTRIBUTING.md for details" when no CONTRIBUTING.md exists. Every section must be earned by the project, not inherited from a template.
+- **NEVER list installation steps you haven't tested.** If the install command doesn't work on a clean environment, the README is worse than no README. Verify every command before documenting it.
+- **NEVER use badges for the sake of badges.** A broken CI badge, an outdated version badge, or a "PRs welcome" badge on an unmaintained project erodes trust. Only include badges that are current and meaningful.
+- **NEVER document what the code already says.** If the usage is self-evident from the code (e.g., `./my-tool --help`), don't write a paragraph explaining it. Point to the help command and move on.
+- **NEVER skip the "What" and go straight to "How."** Before showing install commands, the reader needs to know what this thing does and why they'd want it. One sentence. Then install.
 
 ## References
 

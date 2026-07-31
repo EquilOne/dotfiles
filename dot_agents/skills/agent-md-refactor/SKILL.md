@@ -23,6 +23,8 @@ Use this skill when the user says:
 - **Load vs. retrieval cost.** Is it cheaper to always-load in root (tokens on every task) or on-demand-load from a linked file (tokens only when relevant)?
 - **Override strength.** Does this override a model default? If yes and frequent → root. If yes and rare → linked file with a one-line pointer in root.
 - **Conflict surface.** Does this instruction conflict with another? Resolve BEFORE moving, not after.
+- **Co-change.** Do two instructions reference or depend on each other? They belong in the *same* file, even if they'd otherwise split by topic. Splitting co-dependent rules forces the agent to load two files for one task — a silent tax.
+- **Negative vs. positive framing.** A negative rule ("NEVER use `any`") carries more signal than a positive one ("use specific types"). Before routing, convert weak positives to strong negatives where possible — the converted rule may then qualify for deletion (if it merely restates a default) or become compact enough for root.
 
 ## Triage Decision Tree
 
@@ -35,6 +37,16 @@ Conflicts with another instruction         -> RESOLVE WITH USER FIRST
 Project-specific command/build/test        -> ROOT QUICK REFERENCE
 Ambiguous frequency                        -> LINKED FILE (on-demand is cheaper)
 ```
+
+## Consolidation Rule (Inverse of Splitting)
+
+After triage, if any two linked-file candidates would each be <15 lines OR share >50% of their task context, merge them. Two tiny files cost more to discover and load than one focused file. Signs you should merge:
+
+- Both are consulted by the same task axis (e.g., `code-style.md` and `naming.md` are both "write code" → merge).
+- One file's rules always require the other's to make sense (co-change, see above).
+- The combined file stays under ~60 lines.
+
+Conversely, split a linked file if it exceeds ~80 lines or spans two unrelated task axes.
 
 ## Workflow
 
@@ -52,6 +64,8 @@ Before moving anything, surface conflicts:
 ```
 
 Let the user resolve; do not proceed until contradictions are settled.
+
+If the user refuses to pick a winner or is unsure, do not stall the whole refactor: document both instructions as conditional ("use A when X; use B when Y") and route the pair to the same linked file. Record the unresolved conflict in the deletion/output table so it stays visible.
 
 ### Phase 2: Triage Every Instruction
 
@@ -92,6 +106,16 @@ Output a deletion table:
 - **NEVER resolve contradictions by picking a winner silently.** Surface the conflict with both quotes and ask the user. Auto-resolving breaks the user's mental model of their own config.
 - **NEVER move instructions into a linked file the agent won't discover.** Every linked file MUST be linked from the root's "Detailed Instructions" section; unlinked files are dead weight.
 - **NEVER refactor without a clean git state.** Refactoring touches many files at once; the user must be able to `git diff` and roll back. Refuse to proceed if `git status` is dirty.
+
+## Monorepo / Nested Root Case
+
+In a monorepo where sub-projects need their own agent context, apply the same rules at *each* level:
+
+- Repo root file: cross-cutting rules that apply to every sub-project (CI, shared tooling, top-level commands).
+- Sub-project root file (`apps/web/AGENTS.md`): only rules unique to that sub-project, plus a one-line pointer to the repo root.
+- Never duplicate a rule at both levels — if it applies to all sub-projects, it belongs at repo root only.
+
+If a sub-project has no unique rules, do NOT create an empty root file — link to the repo root from the sub-project's primary doc instead.
 
 ## Verification Checklist
 

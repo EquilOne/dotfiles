@@ -18,6 +18,7 @@ description: >
 - Do NOT use for learning by discovery (Socratic) — use `socratic-mentoring`
 - Do NOT use for writing new code — use `coder`
 - Do NOT use for code review — use `review`
+- Do NOT use for conceptual teaching without code — use `direct-instruction`
 
 **Progressive disclosure:** This skill is self-contained (no reference files needed). The depth-selection table at the top routes to the right level. For complex multi-file explanations, ask the user which file to start with rather than explaining all at once.
 
@@ -110,6 +111,19 @@ If the conversation already discussed this code before the "explain" request, us
 - **NEVER produce explanations longer than the code itself** (unless the code is trivially short and the user needs conceptual grounding). If your explanation is 3x the code's length, you're probably explaining syntax, not intent.
 - **NEVER explain without first checking the user's level.** Because: explaining at the wrong depth wastes everyone's time — too shallow bores the expert, too deep confuses the beginner. The calibration questions take 5 seconds and save a useless explanation.
 - **NEVER use jargon without defining it on first use.** Because: undefined jargon creates false understanding — the reader nods along but didn't actually follow. Define on first use even at expert depth, because "expert" in one domain may be "beginner" in another.
+- **NEVER guess between code explanation and conceptual teaching.** If the user asks "explain how async/await works" and includes a code snippet, determine intent. If they want to understand the *concept* (how it works, why it matters), route to direct-instruction. If they want to understand the *specific code*, this skill is correct. When ambiguous, ask: "Do you want to understand the concept of async/await, or what this specific code does?"
+
+## Pattern: Mindset
+
+This skill follows the Mindset pattern because explaining code is a judgment task, not a format operation.
+
+**Why Mindset, not Tool:** Explaining code is a judgment task (which depth? what to emphasize?), not a format operation. A Tool pattern would require exact scripts — but every explanation is unique. Mindset is correct because the value is in the THINKING (calibration questions, failure modes), not in technique.
+
+**Pattern mapping:**
+- Thinking > technique: calibration questions, failure modes ✓
+- Strong NEVER list: 8 rules with reasoning ✓
+- High freedom: the model chooses what to emphasize ✓
+- Short (~150 lines) ✓
 
 ## Example
 

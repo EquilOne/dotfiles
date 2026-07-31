@@ -75,7 +75,7 @@ brew install font-fira-code-nerd-font
 
 **Check Terminal Color Support**:
 ```bash
-# Check tmux version (needs 3.5a+)
+# Check tmux version (needs 3.3+)
 tmux -V
 
 # Check terminal type
@@ -95,13 +95,14 @@ tmux show-options -g terminal-overrides
 
 **Fix Terminal Type**:
 ```bash
-# Add to shell profile (.bashrc, .zshrc)
-export TERM="tmux-256color"
-
-# Or set in tmux.conf (already included)
-set -g default-terminal "tmux-256color"
-set -ag terminal-overrides ",xterm-256color:RGB"
+# Check tmux is using the correct terminal
+tmux show-options -g default-terminal
+# Should show: tmux-256color
 ```
+
+# Already configured in tmux.conf:
+set -g default-terminal "tmux-256color"
+set -as terminal-features ',xterm-256color:RGB,tmux-256color:RGB,xterm-256color:extkeys'
 
 ### Status Bar Not Appearing
 **Problem**: Status bar missing or corrupted
@@ -149,10 +150,10 @@ setw -g automatic-rename-format '#{pane_current_command}:#{b:pane_current_path}'
 **Manual Rename Test**:
 ```bash
 # Test manual rename
-Ctrl+s ,
-
-# Check if rename prompt appears
+tmux command-prompt -I "#W" "rename-window -- '%%'"
 ```
+
+Or press: `Ctrl+s ,` to trigger the rename prompt.
 
 ### Window Names Not Updating
 **Problem**: Window names stuck on old values
@@ -415,6 +416,34 @@ tmux show-options -g @mode_indicator_prefix_mode_style
 # Should see red color in status bar
 ```
 
+### Session Not Restoring After Reboot
+
+**Problem**: tmux sessions don't come back after system reboot
+
+**Check Plugin Installation**:
+```bash
+ls ~/.config/tmux/plugins/tmux-resurrect
+ls ~/.config/tmux/plugins/tmux-continuum
+```
+
+**Check Continuum Settings**:
+```bash
+tmux show-options -g @continuum-restore
+# Should be "on" (auto-restore on tmux start)
+```
+
+**Manual Save/Restore**:
+- Save: `Ctrl+s Ctrl+s` (prefix then Ctrl+s)
+- Restore: `Ctrl+s Ctrl+r` (prefix then Ctrl+r)
+
+**Ensure Continuum Auto-Restore**:
+```bash
+# Add to tmux.conf if not present
+set -g @continuum-restore 'on'
+```
+
+After adding, reload config: `Ctrl+s r`
+
 ## Configuration Issues
 
 ### Changes Not Applying
@@ -452,12 +481,9 @@ ls -la ~/.config/tmux/tmux.conf
 tmux show-options -g | head
 ```
 
-**Set Default Config Path**:
+# Set Default Config Path
 ```bash
-# Add to shell profile (.bashrc, .zshrc)
-export TMUX_CONFIG="$HOME/.config/tmux/tmux.conf"
-
-# Or create symlink
+# Create symlink for tmux to find the config
 ln -sf ~/.config/tmux/tmux.conf ~/.tmux.conf
 ```
 

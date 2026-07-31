@@ -1,6 +1,6 @@
 ---
 name: skill-judge
-description: Evaluate Agent Skill design quality against official specifications and best practices. Use when reviewing, auditing, or improving SKILL.md files and skill packages. Provides multi-dimensional scoring and actionable improvement suggestions.
+description: Evaluate Agent Skill quality against official specifications and 17+ example patterns. Multi-dimensional scoring (120 points across 8 dimensions), knowledge delta analysis, failure pattern detection, and actionable improvement suggestions. Automatically tracks evaluation history in evaluations.json (keeps most recent 3 per skill). Use when reviewing, auditing, scoring, or improving SKILL.md files and skill packages; comparing skills; or asking "is this skill well-designed?" Triggers: evaluate skill, review SKILL.md, audit skill, score skill, skill quality, how to improve skill, skill evaluation.
 ---
 
 # Skill Judge
@@ -61,31 +61,11 @@ The art of Skill design is maximizing Expert content, using Activation sparingly
 
 The most important dimension. Does the Skill add genuine expert knowledge?
 
-| Score | Criteria |
-|-------|----------|
-| 0-5 | Explains basics the model knows (what is X, how to write code, standard library tutorials) |
-| 6-10 | Mixed: some expert knowledge diluted by obvious content |
-| 11-15 | Mostly expert knowledge with minimal redundancy |
-| 16-20 | Pure knowledge delta — every paragraph earns its tokens |
+**Scoring brief**: See `references/scoring-bands.md` D1 section for full criteria, red/green flags, and evaluation questions.
 
-**Red flags** (instant score ≤5):
-- "What is [basic concept]" sections
-- Step-by-step tutorials for standard operations
-- Explaining how to use common libraries
-- Generic best practices ("write clean code", "handle errors")
-- Definitions of industry-standard terms
+**Decision process**: Tag each paragraph as [E]/[A]/[R]. Compute ratio. Apply scoring decision tree above. Map to 0-20 band.
 
-**Green flags** (indicators of high knowledge delta):
-- Decision trees for non-obvious choices ("when X fails, try Y because Z")
-- Trade-offs only an expert would know ("A is faster but B handles edge case C")
-- Edge cases from real-world experience
-- "NEVER do X because [non-obvious reason]"
-- Domain-specific thinking frameworks
 
-**Evaluation questions**:
-1. For each section, ask: "Does the model already know this?"
-2. If explaining something, ask: "Is this explaining TO the model or FOR the model?"
-3. Count paragraphs that are Expert vs Activation vs Redundant
 
 ---
 
@@ -93,63 +73,9 @@ The most important dimension. Does the Skill add genuine expert knowledge?
 
 Does the Skill transfer expert **thinking patterns** along with **necessary domain-specific procedures**?
 
-The difference between experts and novices isn't "knowing how to operate" — it's "how to think about the problem." But thinking patterns alone aren't enough when the model lacks domain-specific procedural knowledge.
+**Scoring brief**: See `references/scoring-bands.md` D2 section for full criteria, red/green flags, and evaluation questions.
 
-**Key distinction**:
-| Type | Example | Value |
-|------|---------|-------|
-| **Thinking patterns** | "Before designing, ask: What makes this memorable?" | High — shapes decision-making |
-| **Domain-specific procedures** | "OOXML workflow: unpack → edit XML → validate → pack" | High — the model may not know this |
-| **Generic procedures** | "Step 1: Open file, Step 2: Edit, Step 3: Save" | Low — the model already knows |
-
-| Score | Criteria |
-|-------|----------|
-| 0-3 | Only generic procedures the model already knows |
-| 4-7 | Has domain procedures but lacks thinking frameworks |
-| 8-11 | Good balance: thinking patterns + domain-specific workflows |
-| 12-15 | Expert-level: shapes thinking AND provides procedures the model wouldn't know |
-
-**What counts as valuable procedures**:
-- Workflows the model hasn't been trained on (new tools, proprietary systems)
-- Correct ordering that's non-obvious (e.g., "validate BEFORE packing, not after")
-- Critical steps that are easy to miss (e.g., "MUST recalculate formulas after editing")
-- Domain-specific sequences (e.g., MCP server's 4-phase development process)
-
-**What counts as redundant procedures**:
-- Generic file operations (open, read, write, save)
-- Standard programming patterns (loops, conditionals, error handling)
-- Common library usage that's well-documented
-
-**Expert thinking patterns look like**:
-```markdown
-Before [action], ask yourself:
-- **Purpose**: What problem does this solve? Who uses it?
-- **Constraints**: What are the hidden requirements?
-- **Differentiation**: What makes this solution memorable?
-```
-
-**Valuable domain procedures look like**:
-```markdown
-### Redlining Workflow (the model wouldn't know this sequence)
-1. Convert to markdown: `pandoc --track-changes=all`
-2. Map text to XML: grep for text in document.xml
-3. Implement changes in batches of 3-10
-4. Pack and verify: check ALL changes were applied
-```
-
-**Redundant generic procedures look like**:
-```markdown
-Step 1: Open the file
-Step 2: Find the section
-Step 3: Make the change
-Step 4: Save and test
-```
-
-**The test**:
-1. Does it tell the model WHAT to think about? (thinking patterns)
-2. Does it tell the model HOW to do things it wouldn't know? (domain procedures)
-
-A good Skill provides both when needed.
+**Decision process**: Tag each paragraph as [E]/[A]/[R]. Compute ratio. Apply scoring decision tree above. Map to 0-15 band.
 
 ---
 
@@ -157,34 +83,9 @@ A good Skill provides both when needed.
 
 Does the Skill have effective NEVER lists?
 
-**Why this matters**: Half of expert knowledge is knowing what NOT to do. A senior designer sees purple gradient on white background and instinctively cringes — "too AI-generated." This intuition for "what absolutely not to do" comes from stepping on countless landmines.
+**Scoring brief**: See `references/scoring-bands.md` D3 section for full criteria, red/green flags, and evaluation questions.
 
-The model hasn't stepped on these landmines. It doesn't know Inter font is overused, doesn't know purple gradients are the signature of AI-generated content. Good Skills must explicitly state these "absolute don'ts."
-
-| Score | Criteria |
-|-------|----------|
-| 0-3 | No anti-patterns mentioned |
-| 4-7 | Generic warnings ("avoid errors", "be careful", "consider edge cases") |
-| 8-11 | Specific NEVER list with some reasoning |
-| 12-15 | Expert-grade anti-patterns with WHY — things only experience teaches |
-
-**Expert anti-patterns** (specific + reason):
-```markdown
-NEVER use generic AI-generated aesthetics like:
-- Overused font families (Inter, Roboto, Arial)
-- Cliched color schemes (particularly purple gradients on white backgrounds)
-- Predictable layouts and component patterns
-- Default border-radius on everything
-```
-
-**Weak anti-patterns** (vague, no reasoning):
-```markdown
-Avoid making mistakes.
-Be careful with edge cases.
-Don't write bad code.
-```
-
-**The test**: Would an expert read the anti-pattern list and say "yes, I learned this the hard way"? Or would they say "this is obvious to everyone"?
+**Decision process**: Tag each paragraph as [E]/[A]/[R]. Compute ratio. Apply scoring decision tree above. Map to 0-15 band.
 
 ---
 
@@ -192,22 +93,13 @@ Don't write bad code.
 
 Does the Skill follow official format requirements? **Special focus on description quality.**
 
-| Score | Criteria |
-|-------|----------|
-| 0-5 | Missing frontmatter or invalid format |
-| 6-10 | Has frontmatter but description is vague or incomplete |
-| 11-13 | Valid frontmatter, description has WHAT but weak on WHEN |
-| 14-15 | Perfect: comprehensive description with WHAT, WHEN, and trigger keywords |
+**Scoring brief**: See `references/scoring-bands.md` D4 section for full criteria, red/green flags, and evaluation questions.
+
+**Decision process**: Tag each paragraph as [E]/[A]/[R]. Compute ratio. Apply scoring decision tree above. Map to 0-15 band.
 
 **Frontmatter requirements**:
 - `name`: lowercase, alphanumeric + hyphens only, ≤64 characters
 - `description`: **THE MOST CRITICAL FIELD** — determines if skill gets used at all
-
----
-
-**Why description is THE MOST IMPORTANT field** (see Activation Flow diagram in Core Philosophy):
-
-**The brutal truth**: A Skill with perfect content but poor description is **useless** — it will never be activated. The description is the **only chance** to tell the Agent "use me in these situations."
 
 ---
 
@@ -217,36 +109,7 @@ Does the Skill follow official format requirements? **Special focus on descripti
 2. **WHEN**: In what situations should it be used? (trigger scenarios)
 3. **KEYWORDS**: What terms should trigger this Skill? (searchable terms)
 
-**Excellent description** (all three elements):
-```yaml
-description: "Comprehensive document creation, editing, and analysis with support
-for tracked changes, comments, formatting preservation, and text extraction.
-When the model needs to work with professional documents (.docx files) for:
-(1) Creating new documents, (2) Modifying or editing content,
-(3) Working with tracked changes, (4) Adding comments or any other document tasks"
-```
-
-Analysis:
-- WHAT: creation, editing, analysis, tracked changes, comments
-- WHEN: "When the model needs to work with... for: (1)... (2)... (3)..."
-- KEYWORDS: .docx files, tracked changes, professional documents
-
-**Poor description** (missing elements):
-```yaml
-description: "处理文档相关功能"
-```
-
-Problems:
-- WHAT: vague ("文档相关功能" — what specifically?)
-- WHEN: missing (when should Agent use this?)
-- KEYWORDS: missing (no ".docx", no specific scenarios)
-
-**Another poor example**:
-```yaml
-description: "A helpful skill for various tasks"
-```
-
-This is useless — Agent has no idea when to activate it.
+Worked examples of excellent, poor, and useless descriptions are in `references/scoring-bands.md`.
 
 ---
 
@@ -277,49 +140,9 @@ Layer 3: Resources (loaded on demand)
          scripts/, references/, assets/
          No limit
 ```
+**Scoring brief**: See `references/scoring-bands.md` D5 section for full criteria, red/green flags, and evaluation questions.
 
-| Score | Criteria |
-|-------|----------|
-| 0-5 | Everything dumped in SKILL.md (>500 lines, no structure) |
-| 6-10 | Has references but unclear when to load them |
-| 11-13 | Good layering with MANDATORY triggers present |
-| 14-15 | Perfect: decision trees + explicit triggers + "Do NOT Load" guidance |
-
-**For Skills WITH references directory**, check Loading Trigger Quality:
-
-| Trigger Quality | Characteristics |
-|-----------------|-----------------|
-| Poor | References listed at end, no loading guidance |
-| Mediocre | Some triggers but not embedded in workflow |
-| Good | MANDATORY triggers in workflow steps |
-| Excellent | Scenario detection + conditional triggers + "Do NOT Load" |
-
-**The loading problem**:
-```
-Loading too little ◄─────────────────────────────────► Loading too much
-- References sit unused                    - Wastes context space
-- Agent doesn't know when to load          - Irrelevant info dilutes key content
-- Knowledge is there but never accessed    - Unnecessary token overhead
-```
-
-**Good loading trigger** (embedded in workflow):
-```markdown
-### Creating New Document
-
-**MANDATORY - READ ENTIRE FILE**: Before proceeding, you MUST read
-[`docx-js.md`](docx-js.md) (~500 lines) completely from start to finish.
-**NEVER set any range limits when reading this file.**
-
-**Do NOT load** `ooxml.md` or `redlining.md` for this task.
-```
-
-**Bad loading trigger** (just listed):
-```markdown
-## References
-- docx-js.md - for creating documents
-- ooxml.md - for editing
-- redlining.md - for tracking changes
-```
+**Decision process**: Tag each paragraph as [E]/[A]/[R]. Compute ratio. Apply scoring decision tree above. Map to 0-15 band.
 
 **For simple Skills** (no references, <100 lines): Score based on conciseness and self-containment.
 
@@ -338,41 +161,11 @@ Different tasks need different levels of constraint. This is about matching free
 | 11-13 | Good calibration for most scenarios |
 | 14-15 | Perfect freedom calibration throughout |
 
-**The freedom spectrum**:
 
-| Task Type | Should Have | Why | Example Skill |
-|-----------|-------------|-----|---------------|
-| Creative/Design | High freedom | Multiple valid approaches, differentiation is value | frontend-design |
-| Code review | Medium freedom | Principles exist but judgment required | code-review |
-| File format operations | Low freedom | One wrong byte corrupts file, consistency critical | docx, xlsx, pdf |
-
-**High freedom** (text-based instructions):
-```markdown
-Commit to a BOLD aesthetic direction. Pick an extreme: brutally minimal,
-maximalist chaos, retro-futuristic, organic natural...
-```
-
-**Medium freedom** (pseudocode or parameterized):
-```markdown
-Review priority:
-1. Security vulnerabilities (must fix)
-2. Logic errors (must fix)
-3. Performance issues (should fix)
-4. Maintainability (optional)
-```
-
-**Low freedom** (specific scripts, exact steps):
-```markdown
-**MANDATORY**: Use exact script in `scripts/create-doc.py`
-Parameters: --title "X" --author "Y"
-Do NOT modify the script.
-```
-
-**The test**: Ask "if Agent makes a mistake, what's the consequence?"
-- High consequence → Low freedom
-- Low consequence → High freedom
 
 **skill-judge's own calibration**: Scoring interpretation = medium freedom (judgment within the published bands). Report generation = low freedom (follow the report template exactly). Evidence selection = medium freedom.
+
+**Why this calibration**: Incorrect evaluation misleads skill authors about their skill quality — medium-high consequence. Scoring needs judgment (medium freedom) because skill quality is multidimensional. Report format needs exact compliance (low freedom) because a malformed report creates confusion. Evidence selection is judgment-based (medium freedom) because relevance depends on context.
 
 ---
 
@@ -397,15 +190,9 @@ Through analyzing 17 official Skills, we identified 5 main design patterns:
 | 7-8 | Clear pattern with minor deviations |
 | 9-10 | Masterful application of appropriate pattern |
 
-**Pattern selection guide**:
+**Why Process, not Tool**: Skill evaluation is a judgment task with structured phases (Pin → Scan → Score → Calculate → Report → Record). Each phase has its own output and gates. A Tool pattern would collapse this into a single rigid operation, but scoring requires judgment within each phase. The 6-step protocol provides checkpoints (Step 3 completion → Step 4, Step 5 completion → Step 6) that are characteristic of Process patterns.
 
-| Your Task Characteristics | Recommended Pattern |
-|---------------------------|---------------------|
-| Needs taste and creativity | Mindset (~50 lines) |
-| Needs originality and craft quality | Philosophy (~150 lines) |
-| Has multiple distinct sub-scenarios | Navigation (~30 lines) |
-| Complex multi-step project | Process (~200 lines) |
-| Precise operations on specific format | Tool (~300 lines) |
+**Why Process, not Mindset**: At 448 lines, this skill exceeds Mindset's ~50-line ideal by 9x. The 6-step evaluation protocol provides procedural structure that a pure Mindset would lack. The score computation, report template, and persistence rules are low-freedom procedures that require structured guidance, not just thinking patterns.
 
 ---
 
@@ -413,12 +200,9 @@ Through analyzing 17 official Skills, we identified 5 main design patterns:
 
 Can an Agent actually use this Skill effectively?
 
-| Score | Criteria |
-|-------|----------|
-| 0-5 | Confusing, incomplete, contradictory, or untested guidance |
-| 6-10 | Usable but with noticeable gaps |
-| 11-13 | Clear guidance for common cases |
-| 14-15 | Comprehensive coverage including edge cases and error handling |
+**Scoring brief**: See `references/scoring-bands.md` D8 section for full criteria, red/green flags, and evaluation questions.
+
+**Decision process**: Tag each paragraph as [E]/[A]/[R]. Compute ratio. Apply scoring decision tree above. Map to 0-15 band.
 
 **Check for**:
 - **Decision trees**: For multi-path scenarios, is there clear guidance on which path to take?
@@ -427,24 +211,6 @@ Can an Agent actually use this Skill effectively?
 - **Edge cases**: Are unusual but realistic scenarios covered?
 - **Actionability**: Can Agent immediately act, or needs to figure things out?
 
-**Good usability** (decision tree + fallback):
-```markdown
-| Task | Primary Tool | Fallback | When to Use Fallback |
-|------|-------------|----------|----------------------|
-| Read text | pdftotext | PyMuPDF | Need layout info |
-| Extract tables | camelot-py | tabula-py | camelot fails |
-
-**Common issues**:
-- Scanned PDF: pdftotext returns blank → Use OCR first
-- Encrypted PDF: Permission error → Use PyMuPDF with password
-```
-
-**Poor usability** (vague):
-```markdown
-Use appropriate tools for PDF processing.
-Handle errors properly.
-Consider edge cases.
-```
 
 ---
 
@@ -460,6 +226,8 @@ Consider edge cases.
 - **NEVER** undervalue the description field — poor description = skill never gets used
 - **NEVER** put "when to use" info only in the body — Agent only sees description before loading
 - **NEVER** score before confirming you are reading the canonical SKILL.md — not a sibling README.md, an outdated copy, or a reference file. A wrong-file read silently manufactures false "critical issues" (e.g., reporting "no frontmatter" when the real SKILL.md has it).
+- **NEVER** accept a skill's self-reported quality or score as ground truth — always verify by re-reading the actual SKILL.md content. A skill can claim "expert-level" but contain only activation content. The evidence is in the file, not the claim.
+- **NEVER** score a dimension on the basis of a single section or paragraph — a skill might have a strong NEVER list but terrible knowledge delta. Each dimension must be scored independently. A strong D3 does not compensate for a weak D1, and you must not let a section's quality bleed into adjacent dimensions.
 
 ---
 
@@ -504,9 +272,11 @@ Calculate rough ratio: E:A:R
 
 For each of the 8 dimensions:
 1. Find specific evidence (quote relevant lines)
-   **Load reference:** `references/common-failure-patterns.md`
+   **MANDATORY — Load reference:** `references/common-failure-patterns.md` (the 9 named patterns). Load it once before scoring the first dimension. **Do NOT load** after scoring the last dimension — the patterns are only needed during diagnostic analysis.
 2. Assign score with one-line justification
 3. Note specific improvements if score < max
+
+**MANDATORY — Load reference:** `references/scoring-bands.md` (the per-dimension red/green flags, examples, and evaluation questions). Load ONLY the `## DN` section for the dimension you are currently scoring. **Do NOT load the entire file** (it is ~269 lines) and **Do NOT load sections for dimensions you have already scored** — load one section per dimension, on demand, as you score it.
 
 #### How to score a dimension
 
@@ -518,73 +288,79 @@ For each of the 8 dimensions:
 
 > **D1-specific note:** Explicitly count Expert vs Activation vs Redundant paragraphs to derive the band — the E:A:R ratio is the primary driver of the D1 score.
 
+> **Scoring decision tree (E:A:R → band mapping):**
+> After tagging paragraphs and computing the E:A:R ratio, map to the score band using the worst applicable row:
+> 
+> | E:A:R ratio                      | Allowed band | Condition                                                      |
+> | -------------------------------- | ------------ | -------------------------------------------------------------- |
+> | E < 40%, R > 20%                 | 0-5          | Redundant-heavy — most content the model already knows         |
+> | E 40-70%, high Activation        | 6-10         | Mixed; diluted by obvious content                              |
+> | E 40-70%, low Activation         | 11-15        | Mostly expert with minimal redundancy                          |
+> | E > 70%, A < 20%, R < 10%        | 16-20        | Pure knowledge delta — every paragraph earns its tokens        |
+> | E > 70% but A ≥ 20% or R ≥ 10%  | 11-15        | High expert but significant activation overhead pulls down     |
+> | E ≥ 90%                          | 16-20        | Near-perfect knowledge delta                                   |
+> 
+> **If scoring an edge case**: when dimension has < 5 paragraphs, use the ratio of lines (expert-line-count / total-line-count) as a coarse proxy. Flag the estimate in your evidence notes.
+> 
+> **When red flags and green flags conflict**: flags override the E:A:R ratio by ±1 band. One red flag (e.g., "what is X" section) moves the band down by 1. One green flag (e.g., domain-specific decision tree) moves the band up by 1.
+
 > **D8 fallback:** If you cannot decide whether content is Expert vs Redundant, default to Redundant (per D1 red flags) and flag the uncertainty in your notes.
+
+#### When failure patterns are ambiguous
+
+The 9 patterns in `common-failure-patterns.md` are diagnostic labels, not a perfect taxonomy. Handle ambiguity explicitly:
+- **Partial match**: if a pattern fits some symptoms but not all, record it as the primary pattern and note the mismatch in your evidence — do not force a clean fit.
+- **Two patterns conflict**: name both (primary + secondary) and explain which symptoms map to each. Do not pick one and ignore the other.
+- **No pattern fits**: say so ("none of the 9 named patterns apply") and describe the issue in plain language under Critical Issues instead of inventing a label.
+- **Never** bend a skill's observed behavior to match a pattern — bend the diagnosis to match the behavior.
+
+#### When the skill being evaluated is skill-judge itself (self-evaluation)
+
+Evaluating skill-judge with skill-judge is a meta-case that needs explicit handling to stay objective:
+- **Declare it**: state in the report title/verdict that this is a self-evaluation. Do not pretend the evaluator is independent.
+- **Bias check**: do NOT inflate scores because "we improved it" or deflate them to seem rigorous. Score the evidence, not the intent. If a prior iteration's recorded improvements were applied, judge whether they actually moved the evidence — not whether they were meant to.
+- **Arithmetic is non-negotiable**: compute `total_score` as the literal sum of the 8 dimension scores; derive `percentage` and `grade` from that sum. A self-evaluation that reports a total not equal to the sum of its dimensions is a calibration failure of the skill it is evaluating.
+- **Persistence follows the same Step 6 rules** as any evaluation: append (do not blanket-remove), then trim to the 3 most recent entries for skill-judge. Keeping prior entries lets the before/after delta be audited.
 
 ### Step 4: Calculate Total & Grade
 
-```
-Total = D1 + D2 + D3 + D4 + D5 + D6 + D7 + D8
-Max = 120 points
-```
-
-**Grade Scale** (percentage-based):
-| Grade | Percentage | Meaning |
-|-------|------------|---------|
-| A | 90%+ (108+) | Excellent — production-ready expert Skill |
-| B | 80-89% (96-107) | Good — minor improvements needed |
-| C | 70-79% (84-95) | Adequate — clear improvement path |
-| D | 60-69% (72-83) | Below Average — significant issues |
-| F | <60% (<72) | Poor — needs fundamental redesign |
+Total = D1 + D2 + D3 + D4 + D5 + D6 + D7 + D8 (max 120). Grade scale: A ≥ 90% (108+), B ≥ 80% (96+), C ≥ 70% (84+), D ≥ 60% (72+), F < 60%.
 
 ### Step 5: Generate Report
 
-**Load reference:** `references/quick-reference-checklist.md`
+**MANDATORY — Load reference:** `references/quick-reference-checklist.md`. Load only during Step 5 report generation. **Do NOT load** during scoring — it is a report verification tool, not a scoring guide.
 
-```markdown
-# Skill Evaluation Report: [Skill Name]
+**MANDATORY for first-time evaluators**: If this is your first evaluation using this skill, or if you want a worked example, load `references/example-evaluation.md` (~180 lines) before starting Step 0. Read it completely to understand the expected output format and reasoning depth. **Do NOT load** if you have already used this skill before — the example is a teaching tool, not a scoring reference.
 
-## Summary
-- **Total Score**: X/120 (X%)
-- **Grade**: [A/B/C/D/F]
-- **Pattern**: [Mindset/Navigation/Philosophy/Process/Tool]
-- **Knowledge Ratio**: E:A:R = X:Y:Z
-- **Verdict**: [One sentence assessment]
+See `references/example-evaluation.md` for the report template format. The template is embedded in the example for immediate reference.
 
-## Dimension Scores
+### Step 6: Record Results
 
-| Dimension | Score | Max | Notes |
-|-----------|-------|-----|-------|
-| D1: Knowledge Delta | X | 20 | |
-| D2: Mindset vs Mechanics | X | 15 | |
-| D3: Anti-Pattern Quality | X | 15 | |
-| D4: Specification Compliance | X | 15 | |
-| D5: Progressive Disclosure | X | 15 | |
-| D6: Freedom Calibration | X | 15 | |
-| D7: Pattern Recognition | X | 10 | |
-| D8: Practical Usability | X | 15 | |
+**MANDATORY**: After generating the report, persist the evaluation to the tracker. This step is NOT optional — every evaluation must be recorded.
 
-## Critical Issues
-[List must-fix problems that significantly impact the Skill's effectiveness]
+**File:** `evaluations.json` (in the skill-judge directory, alongside SKILL.md)
 
-## Top 3 Improvements
-1. [Highest impact improvement with specific guidance]
-2. [Second priority improvement]
-3. [Third priority improvement]
+**Procedure (append-then-trim — do NOT blanket-remove):**
+1. Read `evaluations.json` and parse it as JSON. Shape is `{ "evaluations": [...] }`. If it is malformed or not that shape, STOP and surface the error — do not overwrite.
+2. Compute the new entry's `total_score` as the EXACT sum of its 8 `dimension_scores` values. Verify `sum(dimension_scores) == total_score` before continuing; derive `percentage` and `grade` from this sum, not from a separately-chosen number. Mismatch = a bug; fix it before writing.
+3. If an existing entry has the SAME `skill_name` AND SAME `evaluated_at` timestamp, replace it in place (this is the only removal case).
+4. Otherwise APPEND the new entry to the `evaluations` array. Do NOT remove other entries for the same skill — history is retained.
+5. After appending, if more than 3 entries exist for the same `skill_name`, keep only the 3 most recent by `evaluated_at` and drop older ones. Preserve ALL entries for other skills untouched.
+6. Write the updated JSON back with 2-space indentation, preserving the `{ "evaluations": [...] }` envelope.
 
-## Detailed Analysis
-[For each dimension scoring below 80%, provide:
-- What's missing or problematic
-- Specific examples from the Skill
-- Concrete suggestions for improvement]
-```
+**Entry structure:**
+
+**NEVER** skip this step. **NEVER** blanket-remove a skill's prior entries (only replace an exact same-timestamp match, or trim to the 3 most recent). **NEVER** store more than 3 entries per skill. **NEVER** write a `total_score` that does not equal the sum of the `dimension_scores`. **NEVER** edit the JSON in a way that breaks the `{ "evaluations": [...] }` envelope.
 
 ---
 
 ## References
 
 - `references/common-failure-patterns.md` — **MANDATORY during Step 3 (Score Dimensions)**. Use the 9 named patterns to diagnose specific issues. ~100 lines.
+- `references/scoring-bands.md` — **MANDATORY during Step 3 (Score Dimensions)**. Per-dimension red/green flags, worked examples, and evaluation questions moved out of SKILL.md for progressive disclosure. ~250 lines.
 - `references/quick-reference-checklist.md` — **Load during Step 5 (Generate Report)** for output verification. ~30 lines.
 - `references/example-evaluation.md` — **Load when user asks "show me what a good evaluation looks like"** or for first-time evaluators wanting a worked example. ~180 lines.
+- `evaluations.json` — **Updated MANDATORY during Step 6 (Record Results)**. Tracks evaluation history (most recent 3 per skill). Read when user asks to compare skills, review evaluation history, or see past evaluations.
 
 ---
 
@@ -602,19 +378,4 @@ The best Skills are **compressed expert brains** — they take a designer's 10 y
 
 What gets compressed must be things the model doesn't have. Otherwise, it's garbage compression.
 
----
 
-## Self-Evaluation Note
-
-Any high-quality evaluator skill must demonstrate the following — audit skill-judge (and any evaluator skill) against them:
-
-- **Knowledge Delta**: Does it provide specific evaluation criteria the model would not generate on its own?
-- **Mindset**: Does it shape how to think about Skill quality, not just list checklist items?
-- **Anti-Patterns**: Does it include a "NEVER Do When Evaluating" section with specific don'ts?
-- **Specification**: Does it have valid frontmatter with a comprehensive description?
-- **Progressive Disclosure**: Is the core self-contained, with references loaded on demand via explicit triggers embedded in the Evaluation Protocol?
-- **Freedom**: Is the freedom level appropriate for an evaluation task?
-- **Pattern**: Does it follow a recognizable official pattern (e.g., Tool) with decision frameworks?
-- **Usability**: Does it offer a clear protocol, report template, and on-demand references?
-
-Evaluate this Skill against itself as a calibration exercise.

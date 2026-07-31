@@ -46,7 +46,7 @@ Complete reference for all keybindings in this tmux configuration.
 | `Ctrl+s Tab` | Last window     | Toggle between current and previous window |
 | `Ctrl+s C-p` | Previous window | Move to previous window in sequence        |
 | `Ctrl+s C-n` | Next window     | Move to next window in sequence            |
-| `Ctrl+s 0-9` | Go to window    | Direct jump to window number               |
+| `Ctrl+s 1-9` | Go to window    | Direct jump to window number (base-index 1) |
 | `Ctrl+s w`   | List windows    | Show interactive window list               |
 
 ## Window Management
@@ -56,7 +56,7 @@ Complete reference for all keybindings in this tmux configuration.
 | Keybinding | Action              | Notes                              |
 | ---------- | ------------------- | ---------------------------------- |
 | `Ctrl+s c` | Create new window   | Smart naming applied automatically |
-| `Ctrl+s &` | Kill current window | Confirmation not required          |
+| `Ctrl+s &` | Kill current window | Confirmation required (default tmux) |
 | `Ctrl+s ,` | Rename window       | Manual override of smart naming    |
 
 ### Window Manipulation
@@ -92,7 +92,7 @@ Complete reference for all keybindings in this tmux configuration.
 | ---------- | -------------------- | -------------------------------- |
 | `Ctrl+s {` | Swap pane left       | Move current pane left           |
 | `Ctrl+s }` | Swap pane right      | Move current pane right          |
-| `Ctrl+s !` | Break pane to window | Convert pane to new window       |
+| `Ctrl+s !` | Break pane to window | Convert current pane to new window |
 | `Ctrl+s ;` | Last active pane     | Toggle between last active panes |
 | `Ctrl+s o` | Rotate panes         | Rotate through panes in window   |
 
@@ -161,6 +161,7 @@ Complete reference for all keybindings in this tmux configuration.
 | Keybinding | Action         | Description                   |
 | ---------- | -------------- | ----------------------------- |
 | `Ctrl+s s` | Session menu   | Interactive session selection |
+| `Ctrl+s S` | New session    | Create new named session      |
 | `Ctrl+s $` | Rename session | Change current session name   |
 | `Ctrl+s d` | Detach session | Leave session running         |
 | `Ctrl+s D` | Detach client  | Detach specific client        |
@@ -199,7 +200,7 @@ Complete reference for all keybindings in this tmux configuration.
 | ---------- | ------------------ | ----------------------- |
 | `Ctrl+s #` | List buffers       | Show all paste buffers  |
 | `Ctrl+s =` | Choose buffer      | Select buffer to paste  |
-| `Ctrl+s -` | Delete buffer      | Delete current buffer   |
+| `Ctrl+s -` | *(unavailable)*    | `-` is rebound to vertical split |
 | `Ctrl+s +` | Delete all buffers | Clear all paste buffers |
 
 ## Layout Management
@@ -217,10 +218,9 @@ Complete reference for all keybindings in this tmux configuration.
 
 ### Zoom and Focus
 
-| Keybinding | Action     | Effect                   |
-| ---------- | ---------- | ------------------------ |
-| `Ctrl+s z` | Zoom pane  | Toggle zoom current pane |
-| `Ctrl+s !` | Break pane | Convert pane to window   |
+| Keybinding | Action    | Effect                   |
+| ---------- | --------- | ------------------------ |
+| `Ctrl+s z` | Zoom pane | Toggle zoom current pane |
 
 ## Advanced Features
 
@@ -229,13 +229,6 @@ Complete reference for all keybindings in this tmux configuration.
 | Keybinding                       | Action      | Description             |
 | -------------------------------- | ----------- | ----------------------- |
 | `Ctrl+s :setw synchronize-panes` | Toggle sync | Send input to all panes |
-
-### Client Management
-
-| Keybinding | Action      | Description                   |
-| ---------- | ----------- | ----------------------------- |
-| `Ctrl+s c` | New client  | Create new client for session |
-| `Ctrl+s &` | Kill client | Close current client          |
 
 ## Custom Keybinding Patterns
 

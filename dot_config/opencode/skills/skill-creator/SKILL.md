@@ -8,6 +8,9 @@ description: >
   "create a skill for this", "update the X skill", or anything about making the
   current approach reusable. If the user seems to be doing repetitive work that
   could be automated by a skill, ask if they want to create one.
+  Do NOT use for evaluating skills — use skill-judge instead. Do NOT use for editing
+  opencode config — use customize-opencode. Do NOT use for refactoring agent instruction
+  files — use agent-md-refactor.
 ---
 
 # Skill Creator
@@ -29,6 +32,17 @@ Before writing anything, ask yourself:
 - **Smallest viable scope**: What's the smallest scope that covers 80% of the user's use cases? Start there. Scope creep kills skills faster than bad content.
 - **Expert validation**: Would an expert in this domain say "yes, this captures how I think"? If not, you're writing a tutorial, not a skill.
 
+## Research Phase
+
+After clarifying intent but before choosing a pattern, research the domain:
+
+1. **Library/API/CLI-targeting skills** — use `general` subagent with find-docs skill (`npx ctx7@latest`) to fetch current docs, API signatures, and usage patterns.
+2. **Domain/convention skills** (no specific library) — use `research` subagent to investigate conventions, terminology, pain points, and existing patterns in the domain.
+3. **Simple factual lookups** — use `search` subagent directly.
+4. **Multiple angles** — fan out all three in parallel via `task` calls. Batch up to 10 at once.
+
+Merge findings with captured intent before proceeding to pattern selection.
+
 ## Create from Chat Context
 
 When the user says "turn this into a skill" or "make a skill from what we just did":
@@ -36,8 +50,9 @@ When the user says "turn this into a skill" or "make a skill from what we just d
 1. Read back through the conversation to extract the workflow.
 2. Identify the tools used, the order of operations, and any decisions made along the way.
 3. Note any corrections the user made — those are strong signals about what the skill should explicitly handle.
-4. Synthesize a draft SKILL.md.
-5. Present the draft to the user before writing it. Ask if anything's missing or wrong.
+4. If the chat context mentions a specific library, API, framework, or CLI tool, load find-docs and verify the user's workflow against current documentation before synthesizing.
+5. Synthesize a draft SKILL.md.
+6. Present the draft to the user before writing it. Ask if anything's missing or wrong.
 
 ## Do NOT Load
 - Do NOT use skill-creator for evaluating skills — use skill-judge instead
@@ -75,7 +90,7 @@ Rules:
 - No emojis.
 - Concise sections, each focused on one thing.
 - Examples when the output format matters — show input and output.
-- Keep under 200 lines. If approaching that, split into reference files and link to them.
+- Keep under 250 lines. If approaching that, split into reference files and link to them.
 - Embed loading triggers at the decision point where the reference is needed, not in a list at the end.
 
 ## Bundled Resources (scripts/, references/, assets/)
@@ -167,19 +182,12 @@ Before finalizing a skill, validate against these expert questions:
 Run these checks before telling the user the skill is ready:
 - Description has WHAT, WHEN, and KEYWORDS (all three, not just one)
 - Description includes multiple specific user phrases the model can pattern-match
-- Body is under 200 lines (split to reference files if over)
+- Body is under 250 lines (split to reference files if over)
 - At least 3 anti-patterns, each with reasoning for why it fails
 - Tested on 2-3 real prompts the user actually expects to run
 - No generic advice Claude would derive on its own without the skill
 - Bundled resources only when the skill genuinely needs them
-
-## Common Skill Creation Failure Patterns
-
-1. **Tutorial creep:** The skill explains HOW to do something the model already knows (e.g., "write clean code"). Test: would a general LLM produce this without the skill? If yes, delete it.
-2. **Description vagueness:** "Helps with X" never triggers. The description must contain the exact phrases users say. Mine the user's actual words.
-3. **Pattern mismatch:** Using a Mindset pattern (50 lines) for a complex workflow, or a Process pattern (200 lines) for a simple mindset. Pattern drives structure; wrong pattern = structural debt.
-4. **Anti-pattern absence:** No NEVER list = the model falls into every trap the expert has already mapped. Anti-patterns are half the value.
-5. **Progressive disclosure failure:** Everything in SKILL.md. Test: is it over 500 lines? Move detail to references/ with loading triggers.
+- Research was conducted (if domain-specific) — skill doesn't rely on incomplete or outdated assumptions
 
 ## Anti-Patterns
 

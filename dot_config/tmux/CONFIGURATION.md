@@ -17,7 +17,7 @@ The configuration is built around Neovim workflow with these critical settings:
 set -s escape-time 0          # Eliminates Esc lag in Neovim
 set -g focus-events on       # Enables file change detection
 set -g default-terminal "tmux-256color"
-set -ag terminal-overrides ",xterm-256color:RGB"
+set -as terminal-features ',xterm-256color:RGB,tmux-256color:RGB,xterm-256color:extkeys'
 ```
 
 **Why these matter:**
@@ -25,6 +25,7 @@ set -ag terminal-overrides ",xterm-256color:RGB"
 - `escape-time 0` removes the delay when pressing Esc in Neovim, making it feel native
 - `focus-events` allows Neovim to detect when files are changed externally
 - True color support ensures themes render exactly as intended
+- `set-titles on` updates the terminal window title to show the tmux session and window name (e.g., `mysession:mywindow`), making it easy to identify context across multiple terminal windows
 
 ### Indexing Strategy
 
@@ -127,11 +128,25 @@ setw -g automatic-rename-format '#{pane_current_command}:#{b:pane_current_path}'
     - Provides clear indication of current tmux mode
     - Prevents confusion during complex operations
 
+6. **tmux-sensible** - Sensible Defaults
+    - Community-standard sensible defaults from the tmux-plugins org
+    - Complements existing settings without conflict
+    - Covers UTF-8, better resize bindings, and other small improvements
+
+7. **tmux-resurrect** - Session Persistence
+    - Save and restore tmux sessions on demand (prefix + Ctrl+s to save, prefix + Ctrl+r to restore)
+    - Preserves pane layouts, working directories, and running programs
+    - Essential for surviving system reboots
+
+8. **tmux-continuum** - Automatic Session Management
+    - Auto-saves sessions every 15 minutes via tmux-resurrect
+    - Auto-restores last session on tmux server start
+    - Zero-effort session persistence
+
 ### Intentionally Excluded Plugins
 
 **tmux-auto-rename**: Replaced by built-in functionality
 **tmux-uptime**: Adds minimal value, increases status bar clutter
-**tmux-resurrect**: Session management handled by system/terminal
 
 ## Performance Optimizations
 
@@ -147,7 +162,7 @@ set-hook -g window-layout-changed 'refresh-client -S'
 **Why this approach:**
 
 - **Responsive**: Updates happen instantly on user actions
-- **Efficient**: No unnecessary polling or periodic updates
+- **Efficient**: Minimal 1-second polling supplemented by event-driven refresh hooks
 - **Battery-Friendly**: Reduces CPU usage on laptops
 
 ### History Management
@@ -235,6 +250,16 @@ set -g @rose_pine_directory 'off'
 1. **Essential**: Mode indicator, window names
 2. **Context**: Hostname (for remote sessions)
 3. **Excluded**: Directory (redundant with window names), username (usually known)
+
+### Time Display
+
+The status bar shows the current time in 24-hour format (`%H:%M`) in the right section. This is configured via:
+
+```bash
+set -g @rose_pine_date_time '%H:%M'
+```
+
+The time display is intentionally minimal — just hours and minutes — to avoid clutter while providing quick temporal context during long coding sessions.
 
 ### Icon Strategy
 

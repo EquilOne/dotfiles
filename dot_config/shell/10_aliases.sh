@@ -7,6 +7,9 @@
 alias shutdown='sudo shutdown now'
 alias restart='sudo reboot'
 
+# Reload shell config
+alias reload-shell='source ~/.config/shell/loader.sh'
+
 # Navigation
 if command -v zoxide >/dev/null 2>&1; then
   # cd replacements

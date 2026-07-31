@@ -18,8 +18,11 @@ setopt SHARE_HISTORY
 # Zsh options
 setopt autocd extendedglob
 
-# Vi mode — handled by zsh-vi-mode plugin (30_tools/05_zsh_vi_mode.sh)
-# bindkey -v
+# Vi mode
+bindkey -v
+
+# Bind clear
+bindkey '^G^L' clear-screen
 
 # Load unified shell configuration
 if [ -f ~/.config/shell/loader.sh ]; then

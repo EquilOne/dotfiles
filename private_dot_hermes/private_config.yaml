@@ -169,3 +169,6 @@ video_gen:
 onboarding:
   seen:
     tool_progress_prompt: true
+plugins:
+  enabled:
+    - herdr-agent-state
