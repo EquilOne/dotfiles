@@ -12,9 +12,18 @@ Fire on: user says "plan a new project", "scope this", "project kickoff",
 "break down this idea", "help me scope", "new project plan", "plan with
 linear", "linear plan", "create issues for this plan".
 
-## Template Path
+## Shared Resources
 
-`~/.config/opencode/templates/project-planner/docs/`
+This workflow uses the portable shared skill at:
+
+`~/.agents/skills/project-planner/`
+
+Its bundled templates are:
+
+- `~/.agents/skills/project-planner/references/Plan.md`
+- `~/.agents/skills/project-planner/references/Roadmap.md`
+
+When scaffolding a project, copy those references to `<project>/docs/` as `Plan.md` and `Roadmap.md`. Create `docs/` if missing. Never overwrite existing files without warning and confirmation.
 
 ## Workflow
 
@@ -23,9 +32,8 @@ linear", "linear plan", "create issues for this plan".
 1. Determine project directory:
    - Ask: "Is CWD your project directory?"
    - Yes -> use CWD. No -> ask for absolute path. Validate it exists.
-2. Scaffold reference docs:
-   - Copy `Plan.md` and `Roadmap.md` from template to `<project>/docs/`.
-   - Create `docs/` if missing. Report what was created.
+2. Inspect existing `docs/Plan.md`, `docs/Roadmap.md`, and `.planning` state before writing.
+3. Scaffold the shared `Plan.md` and `Roadmap.md` references into `<project>/docs/` only when they do not already exist, or after explicit confirmation to replace them.
 
 ### Phase 2 — Linear Structure
 

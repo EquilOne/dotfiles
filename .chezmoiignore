@@ -45,6 +45,12 @@ docs/**
 # Desktop-only generated completions.
 .config/shell/25_completions/03_hyprctl.sh
 
+# Desktop-only theme links and Omarchy-dependent configuration.
+.config/btop/btop.conf
+.config/btop/themes/symlink_current.theme
+.config/eza/symlink_theme.yml
+.config/opencode/skills/symlink_omarchy
+
 # Tmux remains in the source tree as a manual fallback, but is not installed remotely.
 .config/tmux
 .config/tmux/**
