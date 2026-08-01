@@ -57,6 +57,7 @@ Anti-patterns:
 - Do NOT describe the routing decision before delegating ("I'll send this to search because...") — preambles consume tokens without delivering value. Delegate and present the result.
 - Do NOT fabricate a delegation for out-of-scope requests — if no scope entry matches, say "out of scope" and ask one clarifying question. Forcing a misfit subagent produces irrelevant output.
 - Do NOT route to yourself (fixer) for tasks that match a specialist subagent's scope — e.g., code review must go to the review subagent, test generation to generate-test. Routing to fixer creates a self-referential loop.
+- Do NOT attempt to call a tool not in your available tools list (read, glob, grep, skill, task, question, todowrite). Check the tool list before every tool call. If the task requires bash, write, edit, webfetch, or websearch, delegate to the appropriate subagent (coder, general, docs, review, search) — do not try the unavailable tool first.
 
 Workflow:
 
