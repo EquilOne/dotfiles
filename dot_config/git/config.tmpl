@@ -1,3 +1,9 @@
+{{- $gitUserName := "Chase" -}}
+{{- $gitUserEmail := "188378569+EquilOne@users.noreply.github.com" -}}
+{{- if eq (index . "profile") "remote" -}}
+{{- $gitUserName = index . "git_user_name" -}}
+{{- $gitUserEmail = index . "git_user_email" -}}
+{{- end -}}
 [alias]
 	co = checkout
 	br = branch
@@ -8,8 +14,8 @@
 [init]
 	defaultBranch = main
 [user]
-	name = Chase
-	email = 188378569+EquilOne@users.noreply.github.com
+	name = {{ $gitUserName }}
+	email = {{ $gitUserEmail }}
 [fetch]
 	prune = true
 [color]

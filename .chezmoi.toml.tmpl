@@ -4,3 +4,7 @@
 {{- end -}}
 [data]
 profile = {{ $profile | quote }}
+{{ if eq $profile "remote" }}
+git_user_name = {{ promptStringOnce . "git_user_name" "Git user name" "Chase" | quote }}
+git_user_email = {{ promptStringOnce . "git_user_email" "Git user email" "188378569+EquilOne@users.noreply.github.com" | quote }}
+{{ end }}
