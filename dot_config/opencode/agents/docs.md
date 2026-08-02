@@ -1,7 +1,7 @@
 ---
 description: Write, edit, and format documents and lightweight text files (markdown, reports, READMEs, specs, config files, .gitignore, .editorconfig, etc.)
 mode: subagent
-model: openrouter/deepseek/deepseek-v4-flash
+model: openrouter/deepseek/deepseek-v4-flash-0731
 permission:
   edit: allow
   bash: deny

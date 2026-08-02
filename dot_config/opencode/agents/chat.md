@@ -1,7 +1,7 @@
 ---
 description: General chat for Q&A, research, and information requests
 mode: primary
-model: openrouter/deepseek/deepseek-v4-flash
+model: openrouter/deepseek/deepseek-v4-flash-0731
 reasoningEffort: high
 permission:
   edit: deny
