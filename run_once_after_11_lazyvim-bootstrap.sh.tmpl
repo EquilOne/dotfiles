@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -u
+
+if ! command -v nvim >/dev/null 2>&1; then
+    printf '[lazyvim] warning: Neovim is not installed; skipping LazyVim bootstrap\n' >&2
+    exit 0
+fi
+
+printf '[lazyvim] bootstrapping lazy.nvim and synchronizing LazyVim plugins\n'
+if ! nvim --headless '+Lazy sync' '+qa'; then
+    printf '[lazyvim] warning: LazyVim plugin synchronization failed; run :Lazy sync inside Neovim\n' >&2
+    exit 1
+fi
+
+if [ ! -d "${XDG_DATA_HOME:-$HOME/.local/share}/nvim/lazy/LazyVim" ]; then
+    printf '[lazyvim] warning: LazyVim was not found after synchronization\n' >&2
+    exit 1
+fi
+
+printf '[lazyvim] LazyVim bootstrap verified\n'
+exit 0
+{{- /* Keep the script as a chezmoi template so future profile-specific setup can be added safely. */ -}}
