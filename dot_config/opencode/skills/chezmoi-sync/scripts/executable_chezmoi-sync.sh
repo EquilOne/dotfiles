@@ -49,9 +49,9 @@ if data=$(chezmoi data 2>/dev/null); then
     [ -n "$val" ] && autopush="$val"
   else
     # Case-insensitive grep fallback — chezmoi may use camelCase or lowercase
-    val=$(echo "$data" | grep -ioE '"autoCommit"\s*:\s*(true|false)' | head -1 | sed 's/.*: *//')
+    val=$(echo "$data" | grep -ioE '"autoCommit"\s*:\s*(true|false)' | head -1 | sed 's/.*: *//' || true)
     [ -n "$val" ] && autocommit="$val"
-    val=$(echo "$data" | grep -ioE '"autoPush"\s*:\s*(true|false)' | head -1 | sed 's/.*: *//')
+    val=$(echo "$data" | grep -ioE '"autoPush"\s*:\s*(true|false)' | head -1 | sed 's/.*: *//' || true)
     [ -n "$val" ] && autopush="$val"
   fi
 fi
@@ -109,7 +109,7 @@ for raw in "${files[@]}"; do
   echo "$output"
 
   # Parse commit hash + push from output
-  hash=$(echo "$output" | grep -oE '\[[a-zA-Z0-9._/-]+ [a-f0-9]+\]' | grep -oE '[a-f0-9]{7,}' | head -1)
+  hash=$(echo "$output" | grep -oE '\[[a-zA-Z0-9._/-]+ [a-f0-9]+\]' | grep -oE '[a-f0-9]{7,}' | head -1 || true)
   if [ -n "$hash" ]; then
     if [ "$autopush" = "true" ]; then
       synced+=("$file -> $src (commit $hash, pushed)")
