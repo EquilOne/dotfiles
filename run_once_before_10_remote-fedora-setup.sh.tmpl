@@ -86,12 +86,12 @@ elif ! command -v dnf >/dev/null 2>&1; then
 elif ! command -v sudo >/dev/null 2>&1; then
     fail "sudo is required for Fedora package setup"
     exit 1
-elif ! sudo -n true >/dev/null 2>&1; then
-    fail "passwordless sudo is required for headless remote setup; configure sudoers for this user or run chezmoi apply from an interactive SSH session"
+elif ! sudo -v; then
+    fail "sudo authorization is required for remote profile setup; authenticate in the terminal, then rerun chezmoi apply"
     exit 1
 else
     packages=(
-        git curl jq zsh neovim fzf ripgrep fd-find bat zoxide direnv gh
+        git curl file procps-ng jq zsh neovim fzf ripgrep fd-find bat zoxide direnv gh
         dnf-plugins-core gawk golang rust cargo
         gcc gcc-c++ make cmake pkgconf-pkg-config openssl-devel libffi-devel
         zlib-ng-compat-devel bzip2-devel xz-devel sqlite-devel readline-devel
@@ -277,14 +277,67 @@ if ! command -v pass-cli >/dev/null 2>&1 && [ ! -x "$HOME/.local/bin/pass-cli" ]
     fi
 fi
 
+find_brew() {
+    local candidate
+
+    if command -v brew >/dev/null 2>&1; then
+        command -v brew
+        return 0
+    fi
+
+    for candidate in \
+        "$HOME/.linuxbrew/bin/brew" \
+        "/home/linuxbrew/.linuxbrew/bin/brew" \
+        "/opt/homebrew/bin/brew" \
+        "$HOME/.homebrew/bin/brew"; do
+        if [ -x "$candidate" ]; then
+            printf '%s\\n' "$candidate"
+            return 0
+        fi
+    done
+
+    return 1
+}
+
+install_homebrew() {
+    local brew
+
+    if brew=$(find_brew); then
+        return 0
+    fi
+
+    log "installing Homebrew"
+    run_installer "Homebrew" "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh" bash --env NONINTERACTIVE=1
+
+    if ! brew=$(find_brew); then
+        fail "Homebrew was not installed; see https://docs.brew.sh/Homebrew-on-Linux"
+        return 1
+    fi
+
+    # Make the newly installed Homebrew available to the rest of this run.
+    if ! eval "$(\"$brew\" shellenv)"; then
+        fail "could not initialize Homebrew environment"
+        return 1
+    fi
+}
+
 if ! command -v carapace >/dev/null 2>&1 && [ ! -x "$HOME/.local/bin/carapace" ]; then
-    if command -v go >/dev/null 2>&1; then
+    brew=""
+    if install_homebrew && brew=$(find_brew); then
+        log "installing Carapace with Homebrew"
+        if ! "$brew" install carapace; then
+            fail "Carapace Homebrew installation failed; see https://carapace-sh.github.io/carapace-bin/install.html"
+        fi
+    elif command -v go >/dev/null 2>&1; then
+        log "installing Carapace with Go"
         if ! GOBIN="$HOME/.local/bin" go install github.com/carapace-sh/carapace-bin/cmd/carapace@latest; then
-            fail "Carapace installation failed; see https://carapace-sh.github.io/carapace-bin/install.html"
+            fail "Carapace Go installation failed; see https://carapace-sh.github.io/carapace-bin/install.html"
         fi
     else
-        fail "Go is required for Carapace; see https://carapace-sh.github.io/carapace-bin/install.html"
+        fail "Carapace requires Homebrew or Go; see https://carapace-sh.github.io/carapace-bin/install.html"
     fi
+    unset brew
+
     if [ ! -x "$HOME/.local/bin/carapace" ] && ! command -v carapace >/dev/null 2>&1; then
         fail "Carapace was not installed"
     fi

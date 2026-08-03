@@ -72,9 +72,9 @@ These tools are installed via dnf when available in Fedora repos; the URLs below
 | Proton Pass CLI   | `https://proton.me/download/pass-cli/install.sh`                | `bash`    |
 | Starship          | `https://starship.rs/install.sh`                                | `sh`      |
 | uv                | `https://astral.sh/uv/install.sh`                               | `sh`      |
-| Carapace          | Go install (`github.com/carapace-sh/carapace-bin/cmd/carapace@latest`) | `go install` |
+| Carapace          | Homebrew (`brew install carapace`), with Go install fallback (`github.com/carapace-sh/carapace-bin/cmd/carapace@latest`) | `brew` / `go install` |
 
-The OpenCode installer receives `OPENCODE_INSTALL_DIR="$HOME/.local/bin"` and `--no-modify-path`; the uv installer receives `--env UV_NO_MODIFY_PATH=1`. PATH management is handled by chezmoi's shell config, not by installer shell-profile edits. Existing OpenCode installs at `~/.opencode/bin` remain supported.
+Homebrew is installed on demand with the official Linux installer (`NONINTERACTIVE=1`) when Carapace needs it and no Homebrew installation is detected. The script initializes Homebrew only for the current bootstrap run; persistent PATH management is handled by chezmoi's shell config, not by installer shell-profile edits. The OpenCode installer receives `OPENCODE_INSTALL_DIR="$HOME/.local/bin"` and `--no-modify-path`; the uv installer receives `--env UV_NO_MODIFY_PATH=1`. Existing OpenCode installs at `~/.opencode/bin` remain supported.
 
 ### Eza Installation
 
