@@ -13,7 +13,7 @@ It is not a development project. Write no application code here.
 | `keybinds.md`       | Key reference (leader: `ctrl+x`)                                                |
 | `agents/*.md`       | Subagent config files (11 agents)                                             |
 | `skills/*/SKILL.md` | Loaded skills (8: 4 caveman, explain-code, find-docs, omarchy, skill-creator) |
-| `templates/`        | Project templates (e.g., `project-planner`)                                     |
+| `templates/`        | Project templates                                     |
 | `package.json`      | Plugin dep: `@opencode-ai/plugin@1.4.0` (single, pinned)                        |
 
 ## Critical Quirks
