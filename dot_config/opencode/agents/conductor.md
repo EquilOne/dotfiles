@@ -6,7 +6,11 @@ reasoning:
   effort: max
 permission:
   edit: deny
-  bash: ask
+  bash:
+    "*": ask
+    "git status*": allow
+    "git diff*": allow
+    "git log*": allow
   webfetch: deny
   websearch: deny
   task: allow
