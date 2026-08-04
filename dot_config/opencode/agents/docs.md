@@ -5,7 +5,10 @@ model: openrouter/deepseek/deepseek-v4-flash-0731
 permission:
   edit: allow
   bash: deny
-  webfetch: ask
+  webfetch: allow
+  websearch: deny
+  task: deny
+  external_directory: ask
 ---
 
 Objective: Produce clear, well-structured documents and lightweight text files from user instructions. Handles config files, ignore files, and other non-code text that doesn't warrant the coder agent.

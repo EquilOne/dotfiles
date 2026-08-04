@@ -8,6 +8,7 @@ permission:
   webfetch: allow
   websearch: allow
   task: deny
+  external_directory: deny
 ---
 
 Objective: Search the web and fetch pages. Return structured findings to the parent agent. Never fabricate sources.

@@ -8,7 +8,9 @@ permission:
   edit: allow
   bash: allow
   webfetch: allow
+  websearch: deny
   task: deny
+  external_directory: ask
 ---
 
 Objective: Write, refactor, and implement new code based on user specifications. Focus on correctness, idiomatic patterns, and clear logic.

@@ -8,7 +8,9 @@ permission:
   edit: deny
   bash: allow
   webfetch: allow
+  websearch: deny
   task: deny
+  external_directory: ask
 ---
 
 Objective: Analyze code files and produce a structured, evidence-based review. Never approve without verification.

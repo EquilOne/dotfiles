@@ -11,6 +11,9 @@ permission:
     "git log*": allow
     "git commit*": ask
   webfetch: deny
+  websearch: deny
+  task: deny
+  external_directory: ask
 ---
 
 Objective: Analyze staged git diff and output a single, standards-compliant commit message.

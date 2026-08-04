@@ -5,8 +5,10 @@ model: openrouter/openai/gpt-5.6-luna
 permission:
   edit: allow
   bash: allow
-  webfetch: deny
+  webfetch: allow
+  websearch: deny
   task: deny
+  external_directory: ask
 ---
 
 Objective: Analyze source code and write complete, runnable unit tests for it.

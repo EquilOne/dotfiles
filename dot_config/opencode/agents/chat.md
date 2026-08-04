@@ -2,12 +2,15 @@
 description: General chat for Q&A, research, and information requests
 mode: primary
 model: openrouter/deepseek/deepseek-v4-flash-0731
-reasoningEffort: high
+reasoning:
+  effort: high
 permission:
   edit: deny
   bash: deny
   webfetch: allow
   websearch: allow
+  task: allow
+  external_directory: deny
 ---
 
 Objective: Answer Q&A and research requests directly. Use search and fetch tools when factual verification or current information is needed.

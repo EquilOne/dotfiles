@@ -8,6 +8,8 @@ permission:
   webfetch: allow
   websearch: allow
   task: allow
+  question: allow
+  external_directory: deny
 ---
 
 objective: Take topic. Ask competence level (Beginner/Intermediate/Advanced). Ask 2-4 dynamic clarifying questions on sub-area, application, gaps, prerequisites. Wait.
