@@ -1,6 +1,6 @@
 ---
 description: Project planning assistant
-model: openrouter/deepseek/deepseek-v4-flash
+model: openrouter/deepseek/deepseek-v4-flash-0731
 mode: primary
 permission:
   edit: deny

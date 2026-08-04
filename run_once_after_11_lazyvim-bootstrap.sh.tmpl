@@ -10,12 +10,12 @@ fi
 printf '[lazyvim] bootstrapping lazy.nvim and synchronizing LazyVim plugins\n'
 if ! nvim --headless '+Lazy sync' '+qa'; then
     printf '[lazyvim] warning: LazyVim plugin synchronization failed; run :Lazy sync inside Neovim\n' >&2
-    exit 1
+    exit 0
 fi
 
 if [ ! -d "${XDG_DATA_HOME:-$HOME/.local/share}/nvim/lazy/LazyVim" ]; then
     printf '[lazyvim] warning: LazyVim was not found after synchronization\n' >&2
-    exit 1
+    exit 0
 fi
 
 printf '[lazyvim] LazyVim bootstrap verified\n'

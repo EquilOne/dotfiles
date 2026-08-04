@@ -172,3 +172,4 @@ onboarding:
 plugins:
   enabled:
     - herdr-agent-state
+    - moshi-hooks

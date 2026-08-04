@@ -1,6 +1,9 @@
 ---
 name: project-planner
-description: Use when planning or scoping work. Keep portable plans synchronized with Linear: ask before creating projects, log decisions as comments, publish progress updates, and track actionable tasks as issues.
+description: >
+  Use when planning or scoping work. Keep portable plans synchronized with
+  Linear: ask before creating projects, log decisions as comments, publish
+  progress updates, and track actionable tasks as issues.
 version: 1.1.0
 author: Chase
 license: MIT
