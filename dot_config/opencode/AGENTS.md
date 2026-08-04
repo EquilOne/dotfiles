@@ -9,18 +9,18 @@ It is not a development project. Write no application code here.
 | ----------------- | ----------------------------------------------------------------------------- |
 | `opencode.json`     | Agent routing, models, `default_agent: "fixer"`                                 |
 | `tui.json`          | Keybindings, theme (`rosepine`), UI config                                      |
-| `agent_stack.md`    | Model-to-agent assignment table (16 entries)                                  |
+| `agent_stack.md`    | Native agent routing reference                                             |
 | `keybinds.md`       | Key reference (leader: `ctrl+x`)                                                |
-| `agents/*.md`       | Subagent config files (11 agents)                                             |
-| `skills/*/SKILL.md` | Loaded skills (8: 4 caveman, explain-code, find-docs, omarchy, skill-creator) |
+| `agents/*.md`       | Primary and subagent Markdown definitions                                  |
+| `skills/*/SKILL.md` | Reusable OpenCode skills and workflows |
 | `templates/`        | Project templates                                     |
-| `package.json`      | Plugin dep: `@opencode-ai/plugin@1.4.0` (single, pinned)                        |
+| `package.json`      | Plugin SDK dep: `@opencode-ai/plugin@1.18.11` (pinned)                           |
 
 ## Critical Quirks
 
 - **`.gitignore` ignores `package.json`, `bun.lock`, and `node_modules`** — these are not committed. After clone, create/resolve `package.json` and run `npm install` to restore plugin deps.
-- **`autoupdate: false`** in `opencode.json` — plugins do not auto-update. Update pinned versions manually via `npm update`.
-- **Agents use explicit model overrides** — check `opencode.json` before assuming default model. Each subagent may route to a different model (e.g., `build` uses `minimax/m3`, not default).
+- **`autoupdate: true`** in `opencode.json` — plugin versions currently use `@latest`; inspect the live config before changing update behavior.
+- **Agents use explicit model overrides** — check `opencode.json` and `agents/*.md` before assuming a default model.
 
 ## Commands
 
