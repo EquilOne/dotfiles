@@ -74,6 +74,15 @@ if ! mkdir -p "$HOME/.local/bin"; then
     fail "could not create $HOME/.local/bin"
 fi
 
+# Guarantee chezmoi in the canonical ~/.local/bin for post-init sessions.
+if [ ! -x "$HOME/.local/bin/chezmoi" ]; then
+    if command -v chezmoi >/dev/null 2>&1; then
+        cp "$(command -v chezmoi)" "$HOME/.local/bin/chezmoi"
+    else
+        fail "chezmoi not found in PATH; install it with: sh -c \"curl -fsLS get.chezmoi.io\" -- -b \"$HOME/.local/bin\""
+    fi
+fi
+
 fedora=false
 if [ -f /etc/fedora-release ] || grep -qE '^ID(_LIKE)?=.*(fedora|rhel|centos|rocky|alma)' /etc/os-release 2>/dev/null; then
     fedora=true
