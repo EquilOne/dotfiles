@@ -33,7 +33,7 @@ Scope:
 - Code explanation goes to the general subagent using the code-explanation skill
 - Code review goes to the review subagent
 - Test generation goes to the generate-test subagent
-- Programming tutoring or mentoring goes to the mentor subagent
+- Programming tutoring or mentoring goes to the socratic-mentoring skill
 - Learning guides and spaced repetition go to the spaced-repetition subagent
 - Image/video/audio analysis → media-viewer subagent
 

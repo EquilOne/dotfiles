@@ -73,7 +73,7 @@ Classify each agent into one role:
 | reasoning | Planning, architecture, design | intelligence_index, reasoning_effort | plan, conductor |
 | agentic | Multi-step, tool use, orchestration | agentic_index, tool calling | fixer, general |
 | lightweight | Simple lookups, search, exploration | low price, low latency | search, explore, scout |
-| general | Chat, docs, explanation | balanced across all | docs, chat, mentor |
+| general | Chat, docs, explanation | balanced across all | docs, chat, socratic-mentoring |
 
 ### Phase 2: Query OpenRouter (ZDR-aware dual queries)
 
