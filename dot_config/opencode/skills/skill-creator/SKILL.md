@@ -83,7 +83,7 @@ Mindset and Navigation stay short. Tool and Process can run longer, but split in
 **Why Process pattern:** Skill creation is a multi-step workflow (analyze → choose pattern → draft → validate → iterate) with checkpoints (validation gate). Medium freedom — the workflow is fixed but content is creative.
 
 ## Draft the SKILL.md
-Skills live in `skills/<name>/SKILL.md`. Match the style of existing skills in this repo (caveman, find-docs).
+Skills live in `skills/<name>/SKILL.md`. Match the style of existing skills in this repo (find-docs and other relevant skills).
 
 Rules:
 - Imperative tone ("Do X", not "You should do X").

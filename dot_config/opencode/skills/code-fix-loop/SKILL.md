@@ -3,7 +3,7 @@ name: code-fix-loop
 description: >
   Human-in-the-loop review → fix → test cycle. Conventional review-fix cycle
   for code review then fix workflows. Orchestrates coder, review, and generate-test
-  subagents with caveman-compressed context. MUST use when user says "review and fix"
+  subagents with focused task briefs. MUST use when user says "review and fix"
   or "review then fix". Also use when user says "review cycle", "review loop",
   "code fix loop", "/review-fix", "review before changes", or asks to review
   findings before changes and then apply fixes. Always pauses for user confirmation
@@ -12,15 +12,7 @@ description: >
 
 # Code Fix Loop
 
-Orchestrate a review-fix-test cycle with the human in control. Each step pauses for confirmation. Context stays tight by compressing to caveman briefs before each subagent delegation.
-
-## MANDATORY: Load the Caveman Skill First
-
-Before any subagent delegation, load `caveman` to compress context between calls.
-
-**Load via the `skill` tool:** call `skill` with `{"name": "caveman"}`.
-
-All subagent briefs must be written in caveman mode: terse, location-problem-fix format, no throat-clearing. The orchestrator holds loop state; subagents see only the compressed task.
+Orchestrate a review-fix-test cycle with the human in control. Each step pauses for confirmation. Keep briefs focused on the current phase, approved scope, relevant files, acceptance criteria, and required output.
 
 ## When to Use
 
@@ -40,12 +32,6 @@ Use this skill when the user wants to:
 
 ## Progressive Disclosure
 
-This skill loads the caveman skill at start (stays in context). For detailed brief templates:
-
-**MANDATORY:** When writing a caveman brief for a subagent delegation, read [`references/caveman-brief-templates.md`](references/caveman-brief-templates.md) for format rules, good vs bad examples, and common compression mistakes.
-
-**Do NOT load** the brief templates when: the user has already provided the brief text, or you've loaded it earlier in this session.
-
 **When to load additional skills:**
 - If the code spans multiple unfamiliar languages → consider loading `explain-code` for the review brief
 - If the fix involves config files → the `customize-opencode` skill may provide schema context
@@ -61,9 +47,9 @@ This skill follows the Process pattern because the review-fix-test cycle is a ph
 - **Phase 5:** Final review (confirm fixes resolved findings, optional)
 - **Phase 6:** Summary (report what changed)
 
-Checkpoints between every phase — user confirmation required to advance. Medium freedom: the 6-step sequence is fixed, but the caveman briefs within each step are adaptive. The human-in-the-loop gate is the core safety mechanism that distinguishes this from an automated loop.
+Checkpoints between every phase — user confirmation required to advance. Medium freedom: the 6-step sequence is fixed, but the focused briefs within each step are adaptive. The human-in-the-loop gate is the core safety mechanism that distinguishes this from an automated loop.
 
-**Why Process, not Tool:** A Tool pattern requires exact scripts and low freedom — but the caveman briefs are adaptive templates, not fixed scripts. The skill's value isn't "run this exact command" (Tool); it's "orchestrate these subagents in this order with these confirmation gates" (Process). The caveman compression is a MEDIUM-freedom mechanism: it constrains format (terse, location-problem-fix) but adapts content per finding. This is structurally Process, not Tool.
+**Why Process, not Tool:** A Tool pattern requires exact scripts and low freedom — but the task briefs are adaptive templates, not fixed scripts. The skill's value isn't "run this exact command" (Tool); it's "orchestrate these subagents in this order with these confirmation gates" (Process). The focused briefing is a MEDIUM-freedom mechanism: it constrains scope and required output while adapting content per finding. This is structurally Process, not Tool.
 
 **Why Process, not Mindset:** Mindset skills transfer thinking patterns with no workflow (~50 lines, high freedom). This skill's value is the WORKFLOW itself — the 6-step sequence with gates is the expert knowledge, not just a thinking frame. Remove the workflow and you have nothing; that's the signature of Process, not Mindset. The human-in-the-loop gate is the non-obvious structural insight: it converts an automated loop (which would be a Tool) into a Process by inserting judgment checkpoints that require human confirmation.
 
@@ -72,7 +58,7 @@ Checkpoints between every phase — user confirmation required to advance. Mediu
 **Pattern mapping:**
 - Phased workflow: 6 steps with mandatory confirmation gates ✓
 - Checkpoints: User confirms scope, findings, tests, and final review at each gate ✓
-- Medium freedom: Caveman briefs constrain format, adapt content ✓
+- Medium freedom: Focused briefs constrain scope and output, adapting to findings ✓
 - ~247 lines (within Process range) ✓
 - Non-obvious insight: The human-in-the-loop gate is what makes this Process not Tool ✓
 
@@ -104,7 +90,7 @@ Before starting a review-fix-test cycle, ask:
 - **Risk:** If the fix is wrong, what breaks? High-risk changes (auth, payments, data migration) always warrant the full loop; low-risk (typo, comment) don't.
 - **Testability:** Can the fix be verified by tests? If not, the loop degrades to review-only.
 - **Stakeholders:** Who needs to review the diff before merge? The loop's confirmation gates exist to surface this.
-**Freedom calibration:** The 6-step workflow is fixed (low freedom) because skipping a gate risks unreviewed changes. Within each step, the caveman briefs are adaptive (medium freedom) — the model chooses what to include based on the finding. The user confirmation gates are the lowest-freedom element: they cannot be skipped or automated.
+**Freedom calibration:** The 6-step workflow is fixed (low freedom) because skipping a gate risks unreviewed changes. Within each step, the task briefs are scoped to the current phase. The user confirmation gates are the lowest-freedom element: they cannot be skipped or automated.
 
 **Expert insight:** The most common loop failure is not a bad fix — it's a bad triage. When the user selects "all" findings to fix without reading them, the coder gets a mixed-bag of severity levels and the fix quality drops. Always present findings grouped by severity (critical → important → minor) and recommend fixing critical first, even if the user said "all."
 
@@ -114,7 +100,7 @@ Before starting a review-fix-test cycle, ask:
 
 Delegate to the `review` subagent.
 
-**Brief template (caveman):**
+**Brief template:**
 
 ```
 REVIEW <file_paths>
@@ -142,7 +128,7 @@ If the user wants to edit a finding's scope or wording, treat their version as t
 
 Delegate to the `coder` subagent.
 
-**Brief template (caveman):**
+**Brief template:**
 
 ```
 FIX <file_paths>
@@ -165,7 +151,7 @@ Ask:
 - **no** → skip to Step 5
 - **specific files** → delegate with the subset
 
-**Brief template (caveman):**
+**Brief template:**
 
 ```
 TEST <file_paths>
@@ -185,7 +171,7 @@ Ask:
 - **yes** → delegate to `review` subagent with the final diff
 - **no** → continue to Step 6
 
-**Brief template (caveman):**
+**Brief template:**
 
 ```
 REVIEW-FINAL <file_paths>
@@ -214,7 +200,7 @@ The orchestrator (you) holds the loop state. Subagents see a single focused task
 
 | Failure | Response |
 |---|---|
-| Subagent returns without changes | Re-prompt with a clearer caveman brief; if still empty, ask the user whether to continue or reset scope. |
+| Subagent returns without changes | Re-prompt with a clearer focused brief; if still empty, ask the user whether to continue or reset scope. |
 | Review finds issues but coder disagrees | Present both views to the user and ask for a binding decision; do not arbitrate. |
 | Tests fail repeatedly | After 3 failed cycles, stop the loop and ask the user to clarify requirements or reset scope. |
 | Loop feels stuck | Offer a hard reset: discard pending changes, re-run review from the original diff, or exit the skill. |
@@ -241,8 +227,7 @@ Review-fix-test loops have three characteristic failure modes that only experien
 
 User: "review and fix src/auth.ts"
 
-1. Load caveman skill via `skill` tool.
-2. Delegate review of `src/auth.ts` to `review` subagent. Brief: `REVIEW src/auth.ts. user: harden auth. focus: security. return: file:line findings only.`
+1. Delegate review of `src/auth.ts` to `review` subagent. Brief: `Review src/auth.ts for security issues; return file:line findings with evidence.`
 3. Receive findings: `L23: no null guard on user. L45: hardcoded secret. L78: race in token refresh.`
 4. Ask: "Apply which fixes? (all / skip X / cancel)"
 5. User: "all"
