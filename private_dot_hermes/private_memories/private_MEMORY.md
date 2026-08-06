@@ -6,8 +6,5 @@ Chase's EquilDev business strategy starts with Cedar City/Iron County relationsh
 §
 Linear is connected to Hermes through its MCP integration, and Hermes can retrieve teams and projects in terminal. This agent-configuration remodel does not need a dedicated Linear project.
 §
-For the OpenCode configuration remodel, Chase decided that `fixer` remains a router-only primary agent with direct edit and shell permissions denied; implementation and specialist work are delegated to purpose-specific agents.
-§
-For the OpenCode configuration remodel, `chat` remains a selectable primary agent for direct read-only conversation/research. `plan` should be configured as a subagent invoked by another primary agent when the user requests a plan.
-§
 OpenCode remodel: `fixer` router-only (edit/bash denied); `chat` selectable read-only primary; `plan` read-only/non-delegating GPT-5.6-Luna planning subagent (edit/task/web denied, Git status/diff/log allowed, other bash asks); `conductor` serious multi-phase coordinator with same granular Git inspection; `build` optional disposable-software vibe coder (task/edit/bash cwd allowed, external_directory asks, web denied; delegates search); `coder` focused implementation subagent (edit/bash/webfetch allowed, websearch/task denied, external_directory asks).
+§
