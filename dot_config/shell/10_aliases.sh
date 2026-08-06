@@ -56,6 +56,9 @@ else
   alias lzg='ls -lh'
 fi
 
+# Hermes
+alias hermes='hermes --tui'
+
 # Grep
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
