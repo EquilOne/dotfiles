@@ -127,17 +127,47 @@ Bootstrap installs `pass-cli` to `~/.local/bin` from the official installer at `
 - **Keep local env files secure** — any `.env` files containing secrets must be mode `0600` and gitignored. The chezmoi ignore list already excludes `**/*.env` and `**/env.*`.
 - **Interactive limitations** — `pass-cli run` forwards basic I/O for non-interactive commands and scripts, but is not a full TTY solution. Interactive login or biometric/PIN authentication must be performed directly in an interactive SSH session (run `pass-cli login` there). For production secrets, use per-command or per-service injection rather than a single long-lived `pass-cli run` session.
 
-## OpenCode Remote Safety
+## SSH Agent (keychain + Proton Pass keys)
 
-The OpenCode config template (`opencode.json.tmpl`) disables the **Linear MCP** server when `profile == "remote"` to avoid automatic OAuth flow and token persistence on an untrusted or temporary machine.
+SSH keys live in the Proton `ssh-keys` vault — portable and off disk — and a persistent `keychain`-managed ssh-agent receives them via `pass-cli ssh-agent load`.
 
-```json
-"linear": {
-  "enabled": false
-}
+### On-login flow
+
+`~/.config/shell/30_tools/03_keychain_init.sh` starts/persists the ssh-agent with `keychain --eval --quiet` (no keyfile args, so keychain acts as an agent provider only). It then runs `pass-cli ssh-agent load --vault-name ssh-keys` to load the Proton-stored keys into the agent. The load is gated on the agent having no identities (`! ssh-add -l`), so it fires roughly once per agent lifetime. The script runs from interactive login shells, guarded on `[[ -t 0 && -t 1 ]]`.
+
+### Prerequisites
+
+- **keychain** — installed by the bootstrap as a distro package if available (`try_optional_dnf_package keychain`), otherwise the single-script release is fetched into `~/.local/bin` from `https://github.com/danielrobbins/keychain` (no EPEL — EPEL is Enterprise-Linux-only and does not apply to Fedora). On an existing box the manual install is `sudo dnf install -y keychain`, or if absent from the base repo: `curl -fsSL https://raw.githubusercontent.com/danielrobbins/keychain/2.9.8/keychain -o "$HOME/.local/bin/keychain" && chmod 0755 "$HOME/.local/bin/keychain"`.
+- **pass-cli authenticated** — `pass-cli` must be logged in before the load can run.
+- **PAT `viewer` grant** on the `ssh-keys` vault: `pass-cli pat access grant --pat-name <pat> --vault-name ssh-keys --role viewer`.
+
+### Verify
+
+In an interactive shell:
+
+```sh
+echo "$SSH_AUTH_SOCK"   # should point at a live agent socket
+ssh-add -l              # lists the Proton-stored identities
 ```
 
-Other MCP servers (Exa, OpenRouter, Airtable) remain disabled by default or depend on external credential files not tracked by chezmoi. The Exa MCP is enabled in the rendered config; any service credentials required are external and not managed by chezmoi.
+### Troubleshooting
+
+| Symptom | Likely Cause | Resolution |
+|---|---|---|
+| `SSH_AUTH_SOCK` empty | keychain absent or non-interactive shell | `command -v keychain`; ensure keychain installed (bootstrap does it; manual: dnf or the raw-script install above) |
+| `pass-cli ssh-agent load` silently no-ops | PAT missing `viewer` on `ssh-keys`, or not logged in | Check `pass-cli info`; grant `viewer` on the vault |
+| Keys not loaded after reboot | keychain agent restart cleared memory | Run `pass-cli ssh-agent load --vault-name ssh-keys` in an interactive shell |
+
+## OpenCode Remote Safety
+
+The OpenCode config template (`opencode.json.tmpl`) keeps the **Linear MCP** server enabled on every profile, differing only in auth mode:
+
+- `remote` (headless) — an `Authorization: Bearer` header is rendered at apply time from Proton Pass via `{{ protonPass "pass://SZZ4VITnWMje2Df01Z_-6XJ52UXWIdpywga9uE26vwLE1q4JNzB1GWivdRbO5d1u6iy71wgIMYTH6xb7CYjG1A==/SvWLUqs2yNztw5xe7sQzWJ56L2nZhNYf24sa6FOvDaPmMtcyXFyG9L2qJjgwZMEMG7p5mVIAcpOC-csgNsHQOA==/API Key" }}`, avoiding an interactive OAuth flow and keeping the token out of the repo.
+- any other profile — no header; opencode uses its standard browser OAuth flow.
+
+The Proton Pass reference requires `pass-cli` authenticated on the machine (PAT) with `viewer` access to the `equil-remote` vault.
+
+Other MCP servers (Exa, OpenRouter, Airtable) are disabled by default or depend on external credential files not tracked by chezmoi; any credentials needed at runtime are external and not managed by chezmoi.
 
 ## Verification and Recovery
 
