@@ -8,3 +8,4 @@ Linear is connected to Hermes through its MCP integration, and Hermes can retrie
 §
 OpenCode remodel: `fixer` router-only (edit/bash denied); `chat` selectable read-only primary; `plan` read-only/non-delegating GPT-5.6-Luna planning subagent (edit/task/web denied, Git status/diff/log allowed, other bash asks); `conductor` serious multi-phase coordinator with same granular Git inspection; `build` optional disposable-software vibe coder (task/edit/bash cwd allowed, external_directory asks, web denied; delegates search); `coder` focused implementation subagent (edit/bash/webfetch allowed, websearch/task denied, external_directory asks).
 §
+Enoch City dump hours: open Mon/Wed/Thu afternoons 2pm-6pm; Tue morning 7am-9am; second Saturday of each month 7am-12pm.
