@@ -129,6 +129,19 @@ try_optional_dnf_package() {
     run_privileged dnf install -y "$package"
 }
 
+# keychain provides a persistent ssh-agent for Proton-stored SSH keys.
+# EPEL does not apply to Fedora; prefer the distro package, else install the
+# single-script release from danielrobbins/keychain into ~/.local/bin.
+if ! try_optional_dnf_package keychain && [ ! -x "$HOME/.local/bin/keychain" ]; then
+    if curl -fsSL --retry 3 --connect-timeout 10 --max-time 60 \
+        https://raw.githubusercontent.com/danielrobbins/keychain/2.9.8/keychain \
+        -o "$HOME/.local/bin/keychain" && chmod 0755 "$HOME/.local/bin/keychain"; then
+        :
+    else
+        log "warning: keychain could not be installed; SSH keys must be loaded manually via pass-cli ssh-agent load"
+    fi
+fi
+
 install_eza() {
     if command -v eza >/dev/null 2>&1; then
         return
