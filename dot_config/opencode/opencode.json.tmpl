@@ -19,7 +19,10 @@
     "linear": {
       "type": "remote",
       "url": "https://mcp.linear.app/mcp",
-      "enabled": {{ if eq (index . "profile") "remote" }}false{{ else }}true{{ end }}
+      "enabled": true{{ if eq .profile "remote" }},
+      "headers": {
+        "Authorization": "Bearer {{ protonPass "pass://SZZ4VITnWMje2Df01Z_-6XJ52UXWIdpywga9uE26vwLE1q4JNzB1GWivdRbO5d1u6iy71wgIMYTH6xb7CYjG1A==/SvWLUqs2yNztw5xe7sQzWJ56L2nZhNYf24sa6FOvDaPmMtcyXFyG9L2qJjgwZMEMG7p5mVIAcpOC-csgNsHQOA==/API Key" | trim }}"
+      }{{ end }}
     },
     "airtable": {
       "type": "remote",
