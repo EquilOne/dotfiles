@@ -34,6 +34,11 @@ export GOPATH="$HOME/go"
 # OpenCode: enable EXA web search (required when not using OpenCode provider)
 export OPENCODE_ENABLE_EXA=1
 
+# Proton Pass CLI: use the filesystem key provider; the default kernel
+# keyring is revoked in SSH/headless sessions, which otherwise breaks
+# `chezmoi apply` (protonPass render) with NoStorageAccess(KeyRevoked).
+export PROTON_PASS_KEY_PROVIDER=fs
+
 # Debug: Show what loaded
 if [[ -n "$SHELL_DEBUG" ]]; then
   echo "🔍 00_env.sh loaded - XDG_CONFIG_HOME=$XDG_CONFIG_HOME"

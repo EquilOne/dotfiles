@@ -139,6 +139,7 @@ SSH keys live in the Proton `ssh-keys` vault — portable and off disk — and a
 
 - **keychain** — installed by the bootstrap as a distro package if available (`try_optional_dnf_package keychain`), otherwise the single-script release is fetched into `~/.local/bin` from `https://github.com/danielrobbins/keychain` (no EPEL — EPEL is Enterprise-Linux-only and does not apply to Fedora). On an existing box the manual install is `sudo dnf install -y keychain`, or if absent from the base repo: `curl -fsSL https://raw.githubusercontent.com/danielrobbins/keychain/2.9.8/keychain -o "$HOME/.local/bin/keychain" && chmod 0755 "$HOME/.local/bin/keychain"`.
 - **pass-cli authenticated** — `pass-cli` must be logged in before the load can run.
+- **filesystem key provider** — `PROTON_PASS_KEY_PROVIDER=fs` (set in `00_env.sh`); the kernel keyring is revoked in SSH/headless sessions and would otherwise break the `protonPass` render in `chezmoi apply`.
 - **PAT `viewer` grant** on the `ssh-keys` vault: `pass-cli pat access grant --pat-name <pat> --vault-name ssh-keys --role viewer`.
 
 ### Verify
@@ -156,6 +157,7 @@ ssh-add -l              # lists the Proton-stored identities
 |---|---|---|
 | `SSH_AUTH_SOCK` empty | keychain absent or non-interactive shell | `command -v keychain`; ensure keychain installed (bootstrap does it; manual: dnf or the raw-script install above) |
 | `pass-cli ssh-agent load` silently no-ops | PAT missing `viewer` on `ssh-keys`, or not logged in | Check `pass-cli info`; grant `viewer` on the vault |
+| `chezmoi apply` fails with `error calling protonPass … NoStorageAccess(KeyRevoked)` | key provider on the kernel keyring | Ensure `PROTON_PASS_KEY_PROVIDER=fs` (already in `00_env.sh`); re-login, or `chezmoi apply --skip-secrets` to defer opencode.json |
 | Keys not loaded after reboot | keychain agent restart cleared memory | Run `pass-cli ssh-agent load --vault-name ssh-keys` in an interactive shell |
 
 ## OpenCode Remote Safety
