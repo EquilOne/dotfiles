@@ -1,0 +1,67 @@
+# Hermes: track user files & configs only; ignore installable/regenerable/secrets.
+
+# Application itself and installed tooling (downloadable/installable)
+hermes-agent/**
+bin/**
+lsp/**
+
+# Curator-managed skill bundle (downloaded via manifest)
+skills/**
+
+# Caches and downloads
+cache/**
+audio_cache/**
+image_cache/**
+
+# Logs, runtime state, databases, locks, pids, heartbeat files
+logs/**
+state/**
+sessions/**
+cron/**
+gateway/**
+pending_messages/**
+pairing/**
+platforms/**
+sandboxes/**
+desktop/**
+processes.json
+gateway_state.json
+gateway.lock
+gateway.pid
+gateway-starts.log
+channel_directory.json
+discord_threads.json
+*.db
+*.db-shm
+*.db-wal
+*.lock
+*.pid
+*.log
+*.heartbeat
+
+# Generated / cached metadata
+web-ui-build-stamp.json
+tui-theme-boot.json
+context_length_cache.yaml
+models_dev_cache.json
+ollama_cloud_models_cache.json
+provider_models_cache.json
+.skills_prompt_snapshot.json
+.update_check
+.mcp-discovery.lock
+.npm_lock_hash_*
+.hermes_history
+
+# Secrets / credentials
+.env
+auth.json
+auth.lock
+shared/**
+mcp-tokens/**
+
+# Backups
+config.yaml.bak*
+*.bak*
+
+# Plugin bytecode
+**/__pycache__/**

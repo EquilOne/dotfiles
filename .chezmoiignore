@@ -38,8 +38,6 @@ docs/**
 .config/*/wallpaper*
 .config/*/wallpapers
 .config/*/wallpapers/**
-.hermes
-.hermes/**
 .config/zsh/.zhistory
 
 # Desktop-only generated completions.

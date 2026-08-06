@@ -1,0 +1,5 @@
+Chase prefers incremental, one-decision-at-a-time configuration work: discuss and approve each matrix or config change before applying it, then verify the change before moving on. He prefers Hermes as the general assistant/integration orchestrator and OpenCode as the development assistant, with native configuration primitives over abstract modes.
+§
+Chase is building equil.dev as a professional hub and business site for potential employers/clients. The intended niche is web development plus practical automation for local small-to-medium businesses, initially real estate agents and brokers. The initial flagship offering is lead-to-close team integration: standardize workflows, improve client experience, clarify ownership and handoffs, and reduce dropped or duplicated work. Chase prefers documenting broad direction in the Linear project before creating implementation issues, and prefers tool-agnostic positioning until customer/tool research is done.
+§
+For configuration and architecture work, Chase prefers walking through decisions one at a time before making changes, rather than approving a whole matrix or broad change set at once.
