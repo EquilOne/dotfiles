@@ -164,7 +164,7 @@ ssh-add -l              # lists the Proton-stored identities
 
 The OpenCode config template (`opencode.json.tmpl`) keeps the **Linear MCP** server enabled on every profile, differing only in auth mode:
 
-- `remote` (headless) — an `Authorization: Bearer` header is rendered at apply time from Proton Pass via `{{ protonPass "pass://SZZ4VITnWMje2Df01Z_-6XJ52UXWIdpywga9uE26vwLE1q4JNzB1GWivdRbO5d1u6iy71wgIMYTH6xb7CYjG1A==/SvWLUqs2yNztw5xe7sQzWJ56L2nZhNYf24sa6FOvDaPmMtcyXFyG9L2qJjgwZMEMG7p5mVIAcpOC-csgNsHQOA==/API Key" }}`, avoiding an interactive OAuth flow and keeping the token out of the repo.
+- `remote` (headless) — an `Authorization: Bearer` header is rendered at apply time from Proton Pass via `{{ protonPass "pass://FxKgFOnQtTaXOEnWzbQP4sPtNAqInfXIk56pzYde03onl9btfTgmI9hHoTH07GXkv7-Euj27Y0qPiXEdEeBlYg==/SvWLUqs2yNztw5xe7sQzWJ56L2nZhNYf24sa6FOvDaPmMtcyXFyG9L2qJjgwZMEMG7p5mVIAcpOC-csgNsHQOA==/API Key" }}`, avoiding an interactive OAuth flow and keeping the token out of the repo.
 - any other profile — no header; opencode uses its standard browser OAuth flow.
 
 The Proton Pass reference requires `pass-cli` authenticated on the machine (PAT) with `viewer` access to the `equil-remote` vault.
