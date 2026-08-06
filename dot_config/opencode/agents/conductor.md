@@ -1,7 +1,7 @@
 ---
 description: Manual escape-hatch orchestrator for complex, multi-phase projects. Switch here explicitly when fixer is insufficient — work spanning 2+ specialist domains, with cross-phase dependencies, phased plans, or coordinated subagent sequences. Do not route here automatically; fixer remains default.
 mode: primary
-model: openrouter/openai/gpt-5.6-luna
+model: openrouter/openai/gpt-5.6-terra
 reasoning:
   effort: max
 permission:
