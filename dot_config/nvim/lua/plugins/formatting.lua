@@ -15,6 +15,7 @@ return {
 				javascriptreact = { "biome", "prettier", stop_after_first = true },
 				typescriptreact = { "biome", "prettier", stop_after_first = true },
 				json = { "biome", "prettier", stop_after_first = true },
+				jsonc = { "biome", "prettier", stop_after_first = true },
 
 				-- Prettier
 				html = { "prettier" },
@@ -24,6 +25,9 @@ return {
 				["markdown.mdx"] = { "prettier", "markdownlint-cli2", "injected", "markdown-toc" },
 				-- "injected" formats code blocks in markdown files
 				yaml = { "prettier" },
+				-- chezmoi templates: mask {{ }} template spans, then format as the target type
+				gotmpl = { "chezmoi" },
+				chezmoitmpl = { "chezmoi" },
 
 				-- Config languages
 				lua = { "stylua" },
@@ -36,8 +40,11 @@ return {
 				prettier = {
 					prepend_args = { "--config-precedence", "prefer-file" },
 					cwd = require("conform.util").root_file({
-						".prettierrc", ".prettierrc.json", ".prettierrc.jsonc",
-						".prettierrc.yml", "package.json",
+						".prettierrc",
+						".prettierrc.json",
+						".prettierrc.jsonc",
+						".prettierrc.yml",
+						"package.json",
 					}),
 				},
 				["markdown-toc"] = {
