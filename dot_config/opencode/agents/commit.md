@@ -1,7 +1,7 @@
 ---
 description: Generate concise, conventional Git commit messages from staged diffs
 mode: subagent
-model: openrouter/google/gemini-2.5-flash-lite
+model: openrouter/inclusionai/ling-3.0-flash
 permission:
   edit: deny
   bash:
