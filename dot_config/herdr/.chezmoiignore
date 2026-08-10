@@ -1,0 +1,10 @@
+# Herdr: only the user config (config.toml.tmpl) is tracked here.
+# Everything below is runtime state, cache, or download-regenerable.
+
+.plugins.lock
+*.log
+plugins.json
+plugins/
+release-notes.json
+session.json
+sessions/
