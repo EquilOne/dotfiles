@@ -1,6 +1,6 @@
 ---
 name: commit-work
-description: "Conventional Commits, git message, split commits, and staging for high-quality git commits. Use when the user asks to commit, craft a commit message, stage changes, or split work into multiple commits. MUST use when the user asks to commit, craft a commit message, or split work into multiple commits."
+description: "Full git commit workflow executed end-to-end by the `commit` subagent on the primary agent's behalf: inspect working tree, decide boundaries, stage, review, draft message, verify, commit. For split or complicated changes the executor returns a COMMIT PLAN for the primary to approve, revise, or escalate to the user. Use when the user asks to commit, craft a commit message, stage changes, or split work into multiple commits."
 ---
 
 # Commit work
@@ -10,6 +10,19 @@ Make commits that are easy to review and safe to ship:
 - only intended changes are included
 - commits are logically scoped (split when needed)
 - commit messages describe what changed and why
+
+## Roles
+
+- The `commit` subagent is the **EXECUTOR**: loads this skill, runs everything end-to-end (inspect, decide boundaries, stage, review, message, verify, commit), and holds the git + verification permissions.
+- The primary agent **SUPERVISES**: delegates via the task tool (subagent type `commit`), reviews the returned COMMIT PLAN, and never runs git itself.
+
+Supervision protocol on a COMMIT PLAN return:
+
+- If the plan is sound → resume the task with its task_id, instructing "execute the plan as presented".
+- If the plan needs changes → resume the task with the corrected plan or instructions.
+- If a human decision is required (ambiguous boundaries, secrets, scope judgment) → surface the plan to the user (question tool or plain message) and resume only with their decision.
+
+Never redo the executor's work, and never route its git work to another subagent.
 
 ## Inputs to ask for (if missing)
 - Single commit or multiple commits? (If unsure: default to multiple small commits when there are unrelated changes.)
@@ -23,46 +36,52 @@ Before committing, ask:
 - **Audience:** Who reads this message? (maintainer doing code review? future archaeologist in `git blame`? CI bot parsing conventional commits?)
 - **Atomicity:** Does this diff do ONE thing? If you need "and" in the subject, split the commit.
 - **Reversibility:** Can `git revert` on this commit produce a clean rollback? If not, the commit boundary is wrong.
-- **Convention:** Does the project use Conventional Commits? Check the last 10 commits — match their style.
+- **Convention:** Does the project use Conventional Commits? Check the last 10 commits — match their style. (The executor checks `git log --oneline -10` itself.)
 
-## Workflow (checklist)
-1) Inspect the working tree before staging
+## Workflow (executor checklist)
+1) Inspect the working tree
    - `git status`
-   - `git diff` (unstaged)
-   - If many changes: `git diff --stat`
+   - `git diff --stat`
+   - `git diff`
+   - `git log --oneline -10`
 2) Decide commit boundaries (split if needed)
-   - Split by: feature vs refactor, backend vs frontend, formatting vs logic, tests vs prod code, dependency bumps vs behavior changes.
-   - If changes are mixed in one file, plan to use patch staging.
-3) Stage only what belongs in the next commit
-   - Prefer patch staging for mixed changes: `git add -p`
-   - To unstage a hunk/file: `git restore --staged -p` or `git restore --staged <path>`
-4) Review what will actually be committed
+   - Split by: feature vs refactor, subsystem, formatting vs logic, tests vs prod code, dependency bumps vs behavior.
+3) **PLAN GATE**
+   - Multiple unrelated changes, intra-file mixed hunks, or any complicated situation (merge/rebase in progress, secrets/tokens in the diff, ambiguous intent, very large diff) → stage NOTHING, return a COMMIT PLAN (format below) and stop; continue only on approval.
+4) Stage only the plan's next commit
+   - `git add <paths>` (whole files). Never `git add -p` here — interactive; propose combined-or-deferred in the plan instead.
+5) Review what will be committed
    - `git diff --cached`
-   - Sanity checks:
-     - no secrets or tokens
-     - no accidental debug logging
-     - no unrelated formatting churn
-5) Describe the staged change in 1-2 sentences (before writing the message)
+   - Sanity checks: no secrets/tokens, no accidental debug logging, no unrelated formatting churn.
+6) Describe the staged change in 1-2 sentences (before writing the message)
    - "What changed?" + "Why?"
-   - If you cannot describe it cleanly, the commit is probably too big or mixed; go back to step 2.
-6) Write the commit message
-   - Primary path: delegate drafting to the `commit` subagent via the task tool (subagent type `commit`). It runs `git diff --cached` itself and returns only the final message — pass no diff context. When the subagent drafted the message, the mandatory template read below can be skipped: the subagent enforces the same format (subject ≤72 chars, imperative, body what/why, BREAKING CHANGE footer).
-   - Fallback path (subagent unavailable): draft it yourself with Conventional Commits (required):
-     - `type(scope): short summary`
-     - blank line
-     - body (what/why, not implementation diary)
-     - footer (BREAKING CHANGE) if needed
-   - Prefer an editor for multi-line messages: `git commit -v`
-   - **MANDATORY when drafting multi-line messages yourself**: read [`references/commit-message-template.md`](references/commit-message-template.md) for the full Conventional Commits template with scope examples and breaking-change footer format. **Do NOT load** for single-line commits.
-7) Run the smallest relevant verification
-   - Run the repo's fastest meaningful check (unit tests, lint, or build) before moving on.
-8) Repeat for the next commit until the working tree is clean
+   - If you cannot describe it cleanly, the boundary is wrong → go back to step 2.
+7) Write the commit message
+   - Conventional Commits: types feat|fix|docs|style|refactor|test|chore; imperative subject ≤72 chars; scopes only when the repo has >3 subsystems, primary subsystem only, never multi-scope; breaking changes get `!` after the type plus a `BREAKING CHANGE:` footer; body explains why (the diff shows what), one paragraph max.
+   - For multi-line messages read [`references/commit-message-template.md`](references/commit-message-template.md). **Do NOT load** for single-line commits.
+8) Commit NON-interactively
+   - `git commit -m "<subject>" -m "<body>"` (multiple `-m` flags). NEVER `git commit -v` (opens an editor — hangs in a subagent).
+9) Verify
+   - Run the repo's fastest meaningful check (test, lint, or build) before each commit; if none exists or it isn't permitted, run `git diff --check` and report what was skipped.
+10) Repeat until the working tree is clean, then report.
+
+## COMMIT PLAN format
+
+The executor's final message when gating:
+
+```
+COMMIT PLAN — awaiting approval
+1. type(scope): subject — paths included — why
+2. ...
+Nothing staged, nothing committed.
+```
+
+Each line must describe exactly one commit. If a line needs "and", it must be split.
 
 ## Deliverable
-Division of labor: the `commit` subagent returns only the commit message; the orchestrating agent assembles the full deliverable:
-- the final commit message(s)
-- a short summary per commit (what/why)
-- the staging/review/verify commands actually run (at minimum: `git diff --cached`, plus any tests run)
+
+- Executor report after executing: `Committed N commit(s):` — per commit, short hash + subject + one-line what/why — then `Checks run:` (command + result, or "none — repo has no test/lint/build command", or "skipped: <reason>").
+- For plan returns, the deliverable is the COMMIT PLAN itself and nothing staged/committed.
 
 ## NEVER Do
 
@@ -72,6 +91,8 @@ Division of labor: the `commit` subagent returns only the commit message; the or
 - **NEVER skip `git diff --cached` before committing.** The staging area can contain surprises — partial hunks from `git add -p`, accidentally staged files, or leftover debug code. Always review what will actually be committed.
 - **NEVER commit formatting changes alongside logic changes.** A commit that reformats 50 files AND changes one function hides the real change in noise. Split formatting into its own commit so reviewers can skip it.
 - **NEVER force-push shared branches without coordination.** `git push --force` rewrites history that others may have based work on. Use `--force-with-lease` at minimum, and communicate first.
+- **NEVER use interactive git (`git add -p`, `git commit -v`) in this role.** The executor runs non-interactively; mixed hunks are surfaced in the plan, never decided unilaterally.
+- **NEVER commit before plan approval when a plan was returned.**
 
 ## Edge Cases
 
@@ -81,8 +102,9 @@ Division of labor: the `commit` subagent returns only the commit message; the or
 | Detached HEAD state                    | Create a branch before committing: `git checkout -b <branch-name>`. Commits on detached HEAD are lost if you switch branches.  |
 | Pre-commit hook fails                  | Read the hook output. Fix the issue (lint, format, test). Don't use `--no-verify` unless you're certain the hook is wrong.     |
 | Nothing to commit (working tree clean) | Nothing to do. Don't create empty commits unless the team convention requires them (e.g., merge commits).                    |
-| Need to amend the last commit          | `git commit --amend` for message changes. For staged file changes, `git commit --amend --no-edit`. Only amend if not yet pushed. |
+| Need to amend the last commit          | `git commit --amend -m "..." ...` — non-interactively (`-m` flags, no editor). For staged file changes, `git commit --amend --no-edit`. Only amend if not yet pushed. |
 | Interactive rebase needed              | Not this skill's scope. Suggest `git rebase -i HEAD~N` and let the user decide.                                                |
+| Plan returned                          | The executor's final message IS the COMMIT PLAN; nothing staged or committed. The primary resumes the task (same task_id) to approve, revise, or surface to the user. |
 
 ## Expert Commit Knowledge
 
@@ -95,6 +117,6 @@ Division of labor: the `commit` subagent returns only the commit message; the or
 
 This skill follows the Process pattern:
 
-- **Multi-step workflow:** review → stage → message → commit.
-- **Checkpoints:** confirm scope and content at each step before proceeding.
+- **Multi-step workflow:** inspect → decide boundaries → stage → message → verify → commit.
+- **Checkpoints:** confirm scope and content at each step before proceeding; enforce the plan gate — plans are returned to the primary for approval at every boundary decision.
 - **Medium freedom:** conventions like Conventional Commits exist, but judgment is required for split decisions, scope choice, and message framing.
