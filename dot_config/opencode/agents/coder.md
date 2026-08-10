@@ -5,6 +5,8 @@ model: openrouter/openai/gpt-5.6-luna
 reasoning:
   effort: high
 permission:
+  # Allowlist only — "*" denies everything not listed
+  "*": deny
   edit: allow
   bash: allow
   webfetch: allow
