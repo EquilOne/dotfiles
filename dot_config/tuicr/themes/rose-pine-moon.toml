@@ -1,0 +1,61 @@
+# Rosé Pine Moon — local tuicr theme
+# Aligned strictly with official Rosé Pine specification (rosepinetheme.com)
+
+panel_bg = "#232136"          # base
+bg_highlight = "#393552"      # overlay
+fg_primary = "#e0def4"        # text
+fg_secondary = "#908caa"      # subtle
+fg_dim = "#6e6a86"            # muted
+
+# Diffs (foam = git_add, love = git_delete)
+diff_add = "#9ccfd8"          # foam
+diff_add_bg = "#273444"       # ~18% foam over base
+diff_del = "#eb6f92"          # love
+diff_del_bg = "#3a2536"       # ~18% love over base
+diff_context = "#e0def4"      # text
+diff_hunk_header = "#c4a7e7"  # iris
+expanded_context_fg = "#6e6a86" # muted
+
+# Syntax diff backgrounds & syntax theme reference
+syntax_add_bg = "#273444"
+syntax_del_bg = "#3a2536"
+syntax_theme = "rose-pine-moon.tmTheme"
+
+# File statuses (rose = git_change, pine = git_rename)
+file_added = "#9ccfd8"        # foam
+file_modified = "#ea9a97"     # rose
+file_deleted = "#eb6f92"      # love
+file_renamed = "#3e8fb0"      # pine
+
+# Review status
+reviewed = "#9ccfd8"          # foam
+pending = "#f6c177"           # gold
+
+# Comment types (pine = note)
+comment_note = "#3e8fb0"      # pine
+comment_suggestion = "#9ccfd8" # foam
+comment_issue = "#eb6f92"     # love
+comment_praise = "#f6c177"    # gold
+
+# UI Elements
+border_focused = "#c4a7e7"    # iris
+border_unfocused = "#6e6a86"  # muted
+status_bar_bg = "#2a273f"     # surface
+cursor_color = "#ea9a97"      # rose
+cursor_line_bg = "#2a283e"    # highlight_low
+branch_name = "#c4a7e7"       # iris
+help_indicator = "#6e6a86"    # muted
+
+# Notifications & Badges
+message_info_fg = "#232136"
+message_info_bg = "#9ccfd8"   # foam
+message_warning_fg = "#232136"
+message_warning_bg = "#f6c177" # gold
+message_error_fg = "#232136"
+message_error_bg = "#eb6f92"   # love
+update_badge_fg = "#232136"
+update_badge_bg = "#f6c177"   # gold
+
+# Mode indicator
+mode_fg = "#232136"
+mode_bg = "#ea9a97"           # rose
