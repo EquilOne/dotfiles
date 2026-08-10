@@ -46,22 +46,23 @@ Before committing, ask:
    - "What changed?" + "Why?"
    - If you cannot describe it cleanly, the commit is probably too big or mixed; go back to step 2.
 6) Write the commit message
-   - Use Conventional Commits (required):
+   - Primary path: delegate drafting to the `commit` subagent via the task tool (subagent type `commit`). It runs `git diff --cached` itself and returns only the final message — pass no diff context. When the subagent drafted the message, the mandatory template read below can be skipped: the subagent enforces the same format (subject ≤72 chars, imperative, body what/why, BREAKING CHANGE footer).
+   - Fallback path (subagent unavailable): draft it yourself with Conventional Commits (required):
      - `type(scope): short summary`
      - blank line
      - body (what/why, not implementation diary)
      - footer (BREAKING CHANGE) if needed
    - Prefer an editor for multi-line messages: `git commit -v`
-    - **MANDATORY when drafting multi-line messages**: read [`references/commit-message-template.md`](references/commit-message-template.md) for the full Conventional Commits template with scope examples and breaking-change footer format. **Do NOT load** for single-line commits.
+   - **MANDATORY when drafting multi-line messages yourself**: read [`references/commit-message-template.md`](references/commit-message-template.md) for the full Conventional Commits template with scope examples and breaking-change footer format. **Do NOT load** for single-line commits.
 7) Run the smallest relevant verification
    - Run the repo's fastest meaningful check (unit tests, lint, or build) before moving on.
 8) Repeat for the next commit until the working tree is clean
 
 ## Deliverable
-Provide:
+Division of labor: the `commit` subagent returns only the commit message; the orchestrating agent assembles the full deliverable:
 - the final commit message(s)
 - a short summary per commit (what/why)
-- the commands used to stage/review (at minimum: `git diff --cached`, plus any tests run)
+- the staging/review/verify commands actually run (at minimum: `git diff --cached`, plus any tests run)
 
 ## NEVER Do
 
