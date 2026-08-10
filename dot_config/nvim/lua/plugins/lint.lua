@@ -15,10 +15,6 @@ return {
         },
       },
       setup = {
-        biome = function(_, opts)
-          opts.root_dir = require("lspconfig.util").root_pattern("biome.json")
-          return false
-        end,
         oxlint = function(_, opts)
           opts.filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" }
           return false
