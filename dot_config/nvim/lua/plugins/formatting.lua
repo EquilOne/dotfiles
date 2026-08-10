@@ -36,6 +36,25 @@ return {
 			},
 			-- Customize specific formatters below:
 			formatters = {
+				biome = {
+					condition = function(_, ctx)
+						return #vim.fs.find({
+							".prettierrc",
+							".prettierrc.json",
+							".prettierrc.jsonc",
+							".prettierrc.yaml",
+							".prettierrc.yml",
+							".prettierrc.js",
+							".prettierrc.cjs",
+							".prettierrc.mjs",
+							".prettierrc.toml",
+							"prettier.config.js",
+							"prettier.config.cjs",
+							"prettier.config.mjs",
+							"prettier.config.ts",
+						}, { upward = true, path = ctx.dir }) == 0
+					end,
+				},
 				-- Force 2 spaces for tabs in Prettier
 				prettier = {
 					prepend_args = { "--config-precedence", "prefer-file" },
@@ -67,38 +86,19 @@ return {
 		"mason-org/mason.nvim",
 		opts = {
 			ensure_installed = {
-				-- Python
-				"ruff",
-				"pyright",
-				-- Go
-				"gofumpt",
-				"goimports",
 				-- Web
 				"biome",
 				"prettier",
-				"vtsls",
 				"css-lsp",
 				"html-lsp",
-				"tailwindcss-language-server",
-				-- Lua
-				"stylua",
-				"lua-language-server",
-				-- Shell
-				"shfmt",
-				"shellcheck",
-				"bash-language-server",
 				-- Config
 				"tombi",
-				"yaml-language-server",
 				"yamllint",
-				-- Markdown
-				"markdownlint-cli2",
-				"markdown-toc",
-				"marksman",
 				-- Docker
 				"hadolint",
 				-- Misc
 				"codespell",
+				"lazygit",
 				"oxlint",
 				-- Hyprland
 				"hyprls",
