@@ -282,13 +282,14 @@ hide_tab_bar_when_single_tab = true
 # Background notification popup delivery
 agent_panel_sort = "spaces"
 
-show_agent_labels_on_pane_borders = true
+show_agent_labels_on_pane_borders = false
+
 [ui.toast]
 # off = disable pop-up notifications
 # herdr = show in-app toasts
 # terminal = ask the outer terminal to show a desktop notification
 # system = ask the OS notification service directly
-delivery = "{{ if eq (index . "profile") "remote" }}herdr{{ else }}system{{ end }}"
+delivery = "system"
 delay_seconds = 1
 
 [ui.toast.herdr]
@@ -332,7 +333,7 @@ position = "top-right"
 # allow_nested = false
 # Experimental local Kitty graphics rendering for attached clients.
 # Requires a Kitty graphics-compatible outer terminal.
-kitty_graphics = {{ if eq (index . "profile") "remote" }}false{{ else }}true{{ end }}
+kitty_graphics = false
 # Save recent pane screen history across full server restarts.
 pane_history = false
 # While prefix mode is active, temporarily switch the macOS host input
