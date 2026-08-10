@@ -14,13 +14,8 @@ description: >-
 
 # Documentation Lookup
 
-Make sure the CLI is up to date before running commands:
-
-```bash
-npm install -g ctx7@latest
-```
-
-Or run directly without installing:
+Run the CLI directly via `npx` — no global install. This matches the
+`find-docs` convention in `AGENTS.md`:
 
 ```bash
 npx ctx7@latest <command>

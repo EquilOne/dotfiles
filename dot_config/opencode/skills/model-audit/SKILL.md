@@ -2,7 +2,7 @@
 name: model-audit
 description: >
   Audit opencode agent model config against live OpenRouter pricing and benchmarks.
-  Recommends model swaps across five budget-to-best tiers so you can choose per agent.
+  Recommends model swaps across six budget-to-best tiers so you can choose per agent.
   MUST use when the user asks to review, audit, or optimize their opencode agent models.
   Use when the user asks: "review my models", "audit my models", "model suggestions",
   "better model for X", "cheaper model", "model pricing", "optimize model spend",
@@ -15,9 +15,11 @@ description: >
 
 # Model Audit — OpenRouter Model Suggestion Skill
 
-Audit opencode agent model config against live OpenRouter pricing and benchmarks. Recommends model swaps at three tiers so you can choose per agent.
+Audit opencode agent model config against live OpenRouter pricing and benchmarks. Recommends model swaps at six tiers so you can choose per agent.
 
 ## Prerequisites
+
+**OpenRouter MCP is intentionally DISABLED by default** in this repo's `opencode.json`. Before running this skill, enable it manually (`"enabled": true` on the `openrouter` entry under `mcp`) and restart opencode. The config comment says the same.
 
 OpenRouter MCP must be configured and enabled in `opencode.json`:
 ```json
@@ -57,7 +59,7 @@ If disabled, tell the user and offer to enable it (with authorization).
 
 Then read these files:
 - `opencode.json` — extract `agent.*.model`, `small_model`, `provider.openrouter.models`
-- `agent_stack.md` — extract agent-to-model mapping table
+- `reference.md` — agent-to-model routing tables (consolidated)
 - `agents/*.md` — extract any `model:` frontmatter overrides per agent
 
 - Extract `provider.openrouter.models.*.options.provider` from `opencode.json` — fields: `sort` (latency/throughput/price), any `allow`/`block` lists
@@ -165,7 +167,7 @@ cost_per_100_req    = eff_cost_per_req × 100
 
 If `input_cache_read_price` is not available from the endpoint, fall back to `input_price × 0.5` (standard OpenRouter cache discount) and note the estimate.
 
-### Phase 3: 5-Tier Ladder
+### Phase 3: 6-Tier Ladder
 
 For each agent role, pick candidates from the query results. Use `cost_per_100_req` as the primary cost metric for all tier calculations. Keep raw $/M tokens in the output table for reference.
 
@@ -250,7 +252,7 @@ Each phase constrains the model differently. The consequence of a mistake determ
 
 - Do NOT recommend models without checking tool support — a cheap model that can't call tools is useless for agentic/coding roles.
 - Do NOT recommend based on benchmark rank alone — a model ranked #1 with 0.5% market share may be overfitted or unreliable.
-- Do NOT skip the budget tier for "premium" agents — the user asked for all three tiers. Show them.
+- Do NOT skip the budget tier for "premium" agents — the user asked for all six tiers. Show them.
 - Do NOT assume the current model is wrong — if the current model is already the best value pick, say so. Don't invent a change.
 - Do NOT expand scope to non-OpenRouter providers (OpenAI direct, Anthropic direct, etc.) unless the user explicitly asks. The config uses `openrouter/` prefix, so stay in OpenRouter's catalog.
 - Do NOT recommend a model that lacks structured_outputs or tools support for an agent whose config uses those features.
@@ -260,7 +262,7 @@ Each phase constrains the model differently. The consequence of a mistake determ
 - Do NOT recommend a non-frontier model without verifying ZDR-compliant endpoint availability. A model with good benchmarks but no ZDR-compliant provider is unusable for this user's setup.
 - Do NOT use raw $/M tokens as the primary cost comparator for tier ranking — use per-100-request cost which reflects real-world caching and token efficiency patterns.
 - Do NOT hardcode the ZDR exemption list as a constant in the middle of the workflow — define it as a configurable variable at the top of Phase 2.
-- Do NOT collapse the 5-tier ladder — the user explicitly wants all rungs (Budget, Budget+, Budget++, Value, Value+, Best) for informed decision-making.
+- Do NOT collapse the 6-tier ladder — the user explicitly wants all rungs (Budget, Budget+, Budget++, Value, Value+, Best) for informed decision-making.
 - Do NOT assume frontier exemptions are permanent — the user said this may change. When in doubt between ZDR-filtered and unfiltered options for a model, show both and let the user decide.
 
 (End of file — total 266 lines)
