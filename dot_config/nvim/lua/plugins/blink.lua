@@ -1,6 +1,7 @@
 return {
   {
     "saghen/blink.cmp",
+    dependencies = { "saghen/blink.lib" },
     opts = {
       sources = {
         default = { "lazydev", "lsp", "path", "snippets", "buffer" },
@@ -35,10 +36,9 @@ return {
     },
   },
   {
-    "saghen/blink.lib",
-  },
-  {
     "saghen/blink.pairs",
+    dependencies = { "saghen/blink.lib" },
+    event = { "InsertEnter", "CmdlineEnter" },
     version = "*",
     build = function()
       require("blink.pairs").build():pwait(60000)
