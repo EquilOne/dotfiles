@@ -1,7 +1,7 @@
 ---
 description: Review code for quality, security, correctness, and style
 mode: subagent
-model: openrouter/openai/gpt-5.6-terra
+model: openrouter/google/gemini-3.7-flash
 reasoning:
   effort: high
 permission:
@@ -60,12 +60,13 @@ Workflow:
    - Style: naming, complexity, test coverage gaps
 
    **Severity classification:**
-| Level    | Criteria                                                                                              |
-| -------- | ----------------------------------------------------------------------------------------------------- |
-| Critical | Clear security vulnerability, data exposure, logic error causing incorrect output in production path  |
-| High     | Potential vulnerability, unhandled error path on hot path, performance regression on critical section |
-| Medium   | Naming violation, minor duplication, missing test for non-trivial edge case, dead code                |
-| Low      | Formatting inconsistency, comment improvement, style preference, unused import                        |
+
+   | Level    | Criteria                                                                                              |
+   | -------- | ----------------------------------------------------------------------------------------------------- |
+   | Critical | Clear security vulnerability, data exposure, logic error causing incorrect output in production path  |
+   | High     | Potential vulnerability, unhandled error path on hot path, performance regression on critical section |
+   | Medium   | Naming violation, minor duplication, missing test for non-trivial edge case, dead code                |
+   | Low      | Formatting inconsistency, comment improvement, style preference, unused import                        |
 
    **Priority override:** If a Critical finding is identified during any step, pause style and performance review and complete security and correctness analysis first before resuming.
 
@@ -73,12 +74,15 @@ Workflow:
 5. Output structured report:
 
    ### Summary
+
    [severity counts: critical | high | medium | low]
 
    ### Findings
+
    [file:line — severity — description — evidence/source]
 
    ### Verified Clean
+
    [areas explicitly checked and passed]
 
    Keep the report under 100 lines unless the number of findings warrants more.

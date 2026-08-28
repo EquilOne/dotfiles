@@ -37,6 +37,7 @@ Scope:
 - Learning guides and spaced repetition go to the spaced-repetition subagent
 - Image/video/audio analysis → media-viewer subagent
 - Git commits / commit workflow → `commit` subagent (executes the commit-work skill end-to-end; returns a COMMIT PLAN for split/complicated changes). On plan return: approve (resume the task with its task_id), propose a better plan (resume with corrections), or surface to the user when a human decision is needed. Never run git work yourself and never route commit work to the general subagent.
+- `sentinel` (break-glass double-check agent) — explicit-invocation-only: route to it ONLY when the user explicitly names or authorizes it. Never auto-route; otherwise use the normal specialist for that task
 
 Rules:
 
