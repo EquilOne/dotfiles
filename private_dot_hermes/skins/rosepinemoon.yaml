@@ -1,29 +1,52 @@
 name: rosepinemoon
-description: Rosé Pine Moon — a soothing dark theme
+description: Matches OpenCode's "Rose Pine" theme — classic Rosé Pine palette
 
 colors:
-  banner_border: "#44415a"
-  banner_title: "#e0def4"
-  banner_accent: "#c4a7e7"
-  banner_dim: "#6e6a86"
-  banner_text: "#908caa"
+  # Base surface — rosepine base.
+  background: "#191724"
+
+  # Brand accent — rosepine iris (heading/primary accent).
   ui_accent: "#c4a7e7"
-  ui_label: "#9ccfd8"
+  banner_accent: "#c4a7e7"
+
+  # Text hierarchy.
+  banner_title: "#e0def4"   # headings / primary text (rosepine ink)
+  banner_text: "#e0def4"    # body foreground
+  ui_text: "#e0def4"
+  banner_dim: "#6e6a86"     # muted / secondary (rosepine text-weak)
+  banner_border: "#403d52"  # horizontal rule / border
+  ui_border: "#403d52"
+  ui_label: "#9ccfd8"       # foam (labels/links)
+
+  # Semantic status — foam/gold/love (rosepine info/warning/error).
   ui_ok: "#9ccfd8"
-  ui_error: "#eb6f92"
   ui_warn: "#f6c177"
+  ui_error: "#eb6f92"
+
+  # CLI / TUI chrome.
   prompt: "#e0def4"
-  input_rule: "#c4a7e7"
-  response_border: "#56526e"
-  session_label: "#ea9a97"
-  session_border: "#2a283e"
-  status_bar_bg: "#2a273f"
-  voice_status_bg: "#2a273f"
-  selection_bg: "#44415a"
-  completion_menu_bg: "#2a273f"
-  completion_menu_current_bg: "#44415a"
-  completion_menu_meta_bg: "#393552"
-  completion_menu_meta_current_bg: "#56526e"
+  input_rule: "#9ccfd8"
+  response_border: "#403d52"
+  status_bar_bg: "#1f1d2e"  # rosepine surface
+  status_bar_text: "#e0def4"
+  status_bar_good: "#9ccfd8"
+  status_bar_warn: "#f6c177"
+  status_bar_critical: "#eb6f92"
+  session_label: "#ebbcba"  # rose
+  session_border: "#1f1d2e"
+  voice_status_bg: "#1f1d2e"
+  selection_bg: "#403d52"   # highlight-med
+  completion_menu_bg: "#1f1d2e"
+  completion_menu_current_bg: "#403d52"
+  completion_menu_meta_bg: "#26233a"   # overlay
+  completion_menu_meta_current_bg: "#524f67"  # highlight-high
+
+  # Code syntax — rosepine overrides.
+  syntax_comment: "#6e6a86"
+  syntax_keyword: "#31748f"   # pine
+  syntax_string: "#f6c177"    # gold
+  syntax_number: "#ebbcba"    # rose
+  syntax_type: "#9ccfd8"      # foam
 
 spinner:
   waiting_faces:
@@ -62,4 +85,3 @@ tool_emojis:
   terminal: "Σ"
   web_search: "📜"
   read_file: "📖"
-
