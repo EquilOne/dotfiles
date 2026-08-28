@@ -96,7 +96,8 @@ display:
   cleanup_progress: false
   long_running_notifications: true
   busy_ack_detail: true
-  background_process_notifications: all
+  background_process_notifications: concise
+  mouse_tracking: wheel
 tts:
   provider: openai
   use_gateway: true
@@ -116,7 +117,7 @@ memory:
   nudge_interval: 10
   flush_min_turns: 6
 delegation:
-  max_iterations: 50
+  max_iterations: 250
 skills:
   creation_nudge_interval: 15
 code_execution:
@@ -127,12 +128,11 @@ streaming:
 onboarding:
   seen:
     tool_progress_prompt: true
-    busy_input_prompt: true
 updates:
   pre_update_backup: true
   backup_keep: 3
   non_interactive_local_changes: stash
-_config_version: 33
+_config_version: 39
 session_reset:
   mode: none
   idle_minutes: 1440
@@ -182,6 +182,14 @@ mcp_servers:
   ticktick:
     url: https://mcp.ticktick.com
     auth: oauth
+    enabled: true
+  ynab:
+    command: npx
+    args:
+      - -y
+      - "@maro-org/ynab-mcp"
+    env:
+      YNAB_API_TOKEN: {{ output "pass-cli" "item" "view" "--vault-name" "Dev" "--item-title" "YNAB" "--field" "PAT" | trim }}
     enabled: true
 moa:
   default_preset: default
