@@ -98,7 +98,6 @@ return {
 				"hadolint",
 				-- Misc
 				"codespell",
-				"lazygit",
 				"oxlint",
 				-- Hyprland
 				"hyprls",
