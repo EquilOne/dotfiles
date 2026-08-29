@@ -1,6 +1,6 @@
 ---
 name: commit-work
-description: "Full git commit workflow executed end-to-end by the `commit` subagent on the primary agent's behalf: inspect working tree, decide boundaries, stage, review, draft message, verify, commit. For split or complicated changes the executor returns a COMMIT PLAN for the primary to approve, revise, or escalate to the user. Use when the user asks to commit, craft a commit message, stage changes, or split work into multiple commits."
+description: "Hands-off git commit workflow executed end-to-end by the `commit` subagent. Use when the user asks to commit, stage changes, craft a commit message, split work into commits, says 'run commit-work' or 'run skill' in a working directory, or explicitly loads this skill. Invocation itself is the commit instruction: the primary immediately delegates and does not ask setup questions or run git."
 ---
 
 # Commit work
@@ -11,23 +11,20 @@ Make commits that are easy to review and safe to ship:
 - commits are logically scoped (split when needed)
 - commit messages describe what changed and why
 
-## Roles
+## Hands-off delegation
 
-- The `commit` subagent is the **EXECUTOR**: loads this skill, runs everything end-to-end (inspect, decide boundaries, stage, review, message, verify, commit), and holds the git + verification permissions.
-- The primary agent **SUPERVISES**: delegates via the task tool (subagent type `commit`), reviews the returned COMMIT PLAN, and never runs git itself.
+Invoking this skill is the instruction to commit the current working tree. The primary immediately delegates via the task tool (subagent type `commit`); it does not wait for a separate commit request.
 
-Supervision protocol on a COMMIT PLAN return:
+- The `commit` subagent is the **EXECUTOR**: it runs everything end-to-end (inspect, decide boundaries, stage, review, message, verify, commit) and holds the git + verification permissions.
+- The primary is **HANDS-OFF**: it does not re-read or explain this skill, ask setup questions, inspect or run git, or decide commit boundaries. The executor derives commit count, boundaries, conventions, and checks from the working tree.
+
+The primary acts again only if the executor returns a COMMIT PLAN:
 
 - If the plan is sound → resume the task with its task_id, instructing "execute the plan as presented".
 - If the plan needs changes → resume the task with the corrected plan or instructions.
-- If a human decision is required (ambiguous boundaries, secrets, scope judgment) → surface the plan to the user (question tool or plain message) and resume only with their decision.
+- If a human decision is required (ambiguous boundaries, secrets, scope judgment) → surface the plan to the user and resume only with their decision.
 
-Never redo the executor's work, and never route its git work to another subagent.
-
-## Inputs to ask for (if missing)
-- Single commit or multiple commits? (If unsure: default to multiple small commits when there are unrelated changes.)
-- Commit style: Conventional Commits are required.
-- Any rules: max subject length, required scopes.
+Never redo the executor's work or route its git work to another subagent. Everything below is the executor's workflow.
 
 ## Thinking Frame
 
