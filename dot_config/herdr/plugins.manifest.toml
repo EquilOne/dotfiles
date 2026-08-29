@@ -1,0 +1,23 @@
+# Herdr plugin manifest — single source of truth for which Herdr plugins
+# get auto-installed by run_once_after_12_herdr-plugins.sh when porting config
+# to a new machine via chezmoi.
+#
+# Source-only file: listed in dot_config/herdr/.chezmoiignore, so it is never
+# applied to target machines; the run_once script reads it directly from the
+# chezmoi source directory.
+#
+# Fields:
+#   id         — plugin id as reported by `herdr plugin list`
+#   repo       — GitHub OWNER/REPO[/SUBDIR] shorthand for `herdr plugin install`
+#   ref        — optional pin: full commit SHA passed via --ref (recommended)
+#   enabled    — if false, the plugin is skipped
+#   platforms  — OS allow-list: "linux", "macos", etc. Empty/omitted = any OS.
+#
+# Add one [[plugin]] block per plugin you want installed on new machines.
+
+[[plugin]]
+id = "herdr-splits"
+repo = "lmilojevicc/herdr-splits.nvim"
+ref = "c58bfdf01520845583e0033c11c56fc9d21a5424"
+enabled = true
+platforms = ["linux", "macos"]

@@ -217,63 +217,6 @@ if ! command -v herdr >/dev/null 2>&1 && [ ! -x "$HOME/.local/bin/herdr" ]; then
     fi
 fi
 
-herdr_splits_state() {
-    local plugins
-
-    command -v herdr >/dev/null 2>&1 || return 1
-    command -v jq >/dev/null 2>&1 || return 1
-    if ! plugins=$(herdr plugin list --json 2>/dev/null); then
-        return 1
-    fi
-
-    printf '%s\n' "$plugins" | jq -r '
-        if (.result.plugins? | type) != "array" then
-            error("unexpected plugin list response")
-        else
-            [.result.plugins[] | select(.plugin_id == "herdr-splits")]
-            | if length == 0 then "absent"
-              elif any(.[]; .enabled == true) then "enabled"
-              else "disabled"
-              end
-        end
-    ' 2>/dev/null
-}
-
-ensure_herdr_splits_plugin() {
-    local state
-
-    if ! state=$(herdr_splits_state); then
-        fail "cannot verify Herdr's herdr-splits plugin; herdr plugin list --json and jq are required (https://herdr.dev/docs/cli-reference/)"
-        return
-    fi
-    case "$state" in
-        enabled)
-            return
-            ;;
-        disabled)
-            fail "Herdr's herdr-splits plugin is installed but disabled; enable it with: herdr plugin enable herdr-splits"
-            return
-            ;;
-        absent)
-            ;;
-        *)
-            fail "cannot interpret Herdr's herdr-splits plugin status"
-            return
-            ;;
-    esac
-
-    log "installing Herdr's herdr-splits plugin"
-    if ! herdr plugin install lmilojevicc/herdr-splits.nvim --yes; then
-        fail "could not install Herdr's herdr-splits plugin; see https://github.com/lmilojevicc/herdr-splits.nvim"
-        return
-    fi
-    if [ "$(herdr_splits_state 2>/dev/null || true)" != "enabled" ]; then
-        fail "Herdr's herdr-splits plugin install could not be verified; see https://herdr.dev/docs/cli-reference/"
-    fi
-}
-
-ensure_herdr_splits_plugin
-
 if ! command -v pass-cli >/dev/null 2>&1 && [ ! -x "$HOME/.local/bin/pass-cli" ]; then
     if ! command -v jq >/dev/null 2>&1; then
         fail "Proton Pass CLI requires jq; see https://proton.me/download/pass-cli/install.sh"

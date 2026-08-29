@@ -1,0 +1,143 @@
+{{- /* Auto-install Herdr plugins declared in the portable manifest. */ -}}
+{{- /* Manifest: dot_config/herdr/plugins.manifest.toml (source-only) */ -}}
+#!/usr/bin/env bash
+
+set -u
+set -o pipefail
+
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/bin:$PATH"
+
+SOURCE_DIR="{{ .chezmoi.sourceDir }}"
+MANIFEST="$SOURCE_DIR/dot_config/herdr/plugins.manifest.toml"
+
+failed=0
+
+log() { printf '[herdr-plugins] %s\n' "$*"; }
+warn() { printf '[herdr-plugins] warning: %s\n' "$*" >&2; }
+
+if ! command -v herdr >/dev/null 2>&1; then
+    warn "herdr is not installed; Herdr plugins will be installed on a later chezmoi apply"
+    exit 1
+fi
+
+if [ ! -f "$MANIFEST" ]; then
+    warn "Herdr plugin manifest not found: $MANIFEST; retrying on a later chezmoi apply"
+    exit 1
+fi
+
+case "$(uname -s)" in
+    Linux) os="linux" ;;
+    Darwin) os="macos" ;;
+    *) os="$(uname -s | tr '[:upper:]' '[:lower:]')" ;;
+esac
+
+# Prints: enabled | disabled | absent | unknown
+plugin_state() {
+    local id="$1" json
+
+    if command -v jq >/dev/null 2>&1; then
+        if json=$(herdr plugin list --json 2>/dev/null); then
+            printf '%s\n' "$json" | jq -r --arg id "$id" '
+                if (.result.plugins? | type) != "array" then "unknown"
+                else
+                    [.result.plugins[] | select(.plugin_id == $id)]
+                    | if length == 0 then "absent"
+                      elif any(.[]; .enabled == true) then "enabled"
+                      else "disabled"
+                      end
+                end
+            ' 2>/dev/null || printf 'unknown\n'
+        else
+            printf 'unknown\n'
+        fi
+    else
+        herdr plugin list 2>/dev/null | awk -v id="$id" '
+            /^-/ && index($0, id) > 0 {
+                if ($0 ~ /enabled/) { print "enabled"; found=1 }
+                else if ($0 ~ /disabled/) { print "disabled"; found=1 }
+            }
+            END { if (!found) print "absent" }
+        '
+    fi
+}
+
+while IFS=$'\t' read -r id repo ref enabled platforms; do
+    [ -z "$id" ] && continue
+
+    case ",${platforms}," in
+        ",,"|*",${os},"*) ;;
+        *)
+            log "skipping $id: not supported on $os (platforms: ${platforms:-any})"
+            continue
+            ;;
+    esac
+
+    if [ "$enabled" != "true" ]; then
+        log "skipping $id: disabled in manifest"
+        continue
+    fi
+
+    state=$(plugin_state "$id")
+    case "$state" in
+        enabled)
+            log "$id already enabled; nothing to do"
+            ;;
+        disabled)
+            warn "$id is installed but disabled; enable it with: herdr plugin enable $id"
+            ;;
+        absent|unknown)
+            if [ "$state" = "unknown" ]; then
+                warn "could not determine plugin state for $id; attempting install"
+            fi
+            log "installing $id ($repo)"
+            if [ -n "$ref" ]; then
+                if ! herdr plugin install "$repo" --ref "$ref" --yes; then
+                    warn "install of $id failed; run 'herdr plugin install --help' for syntax"
+                    failed=1
+                    continue
+                fi
+            else
+                if ! herdr plugin install "$repo" --yes; then
+                    warn "install of $id failed; run 'herdr plugin install --help' for syntax"
+                    failed=1
+                    continue
+                fi
+            fi
+            if [ "$(plugin_state "$id")" != "enabled" ]; then
+                warn "install of $id could not be verified as enabled; enable it with: herdr plugin enable $id"
+                failed=1
+            fi
+            ;;
+    esac
+done < <(awk '
+    BEGIN { OFS="\t" }
+    /^\[\[plugin\]\]$/ { emit(); inside=1; next }
+    inside && /^[[:space:]]*id[[:space:]]*=[[:space:]]*"/ {
+        v=$0; sub(/^[^"]*"/, "", v); sub(/".*$/, "", v); id=v; next
+    }
+    inside && /^[[:space:]]*repo[[:space:]]*=/ {
+        v=$0; sub(/^[^"]*"/, "", v); sub(/".*$/, "", v); repo=v; next
+    }
+    inside && /^[[:space:]]*ref[[:space:]]*=/ {
+        v=$0; sub(/^[^"]*"/, "", v); sub(/".*$/, "", v); ref=v; next
+    }
+    inside && /^[[:space:]]*enabled[[:space:]]*=/ {
+        v=$0; sub(/^.*=[[:space:]]*/, "", v); enabled=(v=="true")?"true":"false"; next
+    }
+    inside && /^[[:space:]]*platforms[[:space:]]*=[[:space:]]*\[/ {
+        v=$0; sub(/^.*\[/, "", v); sub(/\].*$/, "", v); gsub(/["[:space:]]/, "", v); platforms=v; next
+    }
+    inside && /^[[:space:]]*$/ { emit(); inside=0; next }
+    END { emit() }
+    function emit() {
+        if (inside && id != "") {
+            print id, repo, ref, enabled, platforms
+        }
+        id=""; repo=""; ref=""; enabled="true"; platforms=""
+    }
+' "$MANIFEST")
+
+if [ "$failed" -ne 0 ]; then
+    warn "one or more Herdr plugins failed to install; will retry on a later chezmoi apply"
+fi
+exit "$failed"

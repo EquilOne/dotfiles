@@ -135,41 +135,49 @@ prefix = "ctrl+s"
 key = "ctrl+h"
 type = "plugin_action"
 command = "herdr-splits.nav-left"
+description = "Focus pane left (nvim/herdr)"
 
 [[keys.command]]
 key = "ctrl+j"
 type = "plugin_action"
 command = "herdr-splits.nav-down"
+description = "Focus pane down (nvim/herdr)"
 
 [[keys.command]]
 key = "ctrl+k"
 type = "plugin_action"
 command = "herdr-splits.nav-up"
+description = "Focus pane up (nvim/herdr)"
 
 [[keys.command]]
 key = "ctrl+l"
 type = "plugin_action"
 command = "herdr-splits.nav-right"
+description = "Focus pane right (nvim/herdr)"
 
 [[keys.command]]
 key = "alt+h"
 type = "plugin_action"
 command = "herdr-splits.resize-left"
+description = "Resize pane left (nvim/herdr)"
 
 [[keys.command]]
 key = "alt+j"
 type = "plugin_action"
 command = "herdr-splits.resize-down"
+description = "Resize pane down (nvim/herdr)"
 
 [[keys.command]]
 key = "alt+k"
 type = "plugin_action"
 command = "herdr-splits.resize-up"
+description = "Resize pane up (nvim/herdr)"
 
 [[keys.command]]
 key = "alt+l"
 type = "plugin_action"
 command = "herdr-splits.resize-right"
+description = "Resize pane right (nvim/herdr)"
 
 # Legacy indexed shortcut config is still parsed for compatibility.
 # Prefer switch_tab, switch_workspace, and focus_agent for new configs.
@@ -238,7 +246,6 @@ sidebar_start_collapsed = true
 prompt_new_workspace_name = true
 
 # Draw borders around split panes.
-# pane_borders = true
 
 # Keep split panes visually separated instead of sharing divider borders.
 pane_gaps = false
@@ -249,6 +256,15 @@ pane_gaps = false
 # Hide the tab row when a workspace has exactly one tab.
 # New tabs can still be created with the configured keybinding.
 hide_tab_bar_when_single_tab = true
+
+tab_bar_right = [
+  { type = "zoom" },
+  { type = "hostname" },
+  { type = "datetime", format = "%H:%M" },
+  { type = "text", text = "Testing123" },
+  { type = "command", command = "~/.config/herdr/status.sh", interval_seconds = 3, timeout_seconds = 2 },
+]
+tab_bar_right_separator = " . "
 
 # Agent panel ordering: "spaces" (grouped by space) or "priority" (attention queue).
 # "workspaces" is accepted as an alias for "spaces".

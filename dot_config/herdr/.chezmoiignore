@@ -1,9 +1,11 @@
 # Herdr: only the user config (config.toml.tmpl) is tracked here.
 # Everything below is runtime state, cache, or download-regenerable.
+# plugins.manifest.toml is source-only: read by run_once_after_12_herdr-plugins.sh.
 
 .plugins.lock
 *.log
 plugins.json
+plugins.manifest.toml
 plugins/
 release-notes.json
 session.json
