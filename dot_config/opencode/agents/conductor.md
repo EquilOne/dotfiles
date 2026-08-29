@@ -1,9 +1,9 @@
 ---
 description: Manual escape-hatch orchestrator for complex, multi-phase projects. Switch here explicitly when fixer is insufficient — work spanning 2+ specialist domains, with cross-phase dependencies, phased plans, or coordinated subagent sequences. Do not route here automatically; fixer remains default.
 mode: primary
-model: openrouter/z-ai/glm-5.3-flash
+model: openrouter/z-ai/glm-5.3
 reasoning:
-  effort: max
+  effort: xhigh
 permission:
   edit: deny
   bash:

@@ -1,9 +1,9 @@
 ---
 description: Lightweight orchestrator for non-code tasks; delegates to specialist subagents
 mode: primary
-model: openrouter/deepseek/deepseek-v4-flash-0731
+model: openrouter/z-ai/glm-5.3-flash
 reasoning:
-  effort: xhigh
+  effort: high
 permission:
   edit: deny
   bash: deny
