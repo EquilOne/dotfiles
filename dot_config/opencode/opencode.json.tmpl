@@ -9,7 +9,7 @@
     "openrouter": {
       "type": "remote",
       "url": "https://mcp.openrouter.ai/mcp",
-      "enabled": false
+      "enabled": true
     },
     "linear": {
       "type": "remote",
@@ -105,7 +105,8 @@
             "reasoningEffort": "high",
             "verbosity": "low",
             "provider": {
-              "sort": "throughput"
+              "sort": "throughput",
+              "max_price": { "prompt": 0.14, "completion": 0.28 }
             }
           }
         },
