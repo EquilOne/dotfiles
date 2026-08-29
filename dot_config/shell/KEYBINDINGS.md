@@ -55,6 +55,27 @@
 
 `ch`, `cha`, `che`, `chd`, `chu`, `chst`, `chap`, `chz`
 
+## Vi Mode (zsh-vi-mode + ble.sh)
+
+Zsh uses [zsh-vi-mode](https://github.com/jeffreytse/zsh-vi-mode); bash uses [ble.sh](https://github.com/akinomyoga/ble.sh) (both start in insert mode).
+
+| Key | Mode | Action |
+|-----|------|--------|
+| `Esc` | insert | Enter normal (vi) mode |
+| `i` / `a` / `A` | normal | Re-enter insert mode |
+| `v` | normal | Visual selection mode |
+| `dd` / `dw` / `d$` | normal | Delete line / word / to end |
+| `cc` / `cw` | normal | Change line / word |
+| `yy` / `p` | normal | Yank line / paste |
+| `u` / `Ctrl+r` | normal | Undo / redo |
+| `0` / `$` / `^` | normal | Line start / end / first char |
+| `w` / `b` / `e` | normal | Word forward / back / end |
+| `Ctrl+r` | insert | History search (fzf) |
+| `Ctrl+t` / `Alt+c` | insert | File / directory search (fzf) |
+| `Tab` | insert | Complete (ble.sh bash only; no auto-popup) |
+
+ble.sh extras (bash): syntax highlighting, mode-aware cursor (beam=insert, block=normal), shared history. Config in `30_tools/06_blesh.sh`; zsh config in `30_tools/05_zsh_vi_mode.sh`.
+
 ## Testing
 
 | Command | Description |
