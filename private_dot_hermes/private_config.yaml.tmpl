@@ -1,9 +1,6 @@
 model:
   default: z-ai/glm-5.3-flash
-  provider: nous
-fallback_providers:
-  - provider: openrouter
-    model: z-ai/glm-5.3-flash
+  provider: openrouter
 agent:
   max_turns: 150
   verbose: false
@@ -190,7 +187,7 @@ mcp_servers:
     command: npx
     args:
       - -y
-      - "@maro-org/ynab-mcp"
+      - '@maro-org/ynab-mcp'
     env:
       YNAB_API_TOKEN: {{ output "pass-cli" "item" "view" "--vault-name" "Dev" "--item-title" "YNAB" "--field" "PAT" | trim }}
     enabled: true
@@ -215,3 +212,6 @@ moa:
       fanout: user_turn
       max_tokens: 4096
       degraded_reference_policy: loud
+fallback_providers:
+  - provider: openrouter
+    model: z-ai/glm-5.3-flash
