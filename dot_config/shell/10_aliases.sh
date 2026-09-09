@@ -100,12 +100,9 @@ if command -v opencode >/dev/null 2>&1; then
   alias oc='opencode'
 fi
 
-# herdr IDE — one alias per project; opens/focuses a workspace named after the dir basename.
-# Add more with the same pattern:  alias ide-<name>='~/.config/herdr/ide.sh <project-dir>'
+# herdr IDE — run `ide` from any project dir to open/attach that project's workspace.
 if command -v herdr >/dev/null 2>&1; then
-  alias ide-ssg='~/.config/herdr/ide.sh ~/Education/bootdev/BackendPython/StaticSiteGen'
-  alias ide-worldbanc='~/.config/herdr/ide.sh ~/Education/bootdev/worldbanc'
-  alias ide-github='~/.config/herdr/ide.sh ~/workspace/github'
+  alias ide='~/.config/herdr/ide.sh'
 fi
 
 # Cat --> Bat

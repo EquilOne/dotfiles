@@ -45,7 +45,7 @@ fi
 
 case "$MENU_BIN" in
   walker)
-    selection=$(printf '%s\n' "$entries" | walker -d -I -p "ide workspaces") || exit 0
+    selection=$(printf '%s\n' "$entries" | walker -d -p "ide workspaces") || exit 0
     ;;
   rofi)
     selection=$(printf '%s\n' "$entries" | rofi -dmenu -i -p "ide workspaces") || exit 0
