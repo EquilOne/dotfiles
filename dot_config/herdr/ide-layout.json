@@ -1,0 +1,32 @@
+{
+  "workspace_id": "__WORKSPACE_ID__",
+  "tab_label": "dev",
+  "focus": true,
+  "root": {
+    "type": "split",
+    "direction": "down",
+    "ratio": 0.75,
+    "first": {
+      "type": "split",
+      "direction": "right",
+      "ratio": 0.68,
+      "first": {
+        "type": "pane",
+        "label": "editor",
+        "cwd": "__CWD__",
+        "command": ["sh", "-lc", "nvim"]
+      },
+      "second": {
+        "type": "pane",
+        "label": "opencode",
+        "cwd": "__CWD__",
+        "command": ["sh", "-lc", "opencode"]
+      }
+    },
+    "second": {
+      "type": "pane",
+      "label": "shell",
+      "cwd": "__CWD__"
+    }
+  }
+}
