@@ -27,6 +27,13 @@ keybind = shift+insert=paste_from_clipboard
 keybind = control+insert=copy_to_clipboard
 # Send Shift+Enter as CSI-u so TUIs can distinguish it from Enter.
 keybind = shift+enter=csi:13;2u
+# Send Ctrl+H/J/K/L as exact CSI-u key events so Herdr can distinguish them
+# from Backspace (0x08), Enter (0x0A), and bare control codes in legacy encoding.
+# Format: csi:<codepoint>;<1+modifiers>u — Ctrl = 4, so modifier field is 5.
+keybind = control+h=csi:104;5u
+keybind = control+j=csi:106;5u
+keybind = control+k=csi:107;5u
+keybind = control+l=csi:108;5u
 # Legacy encoding sends Alt+Shift+Enter the same as Alt+Enter; send CSI-u so tmux can match M-S-Enter.
 keybind = alt+shift+enter=csi:13;4u
 # Tabs/Splits
