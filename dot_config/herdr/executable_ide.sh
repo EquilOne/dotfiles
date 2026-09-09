@@ -84,8 +84,8 @@ apply_layout() {
 if ! apply_layout; then
   echo "ide: layout.apply failed, falling back to CLI splits" >&2
   root=$(printf '%s' "$ws_out" | jq -r '.result.root_pane.pane_id')
-  shell=$(herdr --session "$SESSION" pane split "$root" --direction down --ratio 0.75 --no-focus | jq -r '.result.pane.pane_id')
   opencode=$(herdr --session "$SESSION" pane split "$root" --direction right --ratio 0.68 --no-focus | jq -r '.result.pane.pane_id')
+  shell=$(herdr --session "$SESSION" pane split "$root" --direction down --ratio 0.75 --no-focus | jq -r '.result.pane.pane_id')
   herdr --session "$SESSION" pane run "$root" 'sh -lc nvim' >/dev/null 2>&1 || true
   herdr --session "$SESSION" pane run "$opencode" 'sh -lc opencode' >/dev/null 2>&1 || true
   herdr --session "$SESSION" pane focus --direction left --pane "$opencode" >/dev/null 2>&1 || true

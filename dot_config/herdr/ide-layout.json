@@ -4,12 +4,12 @@
   "focus": true,
   "root": {
     "type": "split",
-    "direction": "down",
-    "ratio": 0.75,
+    "direction": "right",
+    "ratio": 0.68,
     "first": {
       "type": "split",
-      "direction": "right",
-      "ratio": 0.68,
+      "direction": "down",
+      "ratio": 0.75,
       "first": {
         "type": "pane",
         "label": "editor",
@@ -18,15 +18,15 @@
       },
       "second": {
         "type": "pane",
-        "label": "opencode",
-        "cwd": "__CWD__",
-        "command": ["sh", "-lc", "opencode"]
+        "label": "shell",
+        "cwd": "__CWD__"
       }
     },
     "second": {
       "type": "pane",
-      "label": "shell",
-      "cwd": "__CWD__"
+      "label": "opencode",
+      "cwd": "__CWD__",
+      "command": ["sh", "-lc", "opencode"]
     }
   }
 }
