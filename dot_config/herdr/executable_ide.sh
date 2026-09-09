@@ -16,6 +16,11 @@ SOCK_DIR="${HERDR_CONFIG_PATH:-$HOME/.config/herdr}/sessions/$SESSION"
 SOCK="$SOCK_DIR/herdr.sock"
 LAYOUT="$HOME/.config/herdr/ide-layout.json"
 
+usage() {
+  echo "usage: ide.sh [DIR]" >&2
+  echo "       ide.sh --attach LABEL" >&2
+}
+
 project_dir() {
   if [[ $# -ge 1 && -n "$1" ]]; then
     printf '%s' "$1"
@@ -28,31 +33,59 @@ project_dir() {
   fi
 }
 
-DIR=$(project_dir "$@")
-DIR=$(realpath -m "$DIR" 2>/dev/null || realpath "$DIR")
+MODE=dir
+DIR=""
+LABEL=""
+if [[ "${1:-}" == "--attach" || "${1:-}" == "-a" ]]; then
+  if [[ $# -lt 2 || -z "$2" ]]; then
+    echo "ide: --attach requires a workspace label" >&2
+    usage
+    exit 1
+  fi
+  MODE=attach
+  LABEL=$2
+else
+  DIR=$(project_dir "$@")
+  DIR=$(realpath -m "$DIR" 2>/dev/null || realpath "$DIR")
+  LABEL=$(basename "$DIR")
+fi
 
-session_running() {
-  herdr session list 2>/dev/null | awk -v s="$SESSION" '$1==s && $2=="running" {found=1} END {exit !found}'
+ensure_server() {
+  if [[ -S "$SOCK" ]]; then
+    return 0
+  fi
+  herdr --session "$SESSION" server >/dev/null 2>&1 &
+  SRV_PID=$!
+  trap 'kill "$SRV_PID" 2>/dev/null || true' EXIT
+  for _ in $(seq 1 50); do
+    if [[ -S "$SOCK" ]]; then return 0; fi
+    sleep 0.2
+  done
+  echo "ide: server socket did not appear at $SOCK" >&2
+  exit 1
 }
 
-if session_running; then
+find_workspace() {
+  local list
+  list=$(herdr --session "$SESSION" workspace list 2>/dev/null || true)
+  printf '%s' "$list" | jq -r --arg label "$LABEL" \
+    '[.result.workspaces[]? | select(.label == $label)][0].workspace_id // empty'
+}
+
+ensure_server
+
+ws_id=$(find_workspace)
+if [[ -n "$ws_id" && "$ws_id" != "null" ]]; then
+  herdr --session "$SESSION" workspace focus "$ws_id" >/dev/null 2>&1 || true
   exec herdr --session "$SESSION"
 fi
 
-herdr --session "$SESSION" server >/dev/null 2>&1 &
-SRV_PID=$!
-trap 'kill "$SRV_PID" 2>/dev/null || true' EXIT
-
-for _ in $(seq 1 50); do
-  if [[ -S "$SOCK" ]]; then break; fi
-  sleep 0.2
-done
-if [[ ! -S "$SOCK" ]]; then
-  echo "ide: server socket did not appear at $SOCK" >&2
+if [[ "$MODE" == "attach" ]]; then
+  echo "ide: no workspace labelled '$LABEL' in session '$SESSION'" >&2
   exit 1
 fi
 
-ws_out=$(herdr --session "$SESSION" workspace create --cwd "$DIR" --label ide --no-focus)
+ws_out=$(herdr --session "$SESSION" workspace create --cwd "$DIR" --label "$LABEL" --no-focus)
 ws_id=$(printf '%s' "$ws_out" | jq -r '.result.workspace.workspace_id')
 if [[ -z "$ws_id" || "$ws_id" == "null" ]]; then
   echo "ide: workspace create failed: $ws_out" >&2
