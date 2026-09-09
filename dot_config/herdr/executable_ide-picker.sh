@@ -27,7 +27,7 @@ if [[ -z "$MENU_BIN" ]]; then
 fi
 
 launch_ide() {
-  nohup ghostty -e "$SELF" "$@" >/dev/null 2>&1 &
+  nohup ghostty -e "$SELF" "$@" >"$HOME/.cache/ide-launch.log" 2>&1 &
   disown
 }
 
