@@ -5,3 +5,5 @@ Chase's career sequence: first become broadly junior-job-ready (TypeScript/web/b
 Chase's Stage 1 curriculum is TypeScript-first: Boot.dev (backend depth; DSA course done) + Odin Project as the web/frontend backbone. Codecademy Pro (paid) reserved for the accessibility unit + TS syntax drills. Python supporting; Ops/Data Analyst deferred. iCanStudy is a learning-how-to-learn course, not spaced-repetition.
 §
 PipeOps (EquilOne/PipeOps in ~/projects/PipeOps) is Chase's learning capstone (PostgreSQL + TS REST API + React UI). Plans live in ~/projects/education/curriculum/. He uses Linear for project/issue tracking and TickTick for shift-aligned study assignments/due dates.
+§
+Chase's timezone is America/Denver — always express times in Mountain Time (schedules use UTC cron: 8am MT = 14:00 UTC winter / 15:00 UTC during DST).
