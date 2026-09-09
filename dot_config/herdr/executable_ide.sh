@@ -21,8 +21,8 @@ project_dir() {
     printf '%s' "$1"
   elif [[ "$PWD" != "$HOME" ]]; then
     printf '%s' "$PWD"
-  elif [[ -d "$HOME/Projects" ]]; then
-    printf '%s' "$HOME/Projects"
+  elif [[ -d "$HOME/workspace" ]]; then
+    printf '%s' "$HOME/workspace"
   else
     printf '%s' "$HOME"
   fi
