@@ -51,7 +51,7 @@ Quick reference: edit → `chezmoi re-add <file>` → `chezmoi diff` → commit.
 | Condition | Command | Why |
 |---|---|---|
 | File is already tracked, plain file, edited in destination | `chezmoi re-add -- "$file"` | Preserves source attributes and refuses to overwrite templates. |
-| File is returned by `chezmoi managed` but is `.tmpl` | `chezmoi edit -- "$file"` | Edit source template directly; never render template bytes back. |
+| File is returned by `chezmoi managed` but is `.tmpl` | `sync-template.sh -- "$file"`, fallback `chezmoi edit -- "$file"` | Merge destination edits back into the template safely (directives re-inserted, render verified). Never render template bytes back. |
 | File is encrypted (`encrypted_*` or `.age`) | `chezmoi edit -- "$file"`, then `chezmoi re-add -- "$file"` | Edit decrypts in place; re-add re-encrypts automatically. |
 | `chezmoi source-path` exits non-zero / empty stdout | `chezmoi add -- "$file"` | File is untracked; add registers it in source. |
 | Need to deploy source to a fresh destination | `chezmoi apply -- "$file"` | Only after `chezmoi diff` shows no local modifications. |
@@ -99,10 +99,20 @@ For each edited file:
    `chezmoi source-path` exits **non-zero** with stderr output if the file is not managed. Suppress stderr; treat empty stdout as **not managed**. Stop and offer `chezmoi add "$file"` if the user wants to track it. Non-empty stdout means managed — continue.
 
 4. Detect template. If the source path ends in `.tmpl`:
-   - Do NOT sync. Overwriting with rendered bytes would strip template logic.
-   - Tell the user the file is templated and they should edit the source
-     directly with `chezmoi edit -- "$file"`.
-   - Stop.
+   - Do NOT use `chezmoi re-add` — overwriting with rendered bytes would
+     strip template logic.
+   - Instead sync via the helper, which copies the destination over the
+     template, re-inserts every template directive from the previous
+     template, and verifies the render matches before committing the change:
+     ```bash
+     bash skills/chezmoi-sync/scripts/sync-template.sh -- "$file"
+     ```
+   - Exit 0 = synced and verified. Exit 1 = some directives couldn't be
+     matched (or render differs); the template was reverted untouched —
+     resolve manually with `chezmoi edit -- "$file"` and `chezmoi cat`.
+   - If the helper script is unavailable, fall back to telling the user the
+     file is templated and should be edited in the source directly with
+     `chezmoi edit -- "$file"`.
 
 5. Pre-flight git check (before any re-add):
    - Query `chezmoi data` for `git.autoCommit` and `git.autoPush`.
@@ -164,7 +174,14 @@ templates:  ~/.config/bar/settings.json
 For a single file, the workflow steps above are sufficient. For 2+ files
 or when the user asks to "sync everything", prefer the script.
 
-Exit codes: `0`=all processed; `1`=one or more re-adds failed; `2`=autoCommit on and source tree dirty (re-run with `--force`).
+`scripts/sync-template.sh` handles template files (`.tmpl`): it merges
+destination edits back into the source template, re-inserting template
+directives from the previous template and verifying the render matches
+the destination before writing. Templates are never synced by
+`chezmoi-sync.sh` — route them to `sync-template.sh`.
+
+Exit codes (`chezmoi-sync.sh`): `0`=all processed; `1`=one or more re-adds failed; `2`=autoCommit on and source tree dirty (re-run with `--force`).
+Exit codes (`sync-template.sh`): `0`=synced and render-verified; `1`=unmergeable directives or render mismatch (template reverted); `64`=usage; `65`=not managed or not a template.
 
 ```bash
 sh skills/chezmoi-sync/scripts/chezmoi-sync.sh ~/.zshrc ~/.config/zed/settings.json
