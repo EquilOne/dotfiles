@@ -1,7 +1,9 @@
 ---
 description: Subagent that generates unit tests for a given file or function
 mode: subagent
-model: openrouter/google/gemini-3.7-flash
+model: openrouter/z-ai/glm-5.3-flash
+reasoning:
+  effort: medium
 permission:
   edit: allow
   bash: allow

@@ -1,9 +1,9 @@
 ---
 description: Review code for quality, security, correctness, and style
 mode: subagent
-model: openrouter/google/gemini-3.7-flash
+model: openrouter/z-ai/glm-5.3
 reasoning:
-  effort: high
+  effort: xhigh
 permission:
   edit: deny
   bash: allow

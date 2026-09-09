@@ -1,7 +1,7 @@
 ---
 description: Subagent that writes, refactors, and implements new code
 mode: subagent
-model: openrouter/google/gemini-3.7-flash
+model: openrouter/z-ai/glm-5.3-flash
 reasoning:
   effort: high
 permission:
