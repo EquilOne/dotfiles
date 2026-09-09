@@ -18,6 +18,14 @@ set_starship_width() {
 
 set_starship_width
 
+# Resolve starship even before 20_path.sh runs (installer puts it in ~/.local/bin)
+STARSHIP_BIN="$(command -v starship 2>/dev/null)"
+if [[ -z "$STARSHIP_BIN" && -x "$HOME/.local/bin/starship" ]]; then
+    export PATH="$HOME/.local/bin:$PATH"
+    STARSHIP_BIN="$HOME/.local/bin/starship"
+fi
+unset STARSHIP_BIN
+
 if command -v starship >/dev/null 2>&1; then
     [[ "$CURRENT_SHELL" == "bash" ]] && eval "$(starship init bash)"
     [[ "$CURRENT_SHELL" == "zsh" ]]  && eval "$(starship init zsh)"
