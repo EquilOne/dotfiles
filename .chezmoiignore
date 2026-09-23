@@ -1,5 +1,8 @@
 .bak*
 .bak/**
+# Nested backup files anywhere in the tree (e.g. nvim/lua/plugins/themes.lua.bak,
+# bat/rose-pine-moon.tmTheme.bak) that the root `.bak*`/`.bak/**` patterns miss.
+**/*.bak
 .git
 .git/**
 **/.git
@@ -17,10 +20,12 @@ nvim/*
 # Repository documentation (not deployed).
 docs/**
 
+# Dead .conf files under the Hyprland 0.56 lua config — omarchy owns the live
+# config (~/.config/hypr/*.lua); these vendored .conf copies are obsolete and the
+# xdph.conf delta is only a cosmetic comment reorder. Unconditional (all profiles).
+
 {{- if eq (index . "profile") "remote" }}
 # Desktop session and presentation state.
-.config/hypr
-.config/hypr/**
 .config/waybar
 .config/waybar/**
 .config/omarchy
@@ -54,3 +59,25 @@ docs/**
 .config/tmux/**
 .config/nvim/lua/plugins/vim-tmux-navigator.lua
 {{- end }}
+
+# Desktop: Omarchy owns these paths and rewrites them on theme switch
+# (~/.local/state/omarchy/current/theme), so chezmoi must not manage them —
+# the vendored copies in the source are obsolete but kept as mapped fallbacks.
+{{- if eq (index . "profile") "desktop" }}
+.config/omarchy
+.config/omarchy/**
+.config/btop
+.config/btop/**
+.config/jolt
+.config/jolt/**
+.config/mdt
+.config/mdt/**
+
+# Renders empty on desktop; harmless remotely — do not move into the remote gate.
+10_remote-fedora-setup.sh
+{{- end }}
+
+# OpenCode runtime package manifests — never managed, so a tracked stale copy
+# can never downgrade the plugin SDK (e.g. 1.18.31 → 1.18.11).
+.config/opencode/package.json
+.config/opencode/package-lock.json
