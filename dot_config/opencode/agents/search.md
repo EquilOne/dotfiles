@@ -1,7 +1,7 @@
 ---
 description: Web search and retrieval subagent
 mode: subagent
-model: openrouter/deepseek/deepseek-v4-flash-0731
+model: openrouter/z-ai/glm-5.3-flash
 permission:
   edit: deny
   bash: deny

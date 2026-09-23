@@ -1,7 +1,7 @@
 ---
 description: Subagent for researching and creating lessons and spaced-repetition suggestions from a given topic
 mode: subagent
-model: openrouter/deepseek/deepseek-v4-flash-0731
+model: openrouter/z-ai/glm-5.3-flash
 permission:
   edit: deny
   bash: deny
