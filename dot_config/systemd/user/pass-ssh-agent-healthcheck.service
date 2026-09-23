@@ -3,4 +3,4 @@ Description=Health-check and auto-restart for pass-cli SSH agent daemon
 
 [Service]
 Type=oneshot
-ExecStart=/home/equilone/.local/bin/pass-ssh-agent-healthcheck.sh
+ExecStart=%h/.local/bin/pass-ssh-agent-healthcheck.sh

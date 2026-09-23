@@ -6,11 +6,11 @@ After=graphical-session.target
 Type=oneshot
 RemainAfterExit=yes
 Environment=PROTON_PASS_KEY_PROVIDER=fs
-ExecStart=/home/equilone/.local/bin/pass-cli ssh-agent daemon start \
+ExecStart=%h/.local/bin/pass-cli ssh-agent daemon start \
     --vault-name ssh-keys \
     --socket-path %h/.ssh/proton-pass-agent.sock \
     --log-file %h/.local/state/proton-pass-agent.log
-ExecStop=/home/equilone/.local/bin/pass-cli ssh-agent daemon stop
+ExecStop=%h/.local/bin/pass-cli ssh-agent daemon stop
 Restart=on-failure
 RestartSec=5
 
