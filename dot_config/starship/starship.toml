@@ -181,33 +181,20 @@ symbol = "󰣫 "
 when = ''' [[ $PWD == $XDG_DATA_HOME/chezmoi* ]] '''
 command = """chezmoi --version | awk '{print $3}' | tr -d ','"""
 
-[custom.vi_mode_normal]
+# Single vi-mode segment: zsh-vi-mode's zvm_after_select_vi_mode hook exports
+# $ZVM_CURRENT_MODE (Normal/Insert/Visual/V-Line/Replace). One module (one pair
+# of subshells) instead of four per-mode modules. Color is emitted inline by the
+# command so each mode keeps its own color; hidden in insert mode.
+[custom.vi_mode]
 disabled = false
-style = "bg:overlay fg:rose"
-format = "[ $output ]($style)"
-command = "echo $ZVM_CURRENT_MODE"
-when = ''' [[ -n "$ZVM_CURRENT_MODE" && "$ZVM_CURRENT_MODE" == "Normal" ]] '''
-
-[custom.vi_mode_visual]
-disabled = false
-style = "bg:overlay fg:iris"
-format = "[ $output ]($style)"
-command = "echo $ZVM_CURRENT_MODE"
-when = ''' [[ -n "$ZVM_CURRENT_MODE" && "$ZVM_CURRENT_MODE" == "Visual" || "$ZVM_CURRENT_MODE" == "v" ]] '''
-
-[custom.vi_mode_v-line]
-disabled = false
-style = "bg:overlay fg:iris"
-format = "[ $output ]($style)"
-command = "echo $ZVM_CURRENT_MODE"
-when = ''' [[ -n "$ZVM_CURRENT_MODE" && "$ZVM_CURRENT_MODE" == "V-Line" ]] '''
-
-[custom.vi_mode_replace]
-disabled = false
-style = "bg:overlay fg:love"
-format = "[ $output ]($style)"
-command = "echo $ZVM_CURRENT_MODE"
-when = ''' [[ -n "$ZVM_CURRENT_MODE" && "$ZVM_CURRENT_MODE" == "Replace" || "$ZVM_CURRENT_MODE" == "r" ]] '''
+format = "[$output ]($style)"
+when = ''' [[ -n "$ZVM_CURRENT_MODE" && "$ZVM_CURRENT_MODE" != "Insert" ]] '''
+command = """case "$ZVM_CURRENT_MODE" in
+  Normal)  printf '\\e[48;2;57;53;82;38;2;215;130;126m NOR \\e[0m' ;;
+  Visual)  printf '\\e[48;2;57;53;82;38;2;196;167;234m VIS \\e[0m' ;;
+  V-Line)  printf '\\e[48;2;57;53;82;38;2;196;167;234m V-LINE \\e[0m' ;;
+  Replace) printf '\\e[48;2;57;53;82;38;2;235;111;146m REP \\e[0m' ;;
+esac"""
 
 # Languages
 
