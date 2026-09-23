@@ -20,6 +20,7 @@ It is not a development project. Write no application code here.
 - **`.gitignore` ignores `package.json`, `bun.lock`, and `node_modules`** — these are not committed. After clone, create/resolve `package.json` and run `npm install` to restore plugin deps.
 - **`autoupdate: false`** in `opencode.json` — updates are off. Plugin versions still use `@latest` — do not pin them.
 - **Agents use explicit model overrides** — check `opencode.json` and `agents/*.md` before assuming a default model.
+- **TEMPORARY WORKAROUND — parallel tool batches abort** (upstream bug anomalyco/opencode#37364, open as of 2026-09-22): when multiple tool calls are dispatched in one step, slower calls get spuriously stamped `Tool execution aborted` after a 250ms cleanup timeout. Not fixed in any release ≤ 1.18.32. Always instruct agents to dispatch **one tool call per step** (sequential, no parallel batches, no multiple `task` subagents in the same step). Aborted calls succeed when re-run sequentially. Remove this bullet once a release fixes #37364 — check the issue and recent release notes before removal.
 
 ## Commands
 
