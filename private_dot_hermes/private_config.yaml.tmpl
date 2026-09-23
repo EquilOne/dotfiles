@@ -89,7 +89,7 @@ display:
   show_reasoning: false
   streaming: true
   final_response_markdown: render
-  skin: rosepinemoon
+  skin: {{ if eq (index . "profile") "desktop" }}omarchy{{ else }}rosepinemoon{{ end }}
   interim_assistant_messages: true
   tool_progress: all
   cleanup_progress: false

@@ -4,7 +4,7 @@ return {
   -- (see "Local development" below).
   cond = vim.fn.executable("herdr") == 1{{ if eq (index . "profile") "remote" }}{{ else }} and vim.env.HERDR_ENV == "1"{{ end }},
   event = "VeryLazy",
-  build = 'lua require("herdr-splits").sync_herdr()',
+  build = ':lua require("herdr-splits").sync_herdr()',
   config = function()
     require("herdr-splits").setup({
       -- Defaults shown. All fields optional.
