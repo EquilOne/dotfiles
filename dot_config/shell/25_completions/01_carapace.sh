@@ -22,7 +22,7 @@ if command -v carapace >/dev/null 2>&1; then
     export CARAPACE_LENIENT=1
     export CARAPACE_HIDDEN=1
     export CARAPACE_ENV=1
-    source <(carapace _carapace)
+    source <(carapace _carapace bash-ble)
   fi
 fi
 

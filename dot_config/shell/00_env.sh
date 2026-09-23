@@ -17,6 +17,9 @@ export YAZI_CONFIG_DIR="$XDG_CONFIG_HOME/yazi"
 export FZF_BASE="$XDG_CONFIG_HOME/fzf"
 export BAT_CONFIG_DIR="$XDG_CONFIG_HOME/bat"
 
+# Starship: use our config dir (Omarchy's ~/.config/starship.toml wins by default otherwise)
+export STARSHIP_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/starship/starship.toml"
+
 # Chezmoi
 export CHEZMOI_DOTFILES="$XDG_DATA_HOME/chezmoi"
 

@@ -3,6 +3,9 @@
 # ROSE PINE MOON COLOR PALETTE (loads early with 00_ prefix)
 # =============================================================================
 # Reference: https://rosepinetheme.com/palette/ingredients/
+# NOTE: This palette statically mirrors rose-pine-moon and is the fallback for
+# tools Omarchy does not re-theme (fzf, vivid LS_COLORS). Desktop apps follow
+# ~/.local/state/omarchy/current/theme instead (see dot_config/shell/01_theme.sh).
 
 # Base colors
 export ROSE_PINE_BASE='#232136'           # Main background
