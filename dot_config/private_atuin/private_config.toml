@@ -1,0 +1,16 @@
+# Atuin — shell history (local-only; no sync account registered)
+# Full default reference: `atuin init` generated template (kept in git via chezmoi
+# as config.toml.orig if needed). Keys below are explicit overrides of defaults.
+
+## Local history only — no sync server / account
+auto_sync = false
+
+## Explicitly disable update checks (system package via pacman)
+update_check = false
+
+## Interactive search: fuzzy matching, full-height list
+search_mode = "fuzzy"
+style = "full"
+
+## Enter immediately executes the selected command (tab = edit first)
+enter_accept = true
