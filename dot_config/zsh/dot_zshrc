@@ -4,6 +4,7 @@
 # =============================================================================
 
 # Zsh-specific history settings
+mkdir -p "$XDG_STATE_HOME/zsh"
 HISTFILE=$XDG_STATE_HOME/zsh/history
 HISTSIZE=10000
 SAVEHIST=10000
