@@ -16,8 +16,12 @@ confirm-close-surface=false
 resize-overlay = never
 
 # Cursor styling
-cursor-style = "block"
+cursor-style = "bar"
 cursor-style-blink = false
+# Disable Ghostty's automatic shell integration: its OSC 133 prompt marks
+# (redraw=last) make Ghostty re-render its cached prompt region, which
+# duplicates the ble.sh-rendered prompt. ble.sh handles prompt rendering.
+shell-integration = none
 shell-integration-features = no-cursor
 
 # Keyboard bindings
