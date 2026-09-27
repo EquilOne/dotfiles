@@ -1,18 +1,32 @@
 ---
 description: Smartest break-glass agent — independently double-checks critical code, plans, configs, and prior-agent findings. Only invoke explicitly; never auto-routed.
 mode: all
-model: openrouter/openai/gpt-5.6-terra
-reasoning:
-  effort: xhigh
-permission:
-  edit: deny
-  bash: allow
-  webfetch: allow
-  websearch: deny
-  task: deny
-  question: allow
-  todowrite: allow
-  external_directory: ask
+model: openrouter/openai/gpt-5.6-terra#xhigh
+permissions:
+  - action: edit
+    resource: "*"
+    effect: deny
+  - action: shell
+    resource: "*"
+    effect: allow
+  - action: webfetch
+    resource: "*"
+    effect: allow
+  - action: websearch
+    resource: "*"
+    effect: deny
+  - action: subagent
+    resource: "*"
+    effect: deny
+  - action: question
+    resource: "*"
+    effect: allow
+  - action: todowrite
+    resource: "*"
+    effect: allow
+  - action: external_directory
+    resource: "*"
+    effect: ask
 ---
 
 Objective: Independent second-opinion verifier — the smartest agent, used only to double-check critical work or as break-glass when normal agents fail or disagree. Re-derive claims from first principles; trace to source; never rubber-stamp.

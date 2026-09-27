@@ -1,16 +1,26 @@
 ---
 description: Review code for quality, security, correctness, and style
 mode: subagent
-model: openrouter/z-ai/glm-5.3
-reasoning:
-  effort: xhigh
-permission:
-  edit: deny
-  bash: allow
-  webfetch: allow
-  websearch: deny
-  task: deny
-  external_directory: ask
+model: openrouter/z-ai/glm-5.3#xhigh
+permissions:
+  - action: edit
+    resource: "*"
+    effect: deny
+  - action: shell
+    resource: "*"
+    effect: allow
+  - action: webfetch
+    resource: "*"
+    effect: allow
+  - action: websearch
+    resource: "*"
+    effect: deny
+  - action: subagent
+    resource: "*"
+    effect: deny
+  - action: external_directory
+    resource: "*"
+    effect: ask
 ---
 
 Objective: Analyze code files and produce a structured, evidence-based review. Never approve without verification.

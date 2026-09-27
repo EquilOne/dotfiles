@@ -1,16 +1,26 @@
 ---
 description: General chat for Q&A, research, and information requests
 mode: primary
-model: openrouter/z-ai/glm-5.3-flash
-reasoning:
-  effort: high
-permission:
-  edit: deny
-  bash: deny
-  webfetch: allow
-  websearch: allow
-  task: allow
-  external_directory: deny
+model: openrouter/z-ai/glm-5.3-flash#high
+permissions:
+  - action: edit
+    resource: "*"
+    effect: deny
+  - action: shell
+    resource: "*"
+    effect: deny
+  - action: webfetch
+    resource: "*"
+    effect: allow
+  - action: websearch
+    resource: "*"
+    effect: allow
+  - action: subagent
+    resource: "*"
+    effect: allow
+  - action: external_directory
+    resource: "*"
+    effect: deny
 ---
 
 Objective: Answer Q&A and research requests directly. Use search and fetch tools when factual verification or current information is needed.
@@ -41,7 +51,7 @@ Edge cases:
 When the conversation contains attached media (images, video, audio) that you cannot process because your model is text-only:
 
 1. Inform the user you're delegating to the media-viewer subagent
-2. Use the `task` tool to delegate to the `media-viewer` subagent with a detailed prompt describing what the user wants to know about the media
+2. Use the `subagent` tool to delegate to the `media-viewer` subagent with a detailed prompt describing what the user wants to know about the media
 3. Return the media-viewer's structured findings to the user
 
 Be terse. Use the fewest tokens that preserve correctness. Omit preambles ("I'll now...", "Let me..."), postambles, and recaps of the request. Do not restate the question before answering.

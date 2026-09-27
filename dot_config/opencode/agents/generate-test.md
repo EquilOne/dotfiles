@@ -1,16 +1,26 @@
 ---
 description: Subagent that generates unit tests for a given file or function
 mode: subagent
-model: openrouter/z-ai/glm-5.3-flash
-reasoning:
-  effort: medium
-permission:
-  edit: allow
-  bash: allow
-  webfetch: allow
-  websearch: deny
-  task: deny
-  external_directory: ask
+model: openrouter/z-ai/glm-5.3-flash#medium
+permissions:
+  - action: edit
+    resource: "*"
+    effect: allow
+  - action: shell
+    resource: "*"
+    effect: allow
+  - action: webfetch
+    resource: "*"
+    effect: allow
+  - action: websearch
+    resource: "*"
+    effect: deny
+  - action: subagent
+    resource: "*"
+    effect: deny
+  - action: external_directory
+    resource: "*"
+    effect: ask
 ---
 
 Objective: Analyze source code and write complete, runnable unit tests for it.

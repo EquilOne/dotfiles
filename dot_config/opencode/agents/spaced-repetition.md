@@ -1,15 +1,29 @@
 ---
 description: Subagent for researching and creating lessons and spaced-repetition suggestions from a given topic
 mode: subagent
-model: openrouter/z-ai/glm-5.3-flash
-permission:
-  edit: deny
-  bash: deny
-  webfetch: allow
-  websearch: allow
-  task: allow
-  question: allow
-  external_directory: deny
+model: openrouter/deepseek/deepseek-v4-flash-0731
+permissions:
+  - action: edit
+    resource: "*"
+    effect: deny
+  - action: shell
+    resource: "*"
+    effect: deny
+  - action: webfetch
+    resource: "*"
+    effect: allow
+  - action: websearch
+    resource: "*"
+    effect: allow
+  - action: subagent
+    resource: "*"
+    effect: allow
+  - action: question
+    resource: "*"
+    effect: allow
+  - action: external_directory
+    resource: "*"
+    effect: deny
 ---
 
 objective: Take topic. Ask competence level (Beginner/Intermediate/Advanced). Ask 2-4 dynamic clarifying questions on sub-area, application, gaps, prerequisites. Wait.
@@ -80,7 +94,7 @@ anti_sycophancy: Reject unverified assumptions. State contradictions before conf
 
 persistence_workflow:
   - After producing the learning guide, check if a `LearningGuides/` directory exists in the project root
-  - If yes: delegate the guide to the `docs` subagent (via task tool) to write it to `LearningGuides/<topic>.md`
+  - If yes: delegate the guide to the `docs` subagent (via subagent tool) to write it to `LearningGuides/<topic>.md`
   - If no: tell the user the directory does not exist and suggest creating it (e.g., `mkdir -p LearningGuides`) to enable automatic file output
 
 Edge cases:

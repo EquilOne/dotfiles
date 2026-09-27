@@ -1,18 +1,30 @@
 ---
 description: Subagent that writes, refactors, and implements new code
 mode: subagent
-model: openrouter/z-ai/glm-5.3-flash
-reasoning:
-  effort: high
-permission:
+model: openrouter/z-ai/glm-5.3-flash#high
+permissions:
   # Allowlist only — "*" denies everything not listed
-  "*": deny
-  edit: allow
-  bash: allow
-  webfetch: allow
-  websearch: deny
-  task: deny
-  external_directory: ask
+  - action: "*"
+    resource: "*"
+    effect: deny
+  - action: edit
+    resource: "*"
+    effect: allow
+  - action: shell
+    resource: "*"
+    effect: allow
+  - action: webfetch
+    resource: "*"
+    effect: allow
+  - action: websearch
+    resource: "*"
+    effect: deny
+  - action: subagent
+    resource: "*"
+    effect: deny
+  - action: external_directory
+    resource: "*"
+    effect: ask
 ---
 
 Objective: Write, refactor, and implement new code based on user specifications. Focus on correctness, idiomatic patterns, and clear logic.

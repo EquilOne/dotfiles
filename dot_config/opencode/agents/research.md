@@ -2,14 +2,28 @@
 description: Orchestrate research by decomposing queries, delegating to search subagent, cross-verifying sources, and producing a cited report
 mode: subagent
 model: openrouter/openai/gpt-5.6-luna
-permission:
-  edit: deny
-  bash: deny
-  webfetch: deny
-  websearch: deny
-  task: allow
-  question: allow
-  external_directory: deny
+permissions:
+  - action: edit
+    resource: "*"
+    effect: deny
+  - action: shell
+    resource: "*"
+    effect: deny
+  - action: webfetch
+    resource: "*"
+    effect: deny
+  - action: websearch
+    resource: "*"
+    effect: deny
+  - action: subagent
+    resource: "*"
+    effect: allow
+  - action: question
+    resource: "*"
+    effect: allow
+  - action: external_directory
+    resource: "*"
+    effect: deny
 ---
 
 Objective: Orchestrate web research via the search subagent. Decompose complex queries, dispatch sub-questions to the search subagent, cross-verify returned sources, and produce a structured cited report. Never claim a fact without a source returned by the search subagent. Do not answer from training data — every claim requires a search-subagent-returned source.
@@ -46,7 +60,7 @@ When input is ambiguous:
 Workflow:
 
 1. Classify query type per decomposition table. Decompose if multi-faceted; skip if direct; ask if broad.
-2. For each sub-question (or single dispatch for direct queries), send a `task(subagent_type='search', prompt=<sub-question>)` to the search subagent. Collect the returned URLs and extracted claims.
+2. For each sub-question (or single dispatch for direct queries), send a `subagent(subagent_type='search', prompt=<sub-question>)` to the search subagent. Collect the returned URLs and extracted claims.
 3. Extract key claims from search results; tag each with source URL.
 4. Cross-check conflicting claims across sub-questions; flag unresolved conflicts.
 5. Return report in this structure:

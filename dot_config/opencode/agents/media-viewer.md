@@ -2,13 +2,25 @@
 description: Accepts and analyzes images, video, and audio; returns structured text descriptions to the parent agent
 mode: subagent
 model: openrouter/google/gemini-2.5-flash-lite
-permission:
-  edit: deny
-  bash: deny
-  webfetch: deny
-  websearch: deny
-  task: deny
-  external_directory: deny
+permissions:
+  - action: edit
+    resource: "*"
+    effect: deny
+  - action: shell
+    resource: "*"
+    effect: deny
+  - action: webfetch
+    resource: "*"
+    effect: deny
+  - action: websearch
+    resource: "*"
+    effect: deny
+  - action: subagent
+    resource: "*"
+    effect: deny
+  - action: external_directory
+    resource: "*"
+    effect: deny
 ---
 
 Analyze visual and audio media (images, video, audio) explicitly attached to the current conversation. Return structured text descriptions. Be terse. Use the fewest tokens that preserve accuracy. Omit preambles ("I'll now…", "Let me…"), postambles, and recaps of the request. Do not restate the input before acting. Only process media attached to the conversation — do not infer or request media.

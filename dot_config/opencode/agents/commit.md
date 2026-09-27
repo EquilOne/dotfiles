@@ -1,37 +1,86 @@
 ---
 description: Execute the full git commit workflow (inspect, stage, draft message, verify, commit) on the primary agent's behalf. Loads and follows the commit-work skill; returns a commit plan for approval on split/complicated changes.
 mode: subagent
-model: openrouter/inception/mercury-2.5
-reasoning:
-  effort: xhigh
-permission:
-  edit: deny
-  bash:
-    "*": deny
-    "git*": allow
-    "git push*": ask
-    "git rebase*": ask
-    "git cherry-pick*": ask
-    "git push --force*": deny
-    "git reset --hard*": deny
-    "git clean*": deny
-    "git filter-branch*": deny
-    "git gc*": deny
-    "npm test*": allow
-    "npm run*": allow
-    "bun test*": allow
-    "pnpm test*": allow
-    "yarn test*": allow
-    "cargo test*": allow
-    "go test*": allow
-    "pytest*": allow
-    "make test*": allow
-    "make lint*": allow
-    "make check*": allow
-  webfetch: deny
-  websearch: deny
-  task: deny
-  external_directory: ask
+model: openrouter/inception/mercury-2.5#xhigh
+permissions:
+  - action: edit
+    resource: "*"
+    effect: deny
+  - action: shell
+    resource: "*"
+    effect: deny
+  - action: shell
+    resource: "git*"
+    effect: allow
+  - action: shell
+    resource: "git push*"
+    effect: ask
+  - action: shell
+    resource: "git rebase*"
+    effect: ask
+  - action: shell
+    resource: "git cherry-pick*"
+    effect: ask
+  - action: shell
+    resource: "git push --force*"
+    effect: deny
+  - action: shell
+    resource: "git reset --hard*"
+    effect: deny
+  - action: shell
+    resource: "git clean*"
+    effect: deny
+  - action: shell
+    resource: "git filter-branch*"
+    effect: deny
+  - action: shell
+    resource: "git gc*"
+    effect: deny
+  - action: shell
+    resource: "npm test*"
+    effect: allow
+  - action: shell
+    resource: "npm run*"
+    effect: allow
+  - action: shell
+    resource: "bun test*"
+    effect: allow
+  - action: shell
+    resource: "pnpm test*"
+    effect: allow
+  - action: shell
+    resource: "yarn test*"
+    effect: allow
+  - action: shell
+    resource: "cargo test*"
+    effect: allow
+  - action: shell
+    resource: "go test*"
+    effect: allow
+  - action: shell
+    resource: "pytest*"
+    effect: allow
+  - action: shell
+    resource: "make test*"
+    effect: allow
+  - action: shell
+    resource: "make lint*"
+    effect: allow
+  - action: shell
+    resource: "make check*"
+    effect: allow
+  - action: webfetch
+    resource: "*"
+    effect: deny
+  - action: websearch
+    resource: "*"
+    effect: deny
+  - action: subagent
+    resource: "*"
+    effect: deny
+  - action: external_directory
+    resource: "*"
+    effect: ask
 ---
 
 Skill: commit-work (source of the full workflow; this file sets role, permissions, and the plan gate).

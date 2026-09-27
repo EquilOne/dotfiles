@@ -8,19 +8,18 @@ It is not a development project. Write no application code here.
 | Path              | Purpose                                                                       |
 | ----------------- | ----------------------------------------------------------------------------- |
 | `opencode.json`     | Agent routing, models, `default_agent: "fixer"`                                 |
-| `tui.json`          | Keybindings, theme (`rosepine`), UI config                                      |
+| `cli.json`          | V2 terminal client config: keybindings, theme (`rosepine`), UI                 |
 | `reference.md`      | Consolidated personal reference: routing + keybindings                        |
 | `agents/*.md`       | Primary and subagent Markdown definitions                                  |
 | `skills/*/SKILL.md` | Reusable OpenCode skills and workflows |
 | `plugins/`          | Plugin hooks — executable code loaded at startup (moshi-hooks.ts, herdr-agent-state.js) |
-| `package.json`      | Plugin SDK dep: `@opencode-ai/plugin@1.18.11` (pinned)                           |
+| `package.json`      | Plugin SDK dep: `@opencode/plugin` (npm install to restore)                          |
 
 ## Critical Quirks
 
 - **`.gitignore` ignores `package.json`, `bun.lock`, and `node_modules`** — these are not committed. After clone, create/resolve `package.json` and run `npm install` to restore plugin deps.
-- **`autoupdate: false`** in `opencode.json` — updates are off. Plugin versions still use `@latest` — do not pin them.
+- **`update: "auto"`** in `opencode.json` (migrated from V1 autoupdate: true). Plugin versions use `@latest` — do not pin them.
 - **Agents use explicit model overrides** — check `opencode.json` and `agents/*.md` before assuming a default model.
-- **TEMPORARY WORKAROUND — parallel tool batches abort** (upstream bug anomalyco/opencode#37364, open as of 2026-09-22): when multiple tool calls are dispatched in one step, slower calls get spuriously stamped `Tool execution aborted` after a 250ms cleanup timeout. Not fixed in any release ≤ 1.18.32. Always instruct agents to dispatch **one tool call per step** (sequential, no parallel batches, no multiple `task` subagents in the same step). Aborted calls succeed when re-run sequentially. Remove this bullet once a release fixes #37364 — check the issue and recent release notes before removal.
 
 ## Commands
 
@@ -42,7 +41,7 @@ No build, lint, test, or typecheck commands exist.
 
 ## Working Here
 
-- Most changes touch `opencode.json`, `tui.json`, skills, or agent configs.
+- Most changes touch `opencode.json`, `cli.json`, skills, or agent configs.
 - If editing skills or agent configs, verify changes with OpenCode CLI after saving.
 - `node_modules/` is gitignored — never modify it.
 - The `opencode-notifier-state.json` file is a runtime state file, not config. Do not commit or hand-edit it.

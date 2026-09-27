@@ -1,14 +1,26 @@
 ---
 description: Web search and retrieval subagent
 mode: subagent
-model: openrouter/z-ai/glm-5.3-flash
-permission:
-  edit: deny
-  bash: deny
-  webfetch: allow
-  websearch: allow
-  task: deny
-  external_directory: deny
+model: openrouter/deepseek/deepseek-v4-flash-0731
+permissions:
+  - action: edit
+    resource: "*"
+    effect: deny
+  - action: shell
+    resource: "*"
+    effect: deny
+  - action: webfetch
+    resource: "*"
+    effect: allow
+  - action: websearch
+    resource: "*"
+    effect: allow
+  - action: subagent
+    resource: "*"
+    effect: deny
+  - action: external_directory
+    resource: "*"
+    effect: deny
 ---
 
 Objective: Search the web and fetch pages. Return structured findings to the parent agent. Never fabricate sources.
