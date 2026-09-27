@@ -1,118 +1,119 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "subagent_depth": 2,
-  "plugin": [
+  "update": "auto",
+  "experimental": {
+    "subagent_depth": 2
+  },
+  "plugins": [
+    "@mohak34/opencode-notifier@latest",
     "@franlol/opencode-md-table-formatter@latest"
   ],
   "mcp": {
-    "openrouter": {
-      "type": "remote",
-      "url": "https://mcp.openrouter.ai/mcp",
-      "enabled": false
-    },
-    "linear": {
-      "type": "remote",
-      "url": "https://mcp.linear.app/mcp",
-      "enabled": true{{ if eq .profile "remote" }},
-      "headers": {
-        "Authorization": "Bearer {{ protonPass "pass://SZZ4VITnWMje2Df01Z_-6XJ52UXWIdpywga9uE26vwLE1q4JNzB1GWivdRbO5d1u6iy71wgIMYTH6xb7CYjG1A==/SvWLUqs2yNztw5xe7sQzWJ56L2nZhNYf24sa6FOvDaPmMtcyXFyG9L2qJjgwZMEMG7p5mVIAcpOC-csgNsHQOA==/API Key" | trim }}"
-      }{{ end }}
-    },
-    "airtable": {
-      "type": "remote",
-      "url": "https://mcp.airtable.com/mcp",
-      "enabled": false
-    },
-    "figma": {
-      "type": "remote",
-      "url": "https://mcp.figma.com/mcp",
-      "enabled": true
+    "servers": {
+      "openrouter": {
+        "type": "remote",
+        "url": "https://mcp.openrouter.ai/mcp",
+        "disabled": true
+      },
+      "linear": {
+        "type": "remote",
+        "url": "https://mcp.linear.app/mcp",
+        "disabled": false{{ if eq .profile "remote" }},
+        "headers": {
+          "Authorization": "Bearer {{ protonPass "pass://SZZ4VITnWMje2Df01Z_-6XJ52UXWIdpywga9uE26vwLE1q4JNzB1GWivdRbO5d1u6iy71wgIMYTH6xb7CYjG1A==/SvWLUqs2yNztw5xe7sQzWJ56L2nZhNYf24sa6FOvDaPmMtcyXFyG9L2qJjgwZMEMG7p5mVIAcpOC-csgNsHQOA==/API Key" | trim }}"
+        }{{ end }}
+      },
+      "airtable": {
+        "type": "remote",
+        "url": "https://mcp.airtable.com/mcp",
+        "disabled": true
+      },
+      "figma": {
+        "type": "remote",
+        "url": "https://mcp.figma.com/mcp",
+        "disabled": false
+      }
     }
   },
   "formatter": true,
-  "autoupdate": false,
   "default_agent": "fixer",
-  "small_model": "openrouter/google/gemini-2.5-flash-lite",
-  "agent": {
+  "agents": {
+    "title": {
+      "model": "openrouter/google/gemini-2.5-flash-lite"
+    },
     "plan": {
       "mode": "subagent",
-      "model": "openrouter/openai/gpt-5.6-luna",
-      "reasoningEffort": "high",
-      "permission": {
-        "edit": "deny",
-        "bash": {
-          "*": "ask",
-          "git status*": "allow",
-          "git diff*": "allow",
-          "git log*": "allow"
-        },
-        "webfetch": "deny",
-        "websearch": "deny",
-        "task": "deny",
-        "question": "allow",
-        "todowrite": "allow",
-        "external_directory": "deny"
-      }
+      "model": "openrouter/openai/gpt-5.6-luna#high",
+      "permissions": [
+        { "action": "edit", "resource": "*", "effect": "deny" },
+        { "action": "shell", "resource": "*", "effect": "ask" },
+        { "action": "shell", "resource": "git status*", "effect": "allow" },
+        { "action": "shell", "resource": "git diff*", "effect": "allow" },
+        { "action": "shell", "resource": "git log*", "effect": "allow" },
+        { "action": "webfetch", "resource": "*", "effect": "deny" },
+        { "action": "websearch", "resource": "*", "effect": "deny" },
+        { "action": "subagent", "resource": "*", "effect": "deny" },
+        { "action": "question", "resource": "*", "effect": "allow" },
+        { "action": "todowrite", "resource": "*", "effect": "allow" },
+        { "action": "external_directory", "resource": "*", "effect": "deny" }
+      ]
     },
     "build": {
       "mode": "primary",
-      "model": "openrouter/openai/gpt-5.6-luna",
-      "reasoningEffort": "xhigh",
-      "permission": {
-        "edit": "allow",
-        "bash": "allow",
-        "webfetch": "deny",
-        "websearch": "deny",
-        "task": "allow",
-        "external_directory": "ask"
-      }
+      "model": "openrouter/openai/gpt-5.6-luna#xhigh",
+      "permissions": [
+        { "action": "edit", "resource": "*", "effect": "allow" },
+        { "action": "shell", "resource": "*", "effect": "allow" },
+        { "action": "webfetch", "resource": "*", "effect": "deny" },
+        { "action": "websearch", "resource": "*", "effect": "deny" },
+        { "action": "subagent", "resource": "*", "effect": "allow" },
+        { "action": "external_directory", "resource": "*", "effect": "ask" }
+      ]
     },
     "explore": {
-      "model": "openrouter/z-ai/glm-5.3-flash",
-      "reasoningEffort": "medium"
+      "model": "openrouter/deepseek/deepseek-v4-flash-0731"
     },
     "general": {
-      "model": "openrouter/z-ai/glm-5.3-flash",
-      "reasoningEffort": "medium"
+      "model": "openrouter/deepseek/deepseek-v4-flash-0731"
     },
     "scout": {
       "mode": "subagent",
-      "model": "openrouter/z-ai/glm-5.3-flash",
-      "reasoningEffort": "medium"
+      "model": "openrouter/deepseek/deepseek-v4-flash-0731"
     }
   },
-  "provider": {
+  "providers": {
     "openrouter": {
       "models": {
         "z-ai/glm-5.2": {
-          "options": {
+          "settings": {
             "reasoningEffort": "xhigh",
             "verbosity": "low",
-            "provider": {
-              "sort": "latency"
-            }
+            "provider": { "sort": "latency" }
           }
         },
         "z-ai/glm-5.3": {
-          "options": {
+          "settings": {
             "reasoningEffort": "xhigh",
             "verbosity": "low",
-            "provider": {
-              "sort": "latency"
-            }
-          }
+            "provider": { "sort": "latency" }
+          },
+          "variants": [
+            { "id": "xhigh", "settings": { "reasoningEffort": "xhigh" } }
+          ]
         },
         "z-ai/glm-5.3-flash": {
-          "options": {
+          "settings": {
             "reasoningEffort": "max",
             "verbosity": "low",
-            "provider": {
-              "sort": "throughput"
-            }
-          }
+            "provider": { "sort": "throughput" }
+          },
+          "variants": [
+            { "id": "high", "settings": { "reasoningEffort": "high" } },
+            { "id": "medium", "settings": { "reasoningEffort": "medium" } }
+          ]
         },
         "deepseek/deepseek-v4-flash-0731": {
-          "options": {
+          "settings": {
             "reasoningEffort": "high",
             "verbosity": "low",
             "provider": {
@@ -121,60 +122,58 @@
             }
           }
         },
-
         "openai/gpt-5.6-luna": {
-          "options": {
+          "settings": {
             "reasoningEffort": "xhigh",
             "verbosity": "low",
-            "provider": {
-              "sort": "price"
-            }
-          }
+            "provider": { "sort": "price" }
+          },
+          "variants": [
+            { "id": "high", "settings": { "reasoningEffort": "high" } },
+            { "id": "xhigh", "settings": { "reasoningEffort": "xhigh" } }
+          ]
         },
-
         "openai/gpt-5.6-terra": {
-          "options": {
+          "settings": {
             "reasoningEffort": "high",
             "verbosity": "low",
-            "provider": {
-              "sort": "price"
-            }
-          }
+            "provider": { "sort": "price" }
+          },
+          "variants": [
+            { "id": "xhigh", "settings": { "reasoningEffort": "xhigh" } }
+          ]
         },
         "google/gemini-3.7-flash": {
-          "options": {
+          "settings": {
             "reasoningEffort": "high",
             "verbosity": "low",
-            "provider": {
-              "sort": "price"
-            }
+            "provider": { "sort": "price" }
           }
         },
         "google/gemini-2.5-flash-lite": {
-          "options": {
+          "settings": {
             "verbosity": "low",
-            "provider": {
-              "sort": "throughput"
-            }
+            "provider": { "sort": "throughput" }
           }
         },
         "openai/gpt-5.6-sol": {
-          "options": {
+          "settings": {
             "reasoningEffort": "xhigh",
             "verbosity": "low",
-            "provider": {
-              "sort": "price"
-            }
+            "provider": { "sort": "price" }
           }
         },
         "xiaomi/mimo-v2.5": {
-          "options": {
+          "settings": {
             "reasoningEffort": "medium",
             "verbosity": "low",
-            "provider": {
-              "sort": "throughput"
-            }
+            "provider": { "sort": "throughput" }
           }
+        },
+        "inception/mercury-2.5": {
+          "variants": [
+            { "id": "xhigh", "settings": { "reasoningEffort": "xhigh" } }
+          ]
         }
       }
     }
