@@ -57,7 +57,12 @@ else
 fi
 
 # Hermes
-alias hermes='hermes --tui'
+alias hrm='hermes --tui'
+
+# Herdr
+alias hrd='herdr'
+alias hrds='herdr session'
+alias hrda='herdr session attach'
 
 # Grep
 alias grep='grep --color=auto'
