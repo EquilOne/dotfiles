@@ -4,7 +4,7 @@
     "name": "rosepine"
   },
   "keybinds": {
-    "leader": "ctrl+x",
+    "leader": "ctrl+space",
     "app.exit": "<leader>q",
     "command.palette.show": "ctrl+p",
     "prompt.editor": "<leader>e",
@@ -21,6 +21,7 @@
     "session.unshare": "none",
     "session.interrupt": "escape",
     "session.compact": "<leader>c",
+    "session.background": "<leader>f",
     "session.child.first": "<leader>t",
     "session.child.next": "<leader>]",
     "session.child.previous": "<leader>[",
