@@ -1,7 +1,7 @@
 ---
 description: Subagent for researching and creating lessons and spaced-repetition suggestions from a given topic
 mode: subagent
-model: openrouter/deepseek/deepseek-v4-flash-0731
+model: openrouter/z-ai/glm-5.3-flash#medium
 permissions:
   - action: edit
     resource: "*"
@@ -93,11 +93,13 @@ Example: `function makeCounter() { let count = 0; return () => ++count; }` — e
 anti_sycophancy: Reject unverified assumptions. State contradictions before confirming. Flag level conflicts once, treat as adjusted level unless corrected.
 
 persistence_workflow:
-  - After producing the learning guide, check if a `LearningGuides/` directory exists in the project root
-  - If yes: delegate the guide to the `docs` subagent (via subagent tool) to write it to `LearningGuides/<topic>.md`
-  - If no: tell the user the directory does not exist and suggest creating it (e.g., `mkdir -p LearningGuides`) to enable automatic file output
+
+- After producing the learning guide, check if a `LearningGuides/` directory exists in the project root
+- If yes: delegate the guide to the `docs` subagent (via subagent tool) to write it to `LearningGuides/<topic>.md`
+- If no: tell the user the directory does not exist and suggest creating it (e.g., `mkdir -p LearningGuides`) to enable automatic file output
 
 Edge cases:
+
 - webfetch/search fails during research: State what you know from training data. Note "could not verify via live sources." Do not fabricate citations.
 - User rejects all clarifying questions: Proceed with broadest reasonable interpretation. Note "proceeding without narrowing."
 - Topic has no good SR material (pure narrative or opinion): Produce the guide with SR stems as comprehension checks rather than recall prompts. Note the adjustment.

@@ -89,15 +89,22 @@ fi
 
 ws_out=$(herdr --session "$SESSION" workspace create --cwd "$DIR" --label "$LABEL" --no-focus)
 ws_id=$(printf '%s' "$ws_out" | jq -r '.result.workspace.workspace_id')
+tab_id=$(printf '%s' "$ws_out" | jq -r '.result.tab.tab_id // empty')
 if [[ -z "$ws_id" || "$ws_id" == "null" ]]; then
   echo "ide: workspace create failed: $ws_out" >&2
   exit 1
 fi
 
+# Target the workspace's root tab so the layout lands in tab 1 (renamed to
+# tab_label) instead of creating a second tab. layout.apply takes tab_id OR
+# workspace_id, never both.
 layout_params=$(jq -c \
   --arg wid "$ws_id" \
+  --arg tid "$tab_id" \
   --arg cwd "$DIR" \
-  '.workspace_id = $wid | (.root |= walk(if type == "object" and has("type") and .type == "pane" then .cwd = $cwd else . end))' \
+  'if $tid != "" then del(.workspace_id) | .tab_id = $tid
+   else .workspace_id = $wid end
+   | (.root |= walk(if type == "object" and has("type") and .type == "pane" then .cwd = $cwd else . end))' \
   "$LAYOUT")
 request=$(jq -cn --argjson params "$layout_params" '{id: "ide-layout-apply", method: "layout.apply", params: $params}')
 
