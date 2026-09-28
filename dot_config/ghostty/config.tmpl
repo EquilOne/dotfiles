@@ -1,9 +1,9 @@
 # Dynamic theme colors
-{{- if eq (includeTemplate "omarchyVersion" .) "omarchy4" }}
+{{ if eq (includeTemplate "omarchyVersion" .) "omarchy4" -}}
 config-file = ?"~/.local/state/omarchy/current/theme/ghostty.conf"
-{{- else }}
+{{- else -}}
 config-file = ?"~/.config/omarchy/current/theme/ghostty.conf"
-{{- end }}
+{{ end }}
 
 # Font
 font-family = "MartianMono Nerd Font"
@@ -20,13 +20,13 @@ confirm-close-surface=false
 resize-overlay = never
 
 # Cursor styling
-{{- if eq (includeTemplate "omarchyVersion" .) "omarchy4" }}
+{{ if eq (includeTemplate "omarchyVersion" .) "omarchy4" -}}
 cursor-style = "bar"
-{{- else }}
+{{- else -}}
 cursor-style = "block"
-{{- end }}
+{{ end }}
 cursor-style-blink = false
-{{- if eq (includeTemplate "omarchyVersion" .) "omarchy4" }}
+{{ if eq (includeTemplate "omarchyVersion" .) "omarchy4" -}}
 # Disable Ghostty's automatic shell integration: its OSC 133 prompt marks
 # (redraw=last) make Ghostty re-render its cached prompt region, which
 # duplicates the ble.sh-rendered prompt. ble.sh handles prompt rendering.
@@ -98,8 +98,8 @@ keybind = global:ctrl+backquote=toggle_quick_terminal
 mouse-scroll-multiplier = 1.0
 
 # Fix general slowness on hyprland (https://github.com/ghostty-org/ghostty/discussions/3224)
-{{- if eq (includeTemplate "omarchyVersion" .) "omarchy4" }}
+{{ if eq (includeTemplate "omarchyVersion" .) "omarchy4" -}}
 async-backend = epoll
-{{- else }}
+{{- else -}}
 # async-backend = epoll # disabled 2026-09-09: IO-thread null-deref crash on herdr attach (ghostty #14091)
-{{- end }}
+{{ end }}

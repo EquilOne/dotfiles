@@ -1,0 +1,12 @@
+{{- /* Omarchy 3.x: mako reads its theme from the omarchy current-theme dir.
+     Omarchy 4 dropped mako; pinetab manages a static config instead
+     (dot_config/mako/config). This script only renders on omarchy3. */ -}}
+{{ if and .omarchy (eq (includeTemplate "omarchyVersion" .) "omarchy3") -}}
+#!/bin/sh
+set -e
+theme="$HOME/.config/omarchy/current/theme/mako.ini"
+if [ -e "$theme" ]; then
+    mkdir -p "$HOME/.config/mako"
+    ln -sfn "$theme" "$HOME/.config/mako/config"
+fi
+{{- end }}

@@ -1,18 +1,31 @@
 #!/bin/bash
 # =============================================================================
-# STARSHIP PROMPT INITIALIZATION (cross-shell compatible)
+# STARSHIP PROMPT INITIALIZATION (cross-shell compatible, device-aware)
 # =============================================================================
+# Omarchy machines use B's starship_minimal/starship_narrow/starship configs.
+# Non-omarchy (pinetab) machines use starship_foot_minimal/starship_foot_narrow
+# and default to starship.toml (foot terminal tuned configs).
 
 # Set prompt config by column width before Starship initializes.
 set_starship_width() {
     local columns="${COLUMNS:-80}"
 
-    if (( columns < 40 )); then
-        export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship_minimal.toml"
-    elif (( columns < 80 )); then
-        export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship_narrow.toml"
+    if [[ -d /usr/share/omarchy ]]; then
+        if (( columns < 40 )); then
+            export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship_minimal.toml"
+        elif (( columns < 80 )); then
+            export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship_narrow.toml"
+        else
+            export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
+        fi
     else
-        export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
+        if (( columns < 40 )); then
+            export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship_foot_minimal.toml"
+        elif (( columns < 80 )); then
+            export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship_foot_narrow.toml"
+        else
+            export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
+        fi
     fi
 }
 

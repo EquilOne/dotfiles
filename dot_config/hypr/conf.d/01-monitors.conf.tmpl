@@ -1,0 +1,12 @@
+################
+### MONITORS ###
+################
+
+# See https://wiki.hypr.land/Configuring/Monitors/
+# Rendered from .device (hostname-keyed table in .chezmoi.toml.tmpl).
+monitor={{ .device.monitor }}, highreshighrr, auto, {{ .device.scale }}, transform, {{ .device.transform }}
+
+# Persistent workspaces on {{ .device.monitor }}
+workspace = 1, monitor:{{ .device.monitor }}, persistent:true
+workspace = 2, monitor:{{ .device.monitor }}, persistent:true
+workspace = 3, monitor:{{ .device.monitor }}, persistent:true

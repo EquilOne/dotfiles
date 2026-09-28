@@ -1,4 +1,4 @@
-{{- if ne (index . "profile") "remote" -}}
+{{- if and .omarchy (ne (index . "profile") "remote") -}}
 return {
 	{
 		name = "theme-hotreload",

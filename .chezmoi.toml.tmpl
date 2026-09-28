@@ -1,10 +1,46 @@
-{{- $profile := promptStringOnce . "profile" "Profile (desktop or remote)" "desktop" -}}
+{{- /* Profile & device configuration.
+     Profile is seeded from $CHEZMOI_PROFILE when set (e.g.
+     CHEZMOI_PROFILE=remote chezmoi apply), otherwise asked once via
+     promptStringOnce and cached in ~/.config/chezmoi/chezmoi.toml.
+     The hostname→device table drives pinetab-specific gating; see
+     .chezmoiignore for the consumers. */ -}}
+{{- $profile := env "CHEZMOI_PROFILE" -}}
+{{- if eq $profile "" -}}
+  {{- if eq .chezmoi.hostname "equil-remote" -}}
+    {{- $profile = "remote" -}}
+  {{- else -}}
+    {{- $profile = promptStringOnce . "profile" "Profile (desktop or remote)" "desktop" -}}
+  {{- end -}}
+{{- end -}}
 {{- if not (or (eq $profile "desktop") (eq $profile "remote")) -}}
 {{- fail "profile must be desktop or remote" -}}
 {{- end -}}
+
+{{- /* Hostname-keyed device table. danctnix = PineTab2 (postmarketOS boot
+     hostname); equil-remote = headless server; anything else = omarchy
+     desktop. The fallback default mirrors the old desktop branch. */ -}}
+{{- $devices := dict
+  "danctnix" (dict "model" "pinetab2" "type" "tablet" "monitor" "DSI-1" "scale" "1.25" "transform" "3" "portrait" true "touch" true "omarchy" false)
+  "equil-remote" (dict "model" "equil-remote" "type" "headless" "monitor" "" "scale" "1" "transform" "0" "portrait" false "touch" false "omarchy" false)
+-}}
+{{- $hostname := .chezmoi.hostname -}}
+{{- $d := index $devices $hostname | default (dict "model" $hostname "type" "desktop" "monitor" "" "scale" "1" "transform" "0" "portrait" false "touch" false "omarchy" true) -}}
+
 [data]
 profile = {{ $profile | quote }}
+omarchy = {{ $d.omarchy }}
+is_tablet = {{ $d.portrait }}
 {{ if eq $profile "remote" }}
 git_user_name = {{ promptStringOnce . "git_user_name" "Git user name" "Chase" | quote }}
 git_user_email = {{ promptStringOnce . "git_user_email" "Git user email" "188378569+EquilOne@users.noreply.github.com" | quote }}
 {{ end }}
+
+[data.device]
+model = {{ $d.model | quote }}
+type = {{ $d.type | quote }}
+monitor = {{ $d.monitor | quote }}
+scale = {{ $d.scale | quote }}
+transform = {{ $d.transform | quote }}
+portrait = {{ $d.portrait }}
+touch = {{ $d.touch }}
+omarchy = {{ $d.omarchy }}
