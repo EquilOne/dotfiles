@@ -17,6 +17,14 @@
 # Must run AFTER 05_zsh_vi_mode.sh (if installed, it re-binds keys on init).
 # The plugin re-wraps widgets on every precmd, so late changes to the widget
 # lists still take effect.
+#
+# IMPORTANT: zsh-vi-mode defers its real init to the FIRST PROMPT (it appends
+# zvm_init to precmd_functions when ZVM_INIT_MODE != sourcing), where it runs
+# `bindkey -v` and its own `zvm_bindkey viins ...` defaults — wiping any
+# bindkey set at source time (at source time they appear to work; the first
+# prompt silently replaces them). All keybinding calls in this file therefore
+# run from `zvm_after_init` (executed by zvm_init AFTER its own binds) when
+# zsh-vi-mode is active, and immediately otherwise.
 # =============================================================================
 
 if [[ "$CURRENT_SHELL" != "zsh" ]]; then
@@ -75,41 +83,121 @@ typeset -ga ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(
     autosuggest-accept-next-word
 )
 
-# Tab: accept next word of the suggestion; with no suggestion showing, fall
-# back to normal Tab completion (ble.sh parity: _blesh_accept_word_or_complete).
-# The widget name must NOT start with '_' or '.' — zsh-autosuggestions
-# skips such widgets when re-binding on every precmd (its ignore list has
-# '_\*' and '.\*' patterns), so the partial-accept wrapper would never be
-# applied and Tab's forward-word would have nowhere to move (the suggestion
-# lives in POSTDISPLAY, not BUFFER, so it could not advance the cursor).
+# Tab: accept the next section of the suggestion — fish-style: leading
+# whitespace + one word, or one path component INCLUDING its trailing '/'
+# per press ("ools ~/.config/" from "ools ~/.config/shell/25_completions").
+# NOTE: zsh-autosuggestions' partial-accept wrapper folds the ghost into
+# BUFFER before this widget runs (POSTDISPLAY is still set, and original
+# buffer end = $#BUFFER - $#POSTDISPLAY), so we slice the folded BUFFER and
+# advance CURSOR directly instead of using forward-word, whose boundaries
+# stop at hyphens/dots (one tiny fragment per press). The wrapper clips
+# BUFFER at the new cursor position and re-fetches the ghost.
+# CRITICAL: the remainder after an accepted section usually STARTS WITH A
+# SPACE — if the slice were cut at the first whitespace, that case would
+# collapse to empty and wrongly fall back to completion (menu), which caused
+# the "first Tab does nothing / Tab cycles the menu" bug. Leading whitespace
+# is therefore part of the next section and accepted with it.
+# With no suggestion showing, fall back to normal Tab completion.
 function _autosuggest_accept_next_word() {
-    if [[ -n "$POSTDISPLAY" ]]; then
-        zle .forward-word
-    else
-        zle expand-or-complete
+    if [[ -n "$POSTDISPLAY" ]] && (( CURSOR >= $#BUFFER - $#POSTDISPLAY )); then
+        local rest=${BUFFER:$CURSOR}
+        # Leading whitespace belongs to the next section (fish accepts " word").
+        local lead=${rest%%[![:space:]]*}
+        local word=${rest:$#lead}
+        word=${word%%[[:space:]]*}
+        local -i n=$(( $#lead + $#word ))
+        if (( n > 0 )); then
+            local tail=${word:1}
+            if [[ $tail == */* ]]; then
+                # One path section per press: stop after the first '/' that
+                # has content before it ("tmp" from "tmp/sddm-auth-…" →
+                # accept "tmp/").
+                n=$(( $#lead + ${#tail%%/*} + 2 ))
+            fi
+            (( CURSOR += n ))
+            return
+        fi
     fi
+    zle expand-or-complete
 }
 zle -N autosuggest-accept-next-word _autosuggest_accept_next_word
+
+# complist must be loaded before the menuselect binds below (and before the
+# fallback direct call of _zsh_as_apply_keybindings).
+zmodload zsh/complist 2>/dev/null
 
 # ---------------------------------------------------------------------------
 # Source the plugin
 # ---------------------------------------------------------------------------
 source "$_zsh_as_plugin"
 
-# C-y: accept whole suggestion (ble.sh: ble-bind -f C-y 'auto_complete/insert').
-# Bound in both vi keymaps (main keymap is viins via `bindkey -v` in .zshrc).
-bindkey -M viins '^Y' autosuggest-accept
-bindkey -M vicmd '^Y' autosuggest-accept
+# ---------------------------------------------------------------------------
+# Keybindings — applied via apply_keybindings (see IMPORTANT note above)
+# ---------------------------------------------------------------------------
+function _zsh_as_apply_keybindings() {
+    # C-y: accept whole suggestion (ble.sh: ble-bind -f C-y 'auto_complete/insert').
+    # Bound in both vi keymaps (main keymap is viins via `bindkey -v` in .zshrc).
+    bindkey -M viins '^Y' autosuggest-accept
+    bindkey -M vicmd '^Y' autosuggest-accept
 
-# Tab in insert mode: partial accept / completion fallback.
-bindkey -M viins '^I' autosuggest-accept-next-word
+    # Tab in insert mode: partial accept / completion fallback.
+    bindkey -M viins '^I' autosuggest-accept-next-word
 
-# Shift+Tab (backtab): force the normal completion menu (listed options) even
-# while a ghost suggestion is displayed. expand-or-complete IS wrapped by the
-# plugin now (added to ZSH_AUTOSUGGEST_CLEAR_WIDGETS below — the wrapper only
-# clears the ghost, never intercepts the menu). Not bound in vicmd (completion
-# menu from normal mode is unexpected).
-bindkey -M viins '\e[Z' expand-or-complete
+    # Shift+Tab (backtab): force the normal completion menu (listed options) even
+    # while a ghost suggestion is displayed. expand-or-complete IS wrapped by the
+    # plugin now (added to ZSH_AUTOSUGGEST_CLEAR_WIDGETS below — the wrapper only
+    # clears the ghost, never intercepts the menu). Not bound in vicmd (completion
+    # menu from normal mode is unexpected).
+    bindkey -M viins '\e[Z' expand-or-complete
+
+    # viins: C-e opens the menu (toggle-on; the C-e close side lives in menuselect).
+    # The user navigates with vi `$`, so vicmd ^E (end-of-line) stays untouched.
+    # menu-expand-or-complete jumps STRAIGHT into menu selection — plain
+    # expand-or-complete cycles through zsh's stages (common prefix → "do you
+    # wish to see all N possibilities?" list prompt → menu), which made C-e
+    # toggle through junk states instead of menu on/off.
+    bindkey -M viins '^E' menu-expand-or-complete
+    bindkey -M viins '^N' menu-expand-or-complete
+    bindkey -M viins '^P' reverse-menu-complete
+
+    # menuselect: all menu-open behavior. Defaults already give arrows (up/down =
+    # up/down-line-or-history item nav); C-n/C-p match them per the keymap table.
+    # Enter/C-y/Tab accept the highlighted item and return to the line without
+    # executing (accept-line semantics inside menu selection). send-break aborts
+    # the menu and restores the line (toggle-off). backward-char/forward-char keep
+    # ^B/^F from inserting junk; in zsh they only move the cursor/selection.
+    bindkey -M menuselect '^E' send-break
+    bindkey -M menuselect '^N' down-line-or-history
+    bindkey -M menuselect '^P' up-line-or-history
+    bindkey -M menuselect '^Y' accept-line
+    bindkey -M menuselect '^I' accept-line
+    bindkey -M menuselect '\e[Z' up-line-or-history
+    bindkey -M menuselect '^B' backward-char
+    bindkey -M menuselect '^F' forward-char
+}
+
+if (( ${+functions[zvm_after_init]} )); then
+    # zsh-vi-mode active: hook the binds so they survive zvm_init's own
+    # `bindkey -v` + default rebinds on the first prompt (see IMPORTANT note).
+    # Chain: snapshot the existing zvm_after_init (05's fzf/zoxide/carapace
+    # re-binds) and run it before ours, so our binds come last. The snapshot
+    # guard also keeps a re-source of this file from chaining itself.
+    if (( ! ${+functions[_zvm_after_init_prev]} )); then
+        functions[_zvm_after_init_prev]=$functions[zvm_after_init]
+    fi
+    function zvm_after_init() {
+        _zvm_after_init_prev
+        _zsh_as_apply_keybindings
+        [[ -n "$SHELL_DEBUG" ]] && echo "[DEBUG] 07: keybindings applied via zvm_after_init"
+    }
+else
+    _zsh_as_apply_keybindings
+fi
+
+# The ghost must clear when the menu opens: the menu widgets are not in the
+# plugin's default clear list, and it re-wraps widgets on every precmd, so
+# appending here (after source) takes effect on the next precmd.
+ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(expand-or-complete reverse-menu-complete menu-expand-or-complete)
 
 # ---------------------------------------------------------------------------
 # Completion menu (fish/blink-style) — C-e toggle, C-n/C-p item navigation
@@ -120,8 +208,9 @@ bindkey -M viins '\e[Z' expand-or-complete
 # give the fish/blink behavior emergently:
 #
 #   menu closed (viins)                menu open (menuselect)
-#   C-e / C-n  expand-or-complete      ^E  send-break        (toggle off)
-#              (opens menu, 1st item)  ^N  down-line-or-history (next item)
+#   C-e / C-n  menu-expand-or-         ^E  send-break        (toggle off)
+#              complete (opens menu    ^N  down-line-or-history (next item)
+#              directly, 1st item)
 #   C-p        reverse-menu-complete   ^P  up-line-or-history   (prev item)
 #              (opens menu, last item) ^M  accept-line          (accept item,
 #   Enter      accept-line (execute)         returns to line, NO execute)
@@ -133,34 +222,8 @@ bindkey -M viins '\e[Z' expand-or-complete
 # Limitations vs ble.sh: no auto-popup (menu opens only via C-e/C-n/C-p/S-TAB),
 # no description pane, no page scrolling, and huge candidate lists first show
 # zsh's "do you wish to see all N possibilities?" prompt.
-zmodload zsh/complist 2>/dev/null
-
-# The ghost must clear when the menu opens: expand-or-complete /
-# reverse-menu-complete are not in the plugin's default clear list (plugin
-# source line 50), and it re-wraps widgets on every precmd, so appending here
-# (after source) takes effect on the next precmd.
-ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(expand-or-complete reverse-menu-complete)
-
-# viins: C-e opens the menu (toggle-on; the C-e close side lives in menuselect).
-# The user navigates with vi `$`, so vicmd ^E (end-of-line) stays untouched.
-bindkey -M viins '^E' expand-or-complete
-bindkey -M viins '^N' expand-or-complete
-bindkey -M viins '^P' reverse-menu-complete
-
-# menuselect: all menu-open behavior. Defaults already give arrows (up/down =
-# up/down-line-or-history item nav); C-n/C-p match them per the keymap table.
-# Enter/C-y/Tab accept the highlighted item and return to the line without
-# executing (accept-line semantics inside menu selection). send-break aborts
-# the menu and restores the line (toggle-off). backward-char/forward-char keep
-# ^B/^F from inserting junk; in zsh they only move the cursor/selection.
-bindkey -M menuselect '^E' send-break
-bindkey -M menuselect '^N' down-line-or-history
-bindkey -M menuselect '^P' up-line-or-history
-bindkey -M menuselect '^Y' accept-line
-bindkey -M menuselect '^I' accept-line
-bindkey -M menuselect '\e[Z' up-line-or-history
-bindkey -M menuselect '^B' backward-char
-bindkey -M menuselect '^F' forward-char
+# (All bindkey calls live in _zsh_as_apply_keybindings above, applied via
+# zvm_after_init when zsh-vi-mode is active — see the IMPORTANT note at top.)
 
 unset _zsh_as_plugin
 
