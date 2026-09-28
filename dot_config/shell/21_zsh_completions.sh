@@ -8,6 +8,9 @@ if [[ "$CURRENT_SHELL" == "zsh" ]]; then
   zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'm:{a-zA-Z}={A-Za-z} r:|[._-]=* r:|=*' 'm:{a-zA-Z}={A-Za-z} r:|[._-]=** r:|=**' 'm:{a-zA-Z}={A-Za-z} l:|=* r:|=*'
   zstyle ':completion:*' menu select
   zstyle ':completion:*' group-name ''
+  # Raise the listing cap so zsh's "do you wish to see all N possibilities?"
+  # gate (default 100 rows) doesn't interrupt the menu toggle (C-e in zsh).
+  zstyle ':completion:*' list-max 500
   zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
   zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
   autoload -Uz compinit

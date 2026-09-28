@@ -76,6 +76,29 @@ Zsh uses [zsh-vi-mode](https://github.com/jeffreytse/zsh-vi-mode); bash uses [bl
 
 ble.sh extras (bash): syntax highlighting, mode-aware cursor (beam=insert, block=normal), shared history. Config in `30_tools/06_blesh.sh`; zsh config in `30_tools/05_zsh_vi_mode.sh`.
 
+## Suggestions & Completion Menu (zsh: zsh-autosuggestions + zsh/complist)
+
+Ghost-text suggestions + fish/blink-style completion menu. Config in `30_tools/07_zsh_autosuggestions.sh`; binds apply via `zvm_after_init` (zsh-vi-mode wipes source-time binds on first prompt).
+
+| Key | Context | Action |
+|-----|---------|--------|
+| `Tab` (Ctrl+I) | insert, ghost showing | Accept next word or path section (fish-style: `tmp/` then `sddm-auth-…` per press) |
+| `Ctrl+Y` | insert/normal | Accept whole suggestion |
+| `→` / `End` | insert | Accept whole suggestion |
+| `Ctrl+E` / `Ctrl+N` | insert | Open completion menu (1st item) |
+| `Ctrl+P` | insert | Open completion menu (last item) |
+| `Shift+Tab` | insert | Force completion menu (bypasses ghost) |
+
+While the menu is open (menuselect keymap):
+
+| Key | Action |
+|-----|--------|
+| `Ctrl+N` / `Ctrl+P` | Next / previous item |
+| `Ctrl+E` | Close menu (toggle off) |
+| `Enter` / `Ctrl+Y` / `Tab` | Accept highlighted item (no execute) |
+| `Shift+Tab` | Previous item |
+| `Ctrl+B` / `Ctrl+F` | Move cursor left / right |
+
 ## Testing
 
 | Command | Description |

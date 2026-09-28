@@ -1,51 +1,44 @@
 # AGENTS.md — Shell Configuration System
 
-## What This Is
+Modular Bash/Zsh dotfiles at `~/.config/shell` (Omarchy/Hyprland), sourced by `loader.sh` in deterministic numeric order. Architecture: `README.md`; keybindings: `KEYBINDINGS.md`.
 
-Modular Bash/Zsh dotfiles at `~/.config/shell` with deterministic, numbered loading. See `README.md` for architecture details and `KEYBINDINGS.md` for keybindings.
+## Loading model (loader.sh)
 
-## Architecture
+- Entry: `source ~/.config/shell/loader.sh` from `.bashrc` / `$ZDOTDIR/.zshrc`.
+- `$CURRENT_SHELL` is set (zsh/bash/unknown) in the loader from `$ZSH_VERSION`/`$BASH_VERSION`; gate all shell-specific syntax on it, never on `$SHELL`.
+- **Interactive guard**: the loader returns immediately for non-interactive shells — bash via `[[ $- != *i* ]]`, zsh via `[[ ! -o interactive ]]`. Sourcing it inside a script or test does nothing.
+- Files and whole directories matching `[0-8][0-9]*` (00–89) source in numeric order. **Files starting with `9x` never load** — the glob stops at 89.
+- `env.local` is sourced last, after everything numbered.
+- The loader supports a `${CURRENT_SHELL}_specific/` dir (`zsh_specific/`, `bash_specific/`) but none exist — files use `$CURRENT_SHELL` guards instead.
 
-- **Entry point**: `loader.sh`
-- **Load order**: `00-89` core, `90-99` reserved for local/secrets (not tracked)
-- **Numbering**:
-  - `00-09`: Core env
-  - `10-19`: Aliases, prompts
-  - `15`: Function libraries (sourced as a directory)
-  - `20-29`: PATH, completions
-  - `25`: Completion libraries (sourced as a directory)
-  - `30-39`: Tool initializations
-- **Shell detection**: `$CURRENT_SHELL` is set from `$ZSH_VERSION`/`$BASH_VERSION` in `loader.sh`
-- **Interactive guard**: `loader.sh` exits immediately if `[[ $- != *i* ]]`
+## Numbering
 
-## Critical Conventions
+- `00-09` core env: `00_env`, `00_rose_pine_colors`, `01_theme`, `05_brew`, `09_omarchy`
+- `10-19` aliases + `15_functions/` (sourced as a directory)
+- `20-29` PATH/completions: `20_path`, `21_zsh_completions`, `22_alias_completions`, `25_completions/`
+- `30-39` tool inits in `30_tools/`
 
-- **Add shell-specific guards**: Use `if [[ "$CURRENT_SHELL" == "zsh" ]]` for zsh-only syntax (e.g. `zstyle`, `compinit`). Some files like `21_zsh_completions.sh` are entirely guarded.
-- **Graceful degradation**: Aliases and init scripts must check `command -v <tool>` before defining tool-specific aliases (e.g. `eza`, `bat`, `zoxide`, `fzf`). Do not assume tools are installed.
-- **PATH dedup**: `20_path.sh` uses `typeset -U` for zsh and a manual `path_dedup` for bash. Use `path_prepend` helper for new entries.
-- **No code in `90-99`**: Reserved for local overrides; keep it out of version control.
+`README.md`'s file tree is stale — several newer files aren't listed there. Trust the actual files.
 
-## Developer Commands
+## Conventions (follow when editing)
 
-- **Update dependencies**: `pnpm install` (for npm-based tooling)
-- **Run full test suite**: `~/.config/shell/test_config.sh`
-- **Run single test module** (bash only): `source ~/.config/shell/tests/helpers.sh && load_config && source ~/.config/shell/tests/test_<module>.sh && summary`
-- **Debug loading**: `export SHELL_DEBUG=1` then `source ~/.config/shell/loader.sh`
-- **Test in a fresh shell**: `bash --login -c "type <command>"` or `zsh --login -c "type <command>"`
+- **Shell guards first**: files with zsh-only syntax wrap everything in `if [[ "$CURRENT_SHELL" == "zsh" ]]` (e.g. `21_zsh_completions`, `22_alias_completions`) or `return` early for the wrong shell (`30_tools/05_zsh_vi_mode.sh`).
+- **Graceful degradation**: `command -v <tool>` before defining tool aliases or eval-ing inits (see `10_aliases`, `30_tools/04_zoxide_init`, `22_alias_completions`). Never assume a tool is installed.
+- **PATH edits stay in `20_path.sh`**: the `path_prepend`/`path_dedup` helpers are `unset` at the end of that file and unavailable in later files. Add PATH entries only inside `20_path.sh`.
+- **Secrets / local state → `env.local`** (untracked, loaded last). Never put secrets in numbered files.
+- Debug a load: `export SHELL_DEBUG=1 && source ~/.config/shell/loader.sh` (the loader unsets `SHELL_DEBUG` when done).
 
-## Testing Framework
+## Testing (bash-only harness)
 
-Custom bash assertions in `tests/helpers.sh`:
-- `assert_set <VAR>` — env var non-empty
-- `assert_command <cmd>` — function/alias/command exists
-- `assert_file <path>` — file exists
-- `assert_path_contains <str>` — PATH contains exact entry
-- `load_config` — manually sources all config files in correct numeric order, sets `CURRENT_SHELL=bash`, enables `expand_aliases`
-- `summary` — prints totals and exits non-zero on failure
-
-**Important**: `load_config` skips the interactive guard and mirrors the loader’s numeric order. Use it when editing tests to avoid re-implementing load logic.
+- Full suite: `~/.config/shell/test_config.sh`
+- Single module: `source ~/.config/shell/tests/helpers.sh && load_config && source ~/.config/shell/tests/test_<module>.sh && summary`
+- Fresh-shell check: `bash --login -c "type <cmd>"` and `zsh --login -c "type <cmd>"`
+- Assertions in `tests/helpers.sh`: `assert_set`, `assert_command`, `assert_file`, `assert_path_contains`; `summary` prints totals and exits non-zero on any failure.
+- `load_config` bypasses the interactive guard on purpose: sets `CURRENT_SHELL=bash`, enables `expand_aliases`, and sources a **hardcoded list**, not the loader glob. New config files are therefore NOT covered by tests until added to that list in `tests/helpers.sh` plus `assert_file` in `tests/test_env.sh` — the list already lags the repo (missing `01_theme`, `09_omarchy`, and several `15_functions`/`25_completions`/`30_tools` files).
+- Because tests force `CURRENT_SHELL=bash`, zsh-only branches never run at runtime; `test_zsh_completions.sh` checks the zsh file statically instead (grep/syntax).
 
 ## References
 
-- `README.md` — Full architecture, alias tables, tool inventory
-- `KEYBINDINGS.md` — Function keybindings and tool shortcuts
+- `README.md` — architecture, alias tables, tool inventory
+- `KEYBINDINGS.md` — keybindings
+- Parent `~/.config/AGENTS.md` — after editing any tracked config here, run `chezmoi re-add <file>`
