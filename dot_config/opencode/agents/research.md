@@ -1,7 +1,7 @@
 ---
 description: Orchestrate research by decomposing queries, delegating to search subagent, cross-verifying sources, and producing a cited report
 mode: subagent
-model: openrouter/openai/gpt-5.6-luna
+model: openrouter/openai/gpt-5.6-luna-pro:nitro
 permissions:
   - action: edit
     resource: "*"

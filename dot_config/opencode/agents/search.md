@@ -1,7 +1,7 @@
 ---
 description: Web search and retrieval subagent
 mode: subagent
-model: openrouter/openai/gpt-5.6-luna
+model: openrouter/openai/gpt-5.6-luna-pro:nitro
 permissions:
   - action: edit
     resource: "*"
