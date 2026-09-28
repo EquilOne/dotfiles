@@ -103,5 +103,8 @@
     "scrollbar": false,
     "thinking": "hide"
   },
+  "tabs": {
+    "mode": "on"
+  },
   "animations": true
 }
