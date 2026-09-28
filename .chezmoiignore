@@ -13,9 +13,11 @@ nvim/*
 !nvim/.gitignore
 
 # Environment files
+# (shell/env.local is intentionally NOT ignored: managed via env.local.tmpl
+# which renders the EXA_API_KEY from Proton Pass — see dot_config/shell/)
 **/*.env
-**/env.local
 **/env.*
+!.config/shell/env.local
 
 # Repository documentation (not deployed).
 docs/**
