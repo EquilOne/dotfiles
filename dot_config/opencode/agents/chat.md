@@ -1,7 +1,7 @@
 ---
 description: General chat for Q&A, research, and information requests
 mode: primary
-model: openrouter/z-ai/glm-5.3-flash#high
+model: openrouter/z-ai/glm-5.3-flash#medium
 permissions:
   - action: edit
     resource: "*"

@@ -39,7 +39,7 @@
     },
     "plan": {
       "mode": "subagent",
-      "model": "openrouter/openai/gpt-5.6-luna#high",
+      "model": "openrouter/openai/gpt-5.6-luna#xhigh",
       "permissions": [
         { "action": "edit", "resource": "*", "effect": "deny" },
         { "action": "shell", "resource": "*", "effect": "ask" },
@@ -67,14 +67,10 @@
       ]
     },
     "explore": {
-      "model": "openrouter/deepseek/deepseek-v4-flash-0731"
+      "model": "openrouter/z-ai/glm-5.3-flash#high"
     },
     "general": {
-      "model": "openrouter/deepseek/deepseek-v4-flash-0731"
-    },
-    "scout": {
-      "mode": "subagent",
-      "model": "openrouter/deepseek/deepseek-v4-flash-0731"
+      "model": "openrouter/z-ai/glm-5.3-flash#high"
     }
   },
   "providers": {
@@ -107,16 +103,6 @@
             { "id": "high", "settings": { "reasoningEffort": "high" } },
             { "id": "medium", "settings": { "reasoningEffort": "medium" } }
           ]
-        },
-        "deepseek/deepseek-v4-flash-0731": {
-          "settings": {
-            "reasoningEffort": "high",
-            "verbosity": "low",
-            "provider": {
-              "sort": "throughput",
-              "max_price": { "prompt": 0.14, "completion": 0.28 }
-            }
-          }
         },
         "openai/gpt-5.6-luna": {
           "settings": {
@@ -168,7 +154,8 @@
         },
         "inception/mercury-2.5": {
           "variants": [
-            { "id": "xhigh", "settings": { "reasoningEffort": "xhigh" } }
+            { "id": "xhigh", "settings": { "reasoningEffort": "xhigh" } },
+            { "id": "medium", "settings": { "reasoningEffort": "medium" } }
           ]
         }
       }

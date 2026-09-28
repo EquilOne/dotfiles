@@ -55,7 +55,7 @@ If disabled, tell the user and offer to enable it (with authorization).
 **Before Phase 1, ask yourself:**
 - What kind of audit is this? (full sweep across all agents vs single-agent deep dive)
 - What's the user's primary goal? (cost reduction, quality improvement, or both)
-- Which agents are most cost-sensitive? (search, explore, scout consume more tokens per call)
+- Which agents are most cost-sensitive? (search, explore consume more tokens per call)
 
 Then read these files:
 - `opencode.json` — extract `agent.*.model`, `small_model`, `provider.openrouter.models`
@@ -74,7 +74,7 @@ Classify each agent into one role:
 | coding | Writes, refactors, reviews code | coding_index, tool support | coder, build, review |
 | reasoning | Planning, architecture, design | intelligence_index, reasoning_effort | plan, conductor |
 | agentic | Multi-step, tool use, orchestration | agentic_index, tool calling | fixer, general |
-| lightweight | Simple lookups, search, exploration | low price, low latency | search, explore, scout |
+| lightweight | Simple lookups, search, exploration | low price, low latency | search, explore |
 | general | Chat, docs, explanation | balanced across all | docs, chat, socratic-mentoring |
 
 ### Phase 2: Query OpenRouter (ZDR-aware dual queries)

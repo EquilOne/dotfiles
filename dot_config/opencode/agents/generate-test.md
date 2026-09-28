@@ -1,7 +1,7 @@
 ---
 description: Subagent that generates unit tests for a given file or function
 mode: subagent
-model: openrouter/z-ai/glm-5.3-flash#medium
+model: openrouter/z-ai/glm-5.3-flash#high
 permissions:
   - action: edit
     resource: "*"

@@ -97,4 +97,4 @@ Workflow:
 
    Keep the report under 100 lines unless the number of findings warrants more.
 
-6. Use the high reasoning budget (configured `reasoning.effort: high`) for security vulnerability analysis and edge case detection — these benefit most from deep reasoning.
+6. Use the xhigh reasoning budget (configured `reasoning.effort: xhigh`) for security vulnerability analysis and edge case detection — these benefit most from deep reasoning.
