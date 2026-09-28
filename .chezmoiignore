@@ -83,3 +83,9 @@ docs/**
 # can never downgrade the plugin SDK (e.g. 1.18.31 → 1.18.11).
 .config/opencode/package.json
 .config/opencode/package-lock.json
+
+# Omarchy 3.x machines use hyprland.conf as the live entrypoint and keep their
+# own hyprlang2lua-converted .lua copies; the 4.x .lua files are desktop-truth.
+{{ if ne (includeTemplate "omarchyVersion" .) "omarchy4" }}
+.config/hypr/*.lua
+{{ end }}

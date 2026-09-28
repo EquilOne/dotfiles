@@ -1,5 +1,7 @@
-{{- if ne (index . "profile") "remote" -}}
+{{- if eq (index . "profile") "remote" -}}
+theme-moon.lua
+{{- else if eq (includeTemplate "omarchyVersion" .) "omarchy4" -}}
 ../../../../.local/state/omarchy/current/theme/neovim.lua
 {{- else -}}
-theme-moon.lua
+../../../../.config/omarchy/current/theme/neovim.lua
 {{- end -}}

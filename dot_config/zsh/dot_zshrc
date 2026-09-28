@@ -38,6 +38,11 @@ for file in $HOME/.config/zsh/**/*.zsh(N); do
 done
 unset file
 
+# Ghostty shell integration (auto-injection fails since shell isn't detected)
+if [[ -n "$GHOSTTY_RESOURCES_DIR" ]]; then
+    builtin source "$GHOSTTY_RESOURCES_DIR/shell-integration/zsh/ghostty-integration"
+fi
+
 # Starship width management (from your existing setup)
 if type set_starship_width >/dev/null 2>&1; then
     set_starship_width
