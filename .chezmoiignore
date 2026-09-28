@@ -89,3 +89,15 @@ docs/**
 {{ if ne (includeTemplate "omarchyVersion" .) "omarchy4" }}
 .config/hypr/*.lua
 {{ end }}
+
+# Omarchy 4 replaced waybar with omarchy-shell (quickshell) and dropped mako:
+# nothing runs either, and ~/.local/state/omarchy/current/theme contains no
+# waybar.css or mako.ini (the theme paths these files import point at the
+# Omarchy 3.x ~/.config/omarchy/current/theme/ layout, dead on 4.x). Keep
+# them managed only on Omarchy 3.x machines.
+{{ if eq (includeTemplate "omarchyVersion" .) "omarchy4" }}
+.config/waybar
+.config/waybar/**
+.config/mako
+.config/mako/**
+{{ end }}
