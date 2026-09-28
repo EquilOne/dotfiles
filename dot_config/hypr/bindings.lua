@@ -39,7 +39,7 @@ o.bind("SUPER + ALT + F", "Full screen", hl.dsp.window.fullscreen({ mode = "full
 -- Close / minimize
 -------------------------------------------------------------------------------
 o.bind("SUPER + Q", "Close window", hl.dsp.window.close())
-o.bind("SUPER + SHIFT + Q", "Close all in workspace", "hypr-close-workspace")
+o.bind("SUPER + SHIFT + Q", "Close all open windows", "omarchy-hyprland-window-close-all")
 -- Hide the active special workspace and re-activate the regular workspace
 -- underneath (on this build the compositor doesn't reliably refocus it).
 o.bind("SUPER + M", "Minimize special workspace", function()
@@ -91,9 +91,11 @@ o.bind("SUPER + SHIFT + SLASH", "Passwords", 'uwsm-app -- 1password')
 -- Special workspace entry binds
 -------------------------------------------------------------------------------
 hl.unbind("SUPER + SHIFT + RETURN") -- was: Browser; repurposed below
--- Launch the herdr IDE session (full-screen TUI) in Ghostty.
-o.bind("SUPER + SHIFT + RETURN", "IDE (herdr)", 'ghostty -e /home/equildev/.config/herdr/ide.sh')
--- Pick an existing herdr IDE workspace (walker menu) and attach to it.
+-- Launch the herdr IDE session in Ghostty — takes over the scratchpad key.
+-- Each press opens a NEW workspace named after the focused terminal's CWD
+-- (falls back to ~/workspace when no terminal is focused). SUPER SHIFT+I attaches to existing ones.
+o.bind("SUPER + SHIFT + RETURN", "IDE (herdr)", 'ghostty -e /home/equildev/.config/herdr/ide.sh "$(omarchy-cmd-terminal-cwd)"')
+-- Attach to an existing herdr IDE workspace (walker menu picker).
 o.bind("SUPER + SHIFT + I", "IDE picker (herdr)", '/home/equildev/.config/herdr/ide-picker.sh')
 hl.unbind("SUPER + CTRL + RETURN") -- was: Herdr default
 -- Temporary terminal on a special workspace.

@@ -1,5 +1,8 @@
 -- Custom window rules.
 
+-- OpenRGB: map into hidden special workspace (Wayland has no X11 tray for its icon)
+o.window("(?i)^openrgb$", { workspace = "special:openrgb silent" })
+
 -- AI chat special workspaces
 o.window({ tag = "quickchat" }, { workspace = "special:aichat silent" })
 o.window({ tag = "quickchatgemini" }, { workspace = "special:gemini silent" })
