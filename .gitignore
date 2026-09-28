@@ -1,0 +1,49 @@
+# Chezmoi
+.chezmoiexternal.toml
+.chezmoidata.yaml
+.chezmoidata.json
+.chezmoidata.*
+.chezmomoignore
+.chezmoitemplates/
+.chezmoiroot
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editor + backups
+*.swp
+*.swo
+*~
+*.tmp
+*.bak
+.idea/
+.vscode/
+*.sublime-*
+
+# Node
+node_modules/
+dist/
+.cache/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# SQLite WAL/SHM
+*.db-shm
+*.db-wal
+
+# Temp files with epoch-like timestamp suffixes (dash + 7+ digits)
+*-[0-9][0-9][0-9][0-9][0-9][0-9][0-9]*
+
+# Shell
+.zcompdump*
+.zsh_history
