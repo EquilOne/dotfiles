@@ -230,6 +230,15 @@ and a change log. Only this machine's agents write here.
     origin/agents/interagent-collab); user decision: danctnix pinetab prompt
     at all widths (router non-omarchy >=80 now starship_foot.toml);
     cross-machine impact on equil-remote wide prompt flagged in commit body.
+  - 2026-09-29 — SSH open item closed: github_pinetab confirmed registered on
+    GitHub as an Authentication key (API-verified, key id 164864973; earlier
+    denials were Signing-only registration then client-side passphrase
+    encryption in non-interactive runs); IdentityAgent
+    ~/.ssh/proton-pass-agent.sock persisted in the github.com block of
+    ~/.ssh/config (unmanaged, machine-local) — headless git verified with
+    agent env stripped (ls-remote exit 0). Optional leftovers: register
+    agent's equil-pinetab key (SHA256:MkKA8XRV…) for device attribution;
+    remove stale on-disk ~/.ssh/id_ed25519.
 
 ## Notes for non-chezmoi machines
 
