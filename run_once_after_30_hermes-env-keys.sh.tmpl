@@ -3,8 +3,9 @@
 # ~/.hermes/.env (Hermes web search backends) and
 # ~/.config/shell/env.local (OpenCode Exa websearch).
 #
-# URIs are rendered by chezmoi; pass-cli resolves at apply time, so this
-# degrades gracefully on machines without pass-cli or without a login
+# URIs are rendered by chezmoi; pass-cli prints the key directly as a bare
+# line (captured on stdout), bounded by `timeout 15`, so this degrades
+# gracefully on machines without pass-cli or without a login
 # (keys are skipped; apply is not broken). Re-runs automatically whenever
 # this script's content changes (run_once semantics).
 
@@ -16,9 +17,7 @@ upsert() {
     file="$1"; name="$2"; uri="$3"
     [ -d "$(dirname "$file")" ] || return 0
     command -v pass-cli >/dev/null 2>&1 || return 0
-    command -v jq >/dev/null 2>&1 || return 0
-    value=$(pass-cli item view "$uri" 2>/dev/null \
-        | jq -r '.item.content.extra_fields[] | select(.name=="API Key") | .content.Hidden' 2>/dev/null) || return 0
+    value=$(timeout 15 pass-cli item view "$uri" 2>/dev/null) || return 0
     [ -n "$value" ] || return 0
     if grep -q "^${name}=" "$file" 2>/dev/null; then
         tmp=$(mktemp)
