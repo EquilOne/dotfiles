@@ -62,9 +62,32 @@ and a change log. Only this machine's agents write here.
 - Role: Arch / omarchy desktop (falls through the default device branch of
   `.chezmoi.toml.tmpl`). Note: `.chezmoiignore` gates on the `profile` var
   (desktop/remote) while the device table and this file's write rule key on
-  `.chezmoi.hostname` — check both. Agents on this machine: fill in role,
-  unmanaged state, quirks.
-- Change log: (empty)
+  `.chezmoi.hostname` — check both.
+- Profile: `desktop`, `omarchy=true`, device model = hostname, all cached in
+  `~/.config/chezmoi/chezmoi.toml` (no prompted values to preserve on this
+  machine). Omarchy 4.0.4; `includeTemplate "omarchyVersion"` resolves to
+  `omarchy4`.
+- Intentionally unmanaged: universal machine-local state per
+  `.chezmoiignore` (node_modules, opencode.db, dconf, chromium/BraveSoftware,
+  kitty, opencode runtime state); desktop gate ignores `.config/omarchy`,
+  `.config/btop`, `.config/jolt`, `.config/mdt`; omarchy4 gate ignores
+  `.config/waybar` and `.config/mako`; omarchy owns `.config/hypr/*.lua`
+  (live config) — classic `.conf` hypr stack is ignored here.
+- Quirks:
+  - omarchy4 ⇒ the 4.x `.config/hypr/*.lua` files are desktop-truth; do not
+    restore the vendored `.conf` copies.
+  - Skill sources live in `dot_agents/skills/` and deploy to
+    `~/.agents/skills/` (managed; `.agents` is NOT ignored).
+  - Targeted `chezmoi apply` needs ~-absolute target paths: relative form
+    (`chezmoi apply -- .agents/...`) fails with "not managed";
+    `chezmoi apply -- ~/.agents/...` works.
+- Change log:
+  - 2026-09-29 — Section filled in from live verification on branch
+    `agents/interagent-collab` (repo clean, up to date; `chezmoi diff` shows
+    only the pending `.agents/skills/chezmoi-interagent-collab/` skill
+    deployment, classified expected).
+  - 2026-09-29 — Applied pending skill deployment (targeted), verified
+    `chezmoi diff` empty and deployed SKILL.md identical to source.
 
 ### danctnix
 
@@ -83,3 +106,12 @@ its agent should treat this file as read-only reference.
 - (candidate) Migrate the hostname→device table from `.chezmoi.toml.tmpl`
   into `.chezmoidata/machines/<hostname>.yaml` + merge template, per
   chezmoi discussion #3773, so all machine data is readable as plain data.
+- (candidate) Collapse the omarchyVersion/device if-chains in
+  `.chezmoiignore` (mako/waybar/hypr duplicate-target gates, ~L249–275) into
+  per-machine claim lists derived from `.chezmoidata` — chezmoi rejects
+  duplicate targets and these nested gates are the repo's highest-risk edit
+  surface.
+- (candidate) Surface `omarchyVersion` as a plain `chezmoi data` field
+  (derive it in `.chezmoidata`/`.chezmoiscripts` instead of a template
+  helper) so review agents can read machine truth without executing
+  templates.

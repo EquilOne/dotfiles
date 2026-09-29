@@ -49,10 +49,12 @@ there should not be one — it is in `.chezmoiignore`).
    - The change would delete files present on disk → flag explicitly.
 5. **Report findings**, one line each:
    `[CONFLICT|CONCERN|INFO] <path> — <why> — <exact fix command>`.
-   Fix vocabulary: `chezmoi apply -- <file>` (targeted), `chezmoi merge
-   <file>` (three-way destination/source/target), `chezmoi re-add <file>`
-   (adopt local), ignore-rule edit in `.chezmoiignore`, or "ask other
-   machine's agent" for cross-machine cases.
+   Fix vocabulary: `chezmoi apply -- <file>` (targeted; target must be
+   ~-absolute — relative target paths fail with "not managed"),
+   `chezmoi merge <file>` (three-way destination/source/target),
+   `chezmoi re-add <file>` (adopt local), ignore-rule edit in
+   `.chezmoiignore`, or "ask other machine's agent" for cross-machine
+   cases.
 6. **Wait for user approval.** Then apply (prefer targeted applies over full
    `chezmoi apply`), verify with `chezmoi diff` (empty for applied targets),
    and record a dated one-line entry in your own machine section's Change
