@@ -63,7 +63,9 @@ there should not be one — it is in `.chezmoiignore`).
    Fix vocabulary: `chezmoi apply -- <file>` (targeted; run from $HOME with
    ~-absolute targets — ANY chezmoi command taking a target arg
    (apply/cat/source-path/diff) fails with "not managed" for relative args
-   from inside the source dir),
+   from inside the source dir; run_* script targets are addressed by their
+   prefix-stripped name, e.g. `chezmoi apply -- 14_opencode-cli-seed.sh` —
+   the `run_once_after_`-prefixed form is not managed),
    `chezmoi merge <file>` (three-way destination/source/target),
    `chezmoi re-add <file>` (adopt local), ignore-rule edit in
    `.chezmoiignore`, or "ask other machine's agent" for cross-machine
