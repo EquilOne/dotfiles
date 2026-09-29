@@ -164,9 +164,8 @@ opencode/*.log
 
 # Desktop-only theme links and Omarchy-dependent configuration.
 .config/btop/btop.conf
-.config/btop/themes/symlink_current.theme
-.config/eza/symlink_theme.yml
-.config/opencode/skills/symlink_omarchy
+.config/btop/themes/current.theme
+.config/opencode/skills/omarchy
 
 # Tmux remains in the source tree as a manual fallback, but is not installed remotely.
 .config/tmux

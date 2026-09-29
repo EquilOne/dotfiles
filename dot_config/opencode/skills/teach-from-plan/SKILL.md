@@ -196,4 +196,4 @@ For the common case (user has a project plan and wants to learn from it):
 
 Skip to Step 3 if the plan is already structured. Skip to Step 2 if the user pastes the plan inline.
 
-Base directory for this skill: /home/equilone/.config/opencode/skills/teach-from-plan
+Base directory for this skill: ~/.config/opencode/skills/teach-from-plan
