@@ -83,6 +83,14 @@ and a change log. Only this machine's agents write here.
     names → target names); eza rule dropped (relative symlink
     resolves everywhere); removed dangling btop theme symlink
     locally.
+  - 2026-09-29 — Full chezmoi apply after review; diff empty
+    post-apply; ob/GOPATH/herdr paths verified. pass-ssh-agent
+    units installed, NOT enabled (decision pending).
+  - 2026-09-29 — Same apply: first run aborted on a
+    destination-changed conflict for .config/opencode/agents
+    (headless, no TTY for the prompt); re-ran with --force —
+    that target's delta was already in the reviewed pre-apply
+    diff (30 lines). No source changes; targets only.
 
 ### Equilibria
 
