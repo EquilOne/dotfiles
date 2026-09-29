@@ -71,7 +71,8 @@ display:
   show_reasoning: false
   streaming: true
   final_response_markdown: render
-  skin: {{ if and (eq (index . "profile") "desktop") .omarchy }}omarchy{{ else }}rosepinemoon{{ end }}
+  # omarchy skin is only published by omarchy 4's omarchy-theme-set-hermes
+  skin: {{ if and (eq (index . "profile") "desktop") (eq (includeTemplate "omarchyVersion" .) "omarchy4") }}omarchy{{ else }}rosepinemoon{{ end }}
   interim_assistant_messages: true
   tool_progress: all
   cleanup_progress: false
