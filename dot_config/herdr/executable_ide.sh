@@ -45,8 +45,6 @@ if [[ "${1:-}" == "--attach" || "${1:-}" == "-a" ]]; then
   MODE=attach
   LABEL=$2
 else
-  # Dir mode always creates a fresh workspace (named from the CWD) so each
-  # keybind press opens a new IDE; existing ones are reachable via --attach.
   DIR=$(project_dir "$@")
   DIR=$(realpath -m "$DIR" 2>/dev/null || realpath "$DIR")
   LABEL=$(basename "$DIR")
@@ -74,15 +72,22 @@ find_workspace() {
     '[.result.workspaces[]? | select(.label == $label)][0].workspace_id // empty'
 }
 
+attach_workspace() {
+  herdr --session "$SESSION" workspace focus "$1" >/dev/null 2>&1 || true
+  exec herdr --session "$SESSION"
+}
+
 ensure_server
 
-# Attach mode reuses an existing workspace; dir mode always creates a new one.
+# Attach if a workspace with this label already exists (attach mode errors
+# when missing; dir mode falls through to create). Labels are dir basenames,
+# so two dirs with the same basename intentionally share one workspace.
+ws_id=$(find_workspace)
+if [[ -n "$ws_id" && "$ws_id" != "null" ]]; then
+  attach_workspace "$ws_id"
+fi
+
 if [[ "$MODE" == "attach" ]]; then
-  ws_id=$(find_workspace)
-  if [[ -n "$ws_id" && "$ws_id" != "null" ]]; then
-    herdr --session "$SESSION" workspace focus "$ws_id" >/dev/null 2>&1 || true
-    exec herdr --session "$SESSION"
-  fi
   echo "ide: no workspace labelled '$LABEL' in session '$SESSION'" >&2
   exit 1
 fi

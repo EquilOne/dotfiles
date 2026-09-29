@@ -28,6 +28,10 @@ name = "rose-pine"
 
 auto_switch = false
 
+# Brighter borders and highlights (rose-pine moon iris)
+[theme.custom]
+accent = "#c4a7e7"
+
 [terminal]
 # Executable used for new interactive panes.
 # Empty means $SHELL, then /bin/sh.
@@ -64,6 +68,7 @@ version_check = true
 # Most reliable direct bindings are ctrl+letter, function keys, and explicit modified chords.
 # alt+..., cmd/super, and punctuation-with-modifiers may depend on your terminal/tmux setup.
 prefix = "ctrl+s"
+reload_config = "prefix+shift+r"
 
 # Prefix-mode actions
 # help = "prefix+?"
@@ -179,6 +184,30 @@ type = "plugin_action"
 command = "herdr-splits.resize-right"
 description = "Resize pane right (nvim/herdr)"
 
+[[keys.command]]
+key = "prefix+shift+e"
+type = "shell"
+command = "/home/equilone/.config/herdr/ide-relaunch.sh"
+description = "Relaunch IDE apps (nvim + opencode) in focused workspace"
+
+[[keys.command]]
+key = "prefix+shift+m"
+type = "shell"
+command = "/home/equilone/.config/herdr/ide-pane-move.sh"
+description = "Move focused pane to a new tab (same workspace)"
+
+[[keys.command]]
+key = "prefix+shift+comma"
+type = "shell"
+command = "/home/equilone/.config/herdr/ide-pane-move-prev.sh"
+description = "Move focused pane to the previous tab (split into it)"
+
+[[keys.command]]
+key = "prefix+shift+period"
+type = "shell"
+command = "/home/equilone/.config/herdr/ide-pane-move-next.sh"
+description = "Move focused pane to the next tab (split into it)"
+
 # Legacy indexed shortcut config is still parsed for compatibility.
 # Prefer switch_tab, switch_workspace, and focus_agent for new configs.
 # [keys.indexed]
@@ -248,7 +277,7 @@ prompt_new_workspace_name = true
 # Draw borders around split panes.
 
 # Keep split panes visually separated instead of sharing divider borders.
-pane_gaps = false
+pane_gaps = true
 
 # Show detected/reported agent labels in split pane borders when no manual pane name is set.
 # show_agent_labels_on_pane_borders = false
