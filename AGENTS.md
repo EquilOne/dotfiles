@@ -267,6 +267,16 @@ and a change log. Only this machine's agents write here.
     agent's equil-pinetab key (SHA256:MkKA8XRV…) for device attribution;
     remove stale on-disk ~/.ssh/id_ed25519.
 
+### Notes for other systems
+
+- (2026-09-29, from equil-remote) **Equilibria:** add
+  `export GOPATH="$HOME/.local/opt/go-bin-v1.25.3"` to
+  `~/.config/shell/env.local` before next apply — commit 5d59abb
+  reverted the shared GOPATH to `$HOME/go`; your `~/go` no longer
+  exists, so without the override go tooling falls back to a
+  nonexistent path. See also the machines-table architecture
+  candidate.
+
 ## Notes for non-chezmoi machines
 
 Moshi (Android) does not run chezmoi. Do not create a section for it here;
