@@ -180,34 +180,6 @@ zle -N autosuggest-menu-accept _zsh_as_menu_accept
 source "$_zsh_as_plugin"
 
 # ---------------------------------------------------------------------------
-# Stale-ghost guard: hardened _zsh_autosuggest_suggest
-# ---------------------------------------------------------------------------
-# Override of the plugin's _zsh_autosuggest_suggest, which does
-# POSTDISPLAY="${suggestion#$BUFFER}" — but in zsh ${var#pattern} returns the
-# WHOLE string when the pattern doesn't match the string's beginning, so an
-# async response arriving after the buffer changed (typing ahead, Tab fold;
-# atuin's subprocess-per-keystroke strategy widens this window) appends the
-# FULL stale command — which starts with the same alias, rendering a doubled
-# line ("gs    gs agents/…"). The plugin's fetch_suggestion guards against the
-# REQUEST buffer inside the forked child, but nothing re-checks at response
-# time. Here: only set POSTDISPLAY when the suggestion still starts with the
-# current BUFFER; otherwise clear it. Safe because every non-race flow yields
-# a suggestion aligned with BUFFER (fetch_suggestion enforces it against the
-# request buffer), so the mismatch branch fires only on stale/misaligned
-# arrivals — those show no ghost, and the next keystroke's fetch refreshes it.
-_zsh_autosuggest_suggest() {
-	emulate -L zsh
-
-	local suggestion="$1"
-
-	if [[ -n "$suggestion" ]] && (( $#BUFFER )) && [[ "$suggestion" == "$BUFFER"* ]]; then
-		POSTDISPLAY="${suggestion#$BUFFER}"
-	else
-		POSTDISPLAY=
-	fi
-}
-
-# ---------------------------------------------------------------------------
 # Keybindings — applied via apply_keybindings (see IMPORTANT note above)
 # ---------------------------------------------------------------------------
 function _zsh_as_apply_keybindings() {
