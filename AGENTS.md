@@ -91,10 +91,46 @@ and a change log. Only this machine's agents write here.
 
 ### danctnix
 
-- Role: PineTab2, postmarketOS (hostname `danctnix`), tablet, portrait,
-  touch. Pinetab-only configs (foot, fuzzel, GTK, themes, classic hypr stack)
-  apply here via `.chezmoiignore` gating; ignored everywhere else.
-- Change log: (empty)
+- Role: PINE64 PineTab 2 tablet, Arch Linux ARM aarch64 bare metal
+  (osRelease `id=archarm`; NOT postmarketOS — `danctnix` is the ALARM
+  PineTab2 kernel package, `7.1.8-danctnix1-1-pinetab2`). Corrected
+  2026-09-29 against live `/etc/os-release` and `uname -r`. Runs the classic
+  Hyprland stack (Hyprland, hyprctl, foot, fuzzel, GTK, static waybar);
+  NOT omarchy. Reached via Tailscale (100.106.230.125). Runs the Hermes
+  agent as user service `hermes-gateway.service` (+ TUI); no Obsidian sync
+  here.
+- Profile: `desktop` — prompted once and cached in
+  `~/.config/chezmoi/chezmoi.toml` — even though this is a non-omarchy
+  tablet. Real gating keys off device data from the hostname-keyed table
+  in `.chezmoi.toml.tmpl` (model pinetab2, type tablet, monitor DSI-1,
+  scale 1.25, transform 3, portrait, touch, `omarchy=false`); these render
+  the hypr monitor config (`dot_config/hypr/conf.d/01-monitors.conf.tmpl`).
+- Intentionally unmanaged here (see `.chezmoiignore`): the inverse of the
+  pinetab-only gate — omarchy-owned paths (`.config/omarchy`, btop, jolt,
+  mdt), ghostty/uwsm + omarchy/minimal/narrow starship variants (non-omarchy
+  gate), `.config/waybar/config.jsonc`, `.config/mako/symlink_config` —
+  plus universal machine-local state (node_modules, `opencode.db*`,
+  `.zcompdump*`, browser/Electron profiles, dconf, tailscale, go, carapace,
+  herdr runtime state), `.config/opencode/package.json` (SDK downgrade
+  guard), KDE/Plasma leftovers, and `AGENTS.md`/`docs/**` (repo-only). Zsh
+  history (`~/.config/zsh/.zhistory`) is absent from source — its ignore rule
+  only fires on the remote profile.
+- Quirks:
+  - `hostname` binary is not installed (exit 127) — use `hostnamectl`,
+    `chezmoi data`, or `chezmoi execute-template
+    '{{ .chezmoi.hostname }}'` (prints `danctnix`).
+  - Data quirk: `.chezmoi.toml.tmpl` sets `is_tablet` from `$d.portrait` —
+    true here only by coincidence (see Architecture ideas).
+  - `git fetch`/`git pull` currently fail with `Permission denied
+    (publickey)`; reviews here are local-only until SSH auth to the remote
+    is fixed.
+- Change log:
+  - 2026-09-29 — Section filled in by the danctnix agent on
+    `agents/interagent-collab`: OS corrected (postmarketOS → Arch Linux ARM;
+    `/etc/os-release`, `linux-pinetab2 7.1.8.danctnix1-1`), device data and
+    ignore gates verified against `.chezmoiignore` and `.chezmoi.toml.tmpl`;
+    Hermes gateway service, Tailscale IP, missing `hostname` binary
+    (`hostnamectl` present), and SSH fetch/pull auth failure recorded.
 
 ## Notes for non-chezmoi machines
 
@@ -115,3 +151,24 @@ its agent should treat this file as read-only reference.
   (derive it in `.chezmoidata`/`.chezmoiscripts` instead of a template
   helper) so review agents can read machine truth without executing
   templates.
+
+- (candidate) Collapse the ignore-matrix gate keys (`profile`,
+  `.chezmoi.hostname`, `.omarchy`, `.device.model`, `omarchyVersion`
+  template) into one machine-identity data block as part of the
+  chezmoidata migration above — e.g. danctnix runs `profile = "desktop"`
+  with `omarchy = false`, so gates on different keys can disagree.
+- (candidate, danctnix, 2026-09-29) Fix `.chezmoi.toml.tmpl`:
+  `is_tablet = {{ $d.portrait }}` derives tablet-ness from portrait
+  orientation. Derive from `$d.type` (`eq $d.type "tablet"`) or `$d.touch`
+  instead. Verified live on danctnix (portrait=true, so coincidentally
+  correct); a portrait-orientation non-tablet host would render
+  `is_tablet=true` and a landscape tablet `false`. No template currently
+  consumes `.is_tablet` — low priority. Data change on all machines —
+  needs per-machine review.
+- (candidate, danctnix, 2026-09-29) Correct the "postmarketOS boot hostname"
+  comment in `.chezmoi.toml.tmpl` — danctnix runs Arch Linux ARM with the
+  ALARM danctnix kernel package. Documentation-only.
+- (candidate, danctnix, 2026-09-29) Second equil-remote's
+  `.chezmoidata/machines/<hostname>.yaml` migration: the hostname→device dict
+  is currently hardcoded inside `.chezmoi.toml.tmpl`; external data would let
+  agents edit machine facts without touching template logic.
