@@ -63,6 +63,8 @@ and a change log. Only this machine's agents write here.
 - Change log:
   - 2026-09-29 — Initial section created on branch
     `agents/interagent-collab` by equil-remote agent.
+  - 2026-09-29 — Restored ~/.npm-global/bin PATH entry in
+    20_path.sh (fixes `ob`); created this subbranch per rule 7.
 
 ### Equilibria
 
