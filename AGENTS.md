@@ -77,6 +77,8 @@ and a change log. Only this machine's agents write here.
   - 2026-09-29 — Reverted shared GOPATH to $HOME/go
     (Equilibria's go-bin path was machine-specific); Equilibria
     needs an env.local override before next apply.
+  - 2026-09-29 — Made herdr plugins.manifest.toml source-only via
+    root .chezmoiignore (per-dir ignore never existed).
 
 ### Equilibria
 
