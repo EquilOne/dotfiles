@@ -80,41 +80,66 @@ typeset -ga ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(
     vi-forward-blank-word-end
     vi-find-next-char
     vi-find-next-char-skip
-    autosuggest-accept-next-word
 )
 
 # Tab: accept the next section of the suggestion — fish-style: leading
 # whitespace + one word, or one path component INCLUDING its trailing '/'
 # per press ("ools ~/.config/" from "ools ~/.config/shell/25_completions").
-# NOTE: zsh-autosuggestions' partial-accept wrapper folds the ghost into
-# BUFFER before this widget runs (POSTDISPLAY is still set, and original
-# buffer end = $#BUFFER - $#POSTDISPLAY), so we slice the folded BUFFER and
-# advance CURSOR directly instead of using forward-word, whose boundaries
-# stop at hyphens/dots (one tiny fragment per press). The wrapper clips
-# BUFFER at the new cursor position and re-fetches the ghost.
-# CRITICAL: the remainder after an accepted section usually STARTS WITH A
-# SPACE — if the slice were cut at the first whitespace, that case would
-# collapse to empty and wrongly fall back to completion (menu), which caused
-# the "first Tab does nothing / Tab cycles the menu" bug. Leading whitespace
-# is therefore part of the next section and accepted with it.
-# With no suggestion showing, fall back to normal Tab completion.
+# This widget is NOT run through the plugin's partial-accept wrapper (it is
+# in ZSH_AUTOSUGGEST_IGNORE_WIDGETS below): zle defers the zle-line-pre-redraw
+# hook — the plugin's fetch point — while input is pending, and herdr remote
+# bridges deliver keystrokes as coalesced bursts, so Tab can land with
+# POSTDISPLAY empty (fetch never ran for the burst's tail) or stale/misaligned
+# (leading-space ghost behind a buffer that already ends with a space; the
+# wrapper would pre-fold that ghost into BUFFER and produce double spaces).
+# Instead the widget sees the unfolded BUFFER/POSTDISPLAY, synchronously
+# refetches when POSTDISPLAY is empty or leading-space-misaligned (atuin
+# strategy: ~8-15 ms; the hardened _zsh_autosuggest_suggest override then
+# guards the response against stale/misaligned appends), and accepts
+# directly from POSTDISPLAY. Fallback contract is unchanged: with nothing to
+# accept, run normal Tab completion (expand-or-complete).
 function _autosuggest_accept_next_word() {
-    if [[ -n "$POSTDISPLAY" ]] && (( CURSOR >= $#BUFFER - $#POSTDISPLAY )); then
-        local rest=${BUFFER:$CURSOR}
-        # Leading whitespace belongs to the next section (fish accepts " word").
-        local lead=${rest%%[![:space:]]*}
-        local word=${rest:$#lead}
+    # Refetch when POSTDISPLAY is unusable: empty (fetch skipped by coalesced
+    # input) or starting with whitespace while BUFFER already ends with one
+    # (stale leading-space case).
+    if [[ -z "$POSTDISPLAY" || ( -n "$POSTDISPLAY" && "$POSTDISPLAY" == ' '* && "$BUFFER" == *' ' ) ]]; then
+        if (( ${+functions[_zsh_autosuggest_fetch_suggestion]} )); then
+            _zsh_autosuggest_fetch_suggestion "$BUFFER"
+            if (( ${+widgets[autosuggest-suggest]} )); then
+                # Plugin wrapper widget: runs the hardened/plain suggest plus
+                # highlight reset/apply and zle -R (keeps the ghost styled).
+                zle autosuggest-suggest -- "$suggestion"
+            elif (( ${+functions[_zsh_autosuggest_suggest]} )); then
+                # Hardened override: only sets POSTDISPLAY when the
+                # suggestion is aligned with the current BUFFER.
+                _zsh_autosuggest_suggest "$suggestion"
+            else
+                [[ -n "$suggestion" ]] && POSTDISPLAY="${suggestion#$BUFFER}"
+            fi
+        fi
+    fi
+    # Accept directly from POSTDISPLAY (no folding): cursor sits at the end
+    # of BUFFER, POSTDISPLAY is the authoritative ghost remainder.
+    if [[ -n "$POSTDISPLAY" ]] && (( CURSOR == $#BUFFER )); then
+        local pd="$POSTDISPLAY"
+        # Leading whitespace belongs to the next section (fish accepts " word");
+        # if it were cut off, the case would collapse to empty and wrongly fall
+        # back to the completion menu ("first Tab does nothing" bug).
+        local lead=${pd%%[![:space:]]*}
+        local word=${pd:$#lead}
         word=${word%%[[:space:]]*}
         local -i n=$(( $#lead + $#word ))
         if (( n > 0 )); then
             local tail=${word:1}
             if [[ $tail == */* ]]; then
                 # One path section per press: stop after the first '/' that
-                # has content before it ("tmp" from "tmp/sddm-auth-…" →
-                # accept "tmp/").
+                # has content before it ("agents/" per press, not
+                # "agents/interagent-collab").
                 n=$(( $#lead + ${#tail%%/*} + 2 ))
             fi
-            (( CURSOR += n ))
+            BUFFER="${BUFFER}${pd[1,n]}"
+            CURSOR=$#BUFFER
+            POSTDISPLAY="${pd:$n}"
             return
         fi
     fi
@@ -291,6 +316,10 @@ fi
 # after the buffer changed (see the #649/#747 block above).
 ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(expand-or-complete reverse-menu-complete menu-expand-or-complete menu-select accept-and-menu-complete)
 ZSH_AUTOSUGGEST_IGNORE_WIDGETS+=(autosuggest-menu-accept)
+# autosuggest-accept-next-word is also IGNORED (never wrapped): the
+# partial-accept wrapper would pre-fold a stale/empty POSTDISPLAY into
+# BUFFER before the widget runs — see the Tab comment block above.
+ZSH_AUTOSUGGEST_IGNORE_WIDGETS+=(autosuggest-accept-next-word)
 
 # ---------------------------------------------------------------------------
 # Completion menu (fish/blink-style) — C-e toggle, C-n/C-p item navigation
