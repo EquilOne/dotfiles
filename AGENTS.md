@@ -65,6 +65,10 @@ and a change log. Only this machine's agents write here.
     `agents/interagent-collab` by equil-remote agent.
   - 2026-09-29 — Restored ~/.npm-global/bin PATH entry in
     20_path.sh (fixes `ob`); created this subbranch per rule 7.
+  - 2026-09-29 — Fixed hermes-env-keys script: pass-cli bare output
+    captured directly, bounded with timeout 15; keys upserted (verified
+    live; vault resolution intermittently flaky — one transient 'vault
+    not found' failure retried OK).
 
 ### Equilibria
 
