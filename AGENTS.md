@@ -134,6 +134,12 @@ and a change log. Only this machine's agents write here.
     (union-resolve for shared-list conflicts, rebase-replay duplicate/
     empty-pick check, ~-absolute targets for all chezmoi target-arg
     commands); skill deployed via targeted apply, `chezmoi diff` verified.
+  - 2026-09-29 — Decision outcomes recorded: starship.toml normalized via
+    targeted apply (prompt unaffected — STARSHIP_CONFIG pins
+    starship_omarchy.toml on omarchy); hrdr/hrdrpine adopted upstream by the
+    user (ba90ebf — earlier re-add was a no-op); cli.json autoaccept drift
+    left in place per the toggleables policy (see Architecture ideas); zsh
+    autosuggestions + zshenv targets intentionally left pending.
 
 ### danctnix
 
@@ -223,3 +229,9 @@ its agent should treat this file as read-only reference.
   gated like the existing starship_foot*.toml pattern, or machine-varying
   values moved into `.chezmoidata` (same machinery as the machines-table
   candidate above).
+- (candidate, EquilVega, 2026-09-29, user-directed) opencode cli.json:
+  split app-written toggleables (e.g. `session.permissions` autoaccept)
+  from "hard" config — hard config injected via chezmoi (apply or a
+  Hermes-config-style seed script), toggleables left unmanaged so runtime
+  drift is tolerated by policy instead of flagged each review. Needs a
+  split mechanism; per-machine review required.
