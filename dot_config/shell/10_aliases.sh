@@ -63,6 +63,8 @@ alias hrm='hermes --tui'
 alias hrd='herdr'
 alias hrds='herdr session'
 alias hrda='herdr session attach'
+alias hrdr='herdr --remote'
+alias hrdrpine='herdr --remote equil-pinetab --remote-keybindings server'
 
 # Grep
 alias grep='grep --color=auto'
