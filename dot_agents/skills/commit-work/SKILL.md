@@ -54,7 +54,7 @@ Before committing, ask:
    - "What changed?" + "Why?"
    - If you cannot describe it cleanly, the boundary is wrong → go back to step 2.
 7) Write the commit message
-   - Conventional Commits: types feat|fix|docs|style|refactor|test|chore; imperative subject ≤72 chars; scopes only when the repo has >3 subsystems, primary subsystem only, never multi-scope; breaking changes get `!` after the type plus a `BREAKING CHANGE:` footer; body explains why (the diff shows what), one paragraph max.
+   - Conventional Commits: types feat|fix|docs|style|refactor|test|chore|config; imperative subject ≤72 chars; scopes only when the repo has >3 subsystems, primary subsystem only, never multi-scope; breaking changes get `!` after the type plus a `BREAKING CHANGE:` footer; body explains why (the diff shows what), one paragraph max.
    - For multi-line messages read [`references/commit-message-template.md`](references/commit-message-template.md). **Do NOT load** for single-line commits.
 8) Commit NON-interactively
    - `git commit -m "<subject>" -m "<body>"` (multiple `-m` flags). NEVER `git commit -v` (opens an editor — hangs in a subagent).
