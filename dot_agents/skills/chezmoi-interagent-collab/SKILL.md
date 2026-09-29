@@ -69,6 +69,22 @@ Redesign ideas (e.g. migrating the hostname device table to
 section as a one-line candidate + rationale. Never implement without
 explicit user approval of that specific change.
 
+## Self-improvement
+
+- This skill is versioned in the repo like any other source file. If the
+  review workflow above missed something, gave a wrong fix, or a risk check
+  proved false-positive on a real run, update this SKILL.md in the same
+  commit as the change-log entry — the lesson goes where the workflow lives.
+- Keep lessons imperative and generic (rules, not incident narration); one
+  rule per bullet. Machine-specific facts belong in your AGENTS.md section,
+  not here.
+- New risk checks discovered on one machine: add them to the risk-check list
+  here immediately so every other machine's agent inherits them on next
+  `git pull`. If a change to this skill would alter another machine's
+  review behavior, note it as a cross-machine concern in the commit body.
+- After editing, verify `chezmoi diff` shows only this file as expected, then
+  commit and push.
+
 ## Anti-patterns
 
 - NEVER blind `chezmoi apply` / `chezmoi update` (the update command pulls
