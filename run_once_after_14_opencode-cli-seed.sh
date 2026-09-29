@@ -1,3 +1,16 @@
+#!/bin/bash
+# Manage ~/.config/opencode/cli.json as "hard config injected by chezmoi,
+# app-written toggleables left alone": opencode rewrites some keys at runtime
+# (e.g. session.permissions), so cli.json is NOT a managed source file. This
+# run_once_after script re-runs whenever its content changes and deep-merges
+# the embedded HARD config into the live file: hard keys win conflicts,
+# live-only keys (session.permissions, anything else opencode writes) are
+# preserved. This script must NEVER fail a chezmoi apply: any internal
+# failure warns on stderr and exits 0, leaving the live file untouched.
+set -euo pipefail
+umask 077
+
+HARD="$(cat <<'JSON'
 {
   "$schema": "https://opencode.ai/v2/cli.json",
   "theme": {
@@ -108,3 +121,81 @@
   },
   "animations": true
 }
+JSON
+)"
+
+target="$HOME/.config/opencode/cli.json"
+
+trap 'printf "opencode-cli-seed: warning: internal failure near line %s (status %s); leaving things as they are\n" "${BASH_LINENO[0]:-?}" "$?" >&2; exit 0' ERR
+
+warn() { printf 'opencode-cli-seed: %s\n' "$1" >&2; }
+
+# Atomic write: mktemp in the target dir (same filesystem), 0600, mv.
+write_atomic() {
+  local dir tmp
+  dir="$(dirname "$target")"
+  mkdir -p "$dir"
+  tmp="$(mktemp "$dir/.cli.json.XXXXXX")"
+  trap 'rm -f "$tmp"' EXIT
+  printf '%s\n' "$1" > "$tmp"
+  chmod 600 "$tmp"
+  mv -f "$tmp" "$target"
+  trap - EXIT
+}
+
+# Deep-merge hard INTO live: recursive object merge, hard wins conflicts.
+# (jq `*` gives the right operand precedence, so the file order is hard first,
+# live second and the filter multiplies `.[1] * .[0]` = live * hard.)
+merge_jq() {
+  jq -s '.[1] * .[0]' <(printf '%s' "$HARD") "$target"
+}
+
+merge_py() {
+  HARD="$HARD" python3 - "$target" <<'PY'
+import json, os, sys
+
+hard = json.loads(os.environ["HARD"])
+with open(sys.argv[1]) as fh:
+    live = json.load(fh)
+
+def merge(h, l):
+    if isinstance(h, dict) and isinstance(l, dict):
+        out = dict(l)
+        for k, v in h.items():
+            cur = out.get(k)
+            out[k] = merge(v, cur) if isinstance(cur, dict) and isinstance(v, dict) else v
+        return out
+    return h
+
+json.dump(merge(hard, live), sys.stdout, indent=2)
+sys.stdout.write("\n")
+PY
+}
+
+if [[ ! -f "$target" ]]; then
+  write_atomic "$HARD"
+  exit 0
+fi
+
+merged=""
+if command -v jq >/dev/null 2>&1; then
+  merged="$(merge_jq)" || merged=""
+elif command -v python3 >/dev/null 2>&1; then
+  merged="$(merge_py)" || merged=""
+else
+  warn "neither jq nor python3 available; leaving $target untouched"
+  exit 0
+fi
+
+if [[ -z "$merged" ]]; then
+  # Merge failed — almost certainly invalid JSON in the live file (opencode
+  # crashed mid-write). Move the broken file aside and reseed from hard.
+  corrupt="$target.corrupt-$(date +%s)"
+  mv -f "$target" "$corrupt"
+  warn "could not parse/merge $target; moved to $corrupt and reseeded from hard config"
+  write_atomic "$HARD"
+  exit 0
+fi
+
+write_atomic "$merged"
+exit 0

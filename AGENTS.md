@@ -166,6 +166,14 @@ and a change log. Only this machine's agents write here.
     toggleables policy). collab branch re-designated by the user as the
     cross-device test line: apply from collab on each machine to validate
     before main.
+  - 2026-09-29 — cli.json toggleables policy implemented: file unmanaged
+    (`chezmoi forget`), replaced by
+    `run_once_after_14_opencode-cli-seed.sh` which deep-merges the embedded
+    hard config into the live file on content change — hard keys win,
+    app-written keys (session.permissions autoaccept) preserved; verified
+    live: `chezmoi diff` completely empty, cli.json byte-identical to
+    pre-migration backup. Other machines: script runs on next apply from
+    collab, preserving their runtime keys.
 
 ### danctnix
 
@@ -255,7 +263,7 @@ its agent should treat this file as read-only reference.
   gated like the existing starship_foot*.toml pattern, or machine-varying
   values moved into `.chezmoidata` (same machinery as the machines-table
   candidate above).
-- (candidate, EquilVega, 2026-09-29, user-directed) opencode cli.json:
+- (implemented on feat/opencode-cli-toggleables, EquilVega, 2026-09-29, user-directed) opencode cli.json:
   split app-written toggleables (e.g. `session.permissions` autoaccept)
   from "hard" config — hard config injected via chezmoi (apply or a
   Hermes-config-style seed script), toggleables left unmanaged so runtime
