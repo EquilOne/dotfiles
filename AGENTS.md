@@ -217,6 +217,15 @@ and a change log. Only this machine's agents write here.
     ignore gates verified against `.chezmoiignore` and `.chezmoi.toml.tmpl`;
     Hermes gateway service, Tailscale IP, missing `hostname` binary
     (`hostnamectl` present), and SSH fetch/pull auth failure recorded.
+  - 2026-09-29 — SSH sync restored after key diagnosis (fetch/pull verified
+    current at dd101b1; github_pinetab key still unregistered on GitHub —
+    open item, access works via the Proton Pass agent keys). 8 pending
+    targets reviewed all-Expected and applied via targeted apply (7 file
+    targets + run_once_after_14_opencode-cli-seed.sh, which ran via its
+    prefix-stripped target form); `chezmoi diff` empty afterwards; cli.json
+    seed merged hard config with `session.permissions.autoaccept` preserved;
+    HERDR_REMOTE_KEYBINDINGS=server and STARSHIP_CONFIG resolved to the
+    foot_minimal variant as expected.
 
 ## Notes for non-chezmoi machines
 
