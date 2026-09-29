@@ -28,8 +28,12 @@ anything managed by chezmoi.
    `.chezmoi.toml.tmpl`, or `.chezmoidata*` change what machines receive and
    must be reviewed per-machine, not just locally.
 7. **Commits:** conventional commits, one logical change per commit. The
-   `agents/interagent-collab` branch is the agent workspace; `main` is stable
-   backup. Merge to `main` only with user approval.
+   `agents/interagent-collab` branch is the shared agent workspace; `main` is
+   stable backup. Each machine's agent works on its own subbranch
+   `agents/<hostname>` created from `agents/interagent-collab` — flat
+   sibling names only (git cannot nest a branch under an existing branch
+   name). Merge subbranch → `agents/interagent-collab` only with user
+   approval; merge to `main` only with user approval.
 8. **Report format for review findings** — one line per finding:
    `[CONFLICT|CONCERN|INFO] <path> — <why> — <suggested action with exact command>`
 
@@ -88,6 +92,9 @@ and a change log. Only this machine's agents write here.
     deployment, classified expected).
   - 2026-09-29 — Applied pending skill deployment (targeted), verified
     `chezmoi diff` empty and deployed SKILL.md identical to source.
+  - 2026-09-29 — Created agent subbranch `agents/Equilibria` from
+    `agents/interagent-collab` (1fac526), pushed with upstream tracking;
+    documented the flat `agents/<hostname>` convention in rule 7.
 
 ### EquilVega
 
