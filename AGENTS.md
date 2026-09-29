@@ -33,7 +33,10 @@ anything managed by chezmoi.
    `agents/<hostname>` created from `agents/interagent-collab` — flat
    sibling names only (git cannot nest a branch under an existing branch
    name). Merge subbranch → `agents/interagent-collab` only with user
-   approval; merge to `main` only with user approval.
+   approval; merge to `main` only with user approval. The collab branch
+   doubles as the cross-device test line: apply from
+   `agents/interagent-collab` on each machine to validate changes before
+   anything merges to `main`.
 8. **Report format for review findings** — one line per finding:
    `[CONFLICT|CONCERN|INFO] <path> — <why> — <suggested action with exact command>`
 
@@ -158,6 +161,11 @@ and a change log. Only this machine's agents write here.
     `feat/zsh-ghost-text-fix` (e659497). Revive later with
     `git revert 3cc4b12 382188f`. cli.json drift and .zshenv/SKILL.md
     targets remain pending as before.
+  - 2026-09-29 — User applied all pending targets except cli.json
+    (SKILL.md + .zshenv now live; diff is cli.json-only, tolerated per
+    toggleables policy). collab branch re-designated by the user as the
+    cross-device test line: apply from collab on each machine to validate
+    before main.
 
 ### danctnix
 
@@ -253,7 +261,7 @@ its agent should treat this file as read-only reference.
   Hermes-config-style seed script), toggleables left unmanaged so runtime
   drift is tolerated by policy instead of flagged each review. Needs a
   split mechanism; per-machine review required.
-- (candidate, EquilVega, 2026-09-29) Fix the omarchy test in
+- (implemented e659497, EquilVega, 2026-09-29) Fix the omarchy test in
   `dot_config/shell/15_functions/01_starship.sh`:
   `[[ -d /usr/share/omarchy || -d ~/.local/share/omarchy ]]` — the current
   test only matches the v4 system-wide path, so v3 omarchy machines route
