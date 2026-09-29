@@ -226,6 +226,10 @@ and a change log. Only this machine's agents write here.
     seed merged hard config with `session.permissions.autoaccept` preserved;
     HERDR_REMOTE_KEYBINDINGS=server and STARSHIP_CONFIG resolved to the
     foot_minimal variant as expected.
+  - 2026-09-29 — Branch re-synced to collab (ff to 1e32882, upstream set to
+    origin/agents/interagent-collab); user decision: danctnix pinetab prompt
+    at all widths (router non-omarchy >=80 now starship_foot.toml);
+    cross-machine impact on equil-remote wide prompt flagged in commit body.
 
 ## Notes for non-chezmoi machines
 
