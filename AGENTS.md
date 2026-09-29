@@ -57,10 +57,13 @@ and a change log. Only this machine's agents write here.
   - 2026-09-29 — Initial section created on branch
     `agents/interagent-collab` by equil-remote agent.
 
-### EquilVega
+### Equilibria
 
-- Role: Arch / omarchy desktop (falls through the default device branch).
-  Agents on this machine: fill in role, unmanaged state, quirks.
+- Role: Arch / omarchy desktop (falls through the default device branch of
+  `.chezmoi.toml.tmpl`). Note: `.chezmoiignore` gates on the `profile` var
+  (desktop/remote) while the device table and this file's write rule key on
+  `.chezmoi.hostname` — check both. Agents on this machine: fill in role,
+  unmanaged state, quirks.
 - Change log: (empty)
 
 ### danctnix
