@@ -42,6 +42,10 @@ export OPENCODE_ENABLE_EXA=1
 # `chezmoi apply` (protonPass render) with NoStorageAccess(KeyRevoked).
 export PROTON_PASS_KEY_PROVIDER=fs
 
+# herdr: default remote-attach keybindings to server-side dispatch
+# (local-mode plugin_action dispatch is broken upstream; see herdrdev/herdr#1598)
+export HERDR_REMOTE_KEYBINDINGS=server
+
 # Debug: Show what loaded
 if [[ -n "$SHELL_DEBUG" ]]; then
   echo "🔍 00_env.sh loaded - XDG_CONFIG_HOME=$XDG_CONFIG_HOME"
