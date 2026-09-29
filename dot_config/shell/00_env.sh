@@ -32,7 +32,7 @@ export PNPM_HOME="$HOME/.local/share/pnpm"
 export BUN_INSTALL="$HOME/.bun"
 
 # Go install location
-export GOPATH="$HOME/.local/opt/go-bin-v1.25.3"
+export GOPATH="$HOME/go"
 
 # OpenCode: enable EXA web search (required when not using OpenCode provider)
 export OPENCODE_ENABLE_EXA=1
