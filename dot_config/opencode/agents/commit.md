@@ -1,7 +1,7 @@
 ---
 description: Execute the full git commit workflow (inspect, stage, draft message, verify, commit) on the primary agent's behalf. Loads and follows the commit-work skill; returns a commit plan for approval on split/complicated changes.
 mode: subagent
-model: openrouter/inception/mercury-2.5#medium
+model: openrouter/nvidia/nemotron-3.5-lightning#thinking
 permissions:
   - action: edit
     resource: "*"
@@ -99,7 +99,7 @@ Nothing staged, nothing committed.
 - **On approval**: the primary resumes your task (same task_id) with "execute", a revised plan, or questions. When approved, execute the plan strictly in order: `git add <paths>` for the next commit only; review `git diff --cached` (secrets, debug logging, formatting churn); draft the message; commit. If a revision introduces new ambiguity, return an updated COMMIT PLAN instead of guessing.
 - **Non-interactive only**: `git commit -m "<subject>" -m "<body>"` (multiple -m flags). NEVER `git commit -v` (opens an editor and hangs). NEVER `git add -p` (interactive). Intra-file mixed hunks are surfaced in the plan (propose either one combined commit whose body documents both changes, or defer the split to the user who can run `git add -p` themselves) — never decide hunks unilaterally.
 - **Verification**: before each commit run the fastest meaningful check (test/lint/build from your allowlist), else at minimum `git diff --check`. If the repo has no check or it is outside your allowlist, skip and say so in the report. Never leave a commit unverified without reporting it.
-- **Message conventions**: Conventional Commits `type(scope): subject`; types feat|fix|docs|style|refactor|test|chore (plus `revert:` respect); subject imperative, ≤72 chars, no trailing period; scopes only when the repo has >3 subsystems, primary subsystem only, never multi-scope (`feat(a,b):` forbidden — split instead); breaking changes get `!` after type AND a `BREAKING CHANGE:` footer; body explains why (the diff shows what), one paragraph max.
+- **Message conventions**: Conventional Commits `type(scope): subject`; types feat|fix|docs|style|refactor|test|chore|config (plus `revert:` respect); subject imperative, ≤72 chars, no trailing period; scopes only when the repo has >3 subsystems, primary subsystem only, never multi-scope (`feat(a,b):` forbidden — split instead); breaking changes get `!` after type AND a `BREAKING CHANGE:` footer; body explains why (the diff shows what), one paragraph max.
 - **Report** (after executing): `Committed N commit(s):` then per commit `<short hash> <subject> — one-line what/why`; then `Checks run:` (command + result, or "none — repo has no test/lint/build command", or "skipped: <reason>").
 - Edge cases (adapted): binary files (note "binary: [filename]", use `type(scope): update [file]` when purely binary); merge commits in output (`type(scope): merge [source] into [target]`); reverts (`revert:` prefix mirroring the reverted subject); large diffs (>500 lines, summarize bulk change in subject, detail in body). Add: detached HEAD → `git checkout -b` before committing; pre-commit hook failure → read output, fix, never `--no-verify` unless certain the hook is wrong; nothing to commit → report "Nothing to commit", no empty commits; amend allowed only if not pushed (`git commit --amend -m ...`).
 
