@@ -24,7 +24,7 @@ set_starship_width() {
         elif (( columns < 80 )); then
             export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship_foot_narrow.toml"
         else
-            export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
+            export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship_foot.toml"
         fi
     fi
 }
