@@ -53,6 +53,11 @@ there should not be one — it is in `.chezmoiignore`).
    - Template logic changed → render-check with `chezmoi cat <file>` on the
      affected files.
    - The change would delete files present on disk → flag explicitly.
+   - Env-var config routers (STARSHIP_CONFIG etc.): verify the resolved
+     value on THIS machine (e.g. `zsh -lic 'echo $STARSHIP_CONFIG'`);
+     install-path markers can conflate omarchy version detection with
+     machine-type detection (v3 = ~/.local/share/omarchy, v4 =
+     /usr/share/omarchy).
 5. **Report findings**, one line each:
    `[CONFLICT|CONCERN|INFO] <path> — <why> — <exact fix command>`.
    Fix vocabulary: `chezmoi apply -- <file>` (targeted; run from $HOME with

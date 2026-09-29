@@ -140,6 +140,13 @@ and a change log. Only this machine's agents write here.
     user (ba90ebf — earlier re-add was a no-op); cli.json autoaccept drift
     left in place per the toggleables policy (see Architecture ideas); zsh
     autosuggestions + zshenv targets intentionally left pending.
+  - 2026-09-29 — CORRECTION: earlier "prompt unaffected" claim was wrong.
+    `01_starship.sh` routes omarchy vs pinetab by testing
+    `/usr/share/omarchy` — the omarchy v4 marker; v3 installs to
+    `~/.local/share/omarchy`, so this machine takes the PINETAB branch
+    (STARSHIP_CONFIG resolved to starship_foot_minimal.toml in a live
+    shell). Restored starship.toml (disk + source) to the common rose-pine
+    preset via re-add; switcher fix proposed in Architecture ideas.
 
 ### danctnix
 
@@ -235,3 +242,9 @@ its agent should treat this file as read-only reference.
   Hermes-config-style seed script), toggleables left unmanaged so runtime
   drift is tolerated by policy instead of flagged each review. Needs a
   split mechanism; per-machine review required.
+- (candidate, EquilVega, 2026-09-29) Fix the omarchy test in
+  `dot_config/shell/15_functions/01_starship.sh`:
+  `[[ -d /usr/share/omarchy || -d ~/.local/share/omarchy ]]` — the current
+  test only matches the v4 system-wide path, so v3 omarchy machines route
+  to the pinetab prompt branch. Prompt-affecting on all omarchy machines —
+  per-machine review required.
