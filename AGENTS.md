@@ -127,6 +127,9 @@ and a change log. Only this machine's agents write here.
     `agents/interagent-collab`: 4 differing targets — starship.toml clobber
     traced to 2eda38f, cli.json permissions drop, 10_aliases.sh hrdr drift;
     awaiting approval.
+  - 2026-09-29 — Created machine subbranch `agents/equilvega` from
+    `agents/interagent-collab` (db7a9ae); each agent works on its own
+    subbranch, collab branch is the shared integration line.
 
 ### danctnix
 
