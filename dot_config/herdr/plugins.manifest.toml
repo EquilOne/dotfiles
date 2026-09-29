@@ -2,7 +2,7 @@
 # get auto-installed by run_once_after_12_herdr-plugins.sh when porting config
 # to a new machine via chezmoi.
 #
-# Source-only file: listed in dot_config/herdr/.chezmoiignore, so it is never
+# Source-only file: listed in the root .chezmoiignore, so it is never
 # applied to target machines; the run_once script reads it directly from the
 # chezmoi source directory.
 #
