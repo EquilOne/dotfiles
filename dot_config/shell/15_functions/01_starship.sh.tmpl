@@ -1,0 +1,52 @@
+#!/bin/bash
+# =============================================================================
+# STARSHIP PROMPT INITIALIZATION (cross-shell compatible, device-aware)
+# =============================================================================
+# Variant set is baked at chezmoi render time from .device.model:
+#   - pinetab (device.model == pinetab2): foot-tuned set at ALL widths
+#     (starship_foot_minimal / starship_foot_narrow / starship_foot)
+#   - every other machine (omarchy desktops and the remote): desktop set
+#     (starship_minimal / starship_narrow / starship.toml)
+# The .chezmoiignore split keeps every referenced variant deployed on its
+# target machines; every STARSHIP_CONFIG path must point at a deployed file.
+
+set_starship_width() {
+    local columns="${COLUMNS:-80}"
+
+{{ if eq .device.model "pinetab2" }}
+    if (( columns < 40 )); then
+        export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship_foot_minimal.toml"
+    elif (( columns < 80 )); then
+        export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship_foot_narrow.toml"
+    else
+        export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship_foot.toml"
+    fi
+{{ else }}
+    if (( columns < 40 )); then
+        export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship_minimal.toml"
+    elif (( columns < 80 )); then
+        export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship_narrow.toml"
+    else
+        export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
+    fi
+{{ end }}
+}
+
+set_starship_width
+
+# Resolve starship even before 20_path.sh runs (installer puts it in ~/.local/bin)
+STARSHIP_BIN="$(command -v starship 2>/dev/null)"
+if [[ -z "$STARSHIP_BIN" && -x "$HOME/.local/bin/starship" ]]; then
+    export PATH="$HOME/.local/bin:$PATH"
+    STARSHIP_BIN="$HOME/.local/bin/starship"
+fi
+unset STARSHIP_BIN
+
+if command -v starship >/dev/null 2>&1; then
+    [[ "$CURRENT_SHELL" == "bash" ]] && eval "$(starship init bash)"
+    [[ "$CURRENT_SHELL" == "zsh" ]]  && eval "$(starship init zsh)"
+fi
+
+if [[ -n "$SHELL_DEBUG" ]]; then
+    echo "[DEBUG] 15_functions/01_starship.sh loaded - starship prompt"
+fi
