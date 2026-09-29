@@ -79,6 +79,10 @@ and a change log. Only this machine's agents write here.
     needs an env.local override before next apply.
   - 2026-09-29 — Made herdr plugins.manifest.toml source-only via
     root .chezmoiignore (per-dir ignore never existed).
+  - 2026-09-29 — Fixed dead remote-gate ignore rules (source
+    names → target names); eza rule dropped (relative symlink
+    resolves everywhere); removed dangling btop theme symlink
+    locally.
 
 ### Equilibria
 
