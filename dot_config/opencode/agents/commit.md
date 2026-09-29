@@ -1,7 +1,7 @@
 ---
 description: Execute the full git commit workflow (inspect, stage, draft message, verify, commit) on the primary agent's behalf. Loads and follows the commit-work skill; returns a commit plan for approval on split/complicated changes.
 mode: subagent
-model: openrouter/inception/mercury-2.5#medium
+model: openrouter/nvidia/nemotron-3.5-lightning#high
 permissions:
   - action: edit
     resource: "*"
