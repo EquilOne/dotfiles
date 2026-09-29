@@ -232,9 +232,11 @@ opencode/*.log
 {{- end }}
 
 # ── Non-omarchy hosts (pinetab): B's profile clutter ────────────────────
-# The pinetab keeps its own static waybar config and has no use for uwsm
-# or B's starship prompt variants.
+# The pinetab keeps its own static waybar config, runs foot (not ghostty),
+# and has no use for uwsm or B's starship prompt variants.
 {{ if not .omarchy }}
+.config/ghostty
+.config/ghostty/**
 .config/waybar/config.jsonc
 .config/uwsm
 .config/uwsm/**
