@@ -1,6 +1,27 @@
 ---
 name: chezmoi-interagent-collab
-description: Review chezmoi diffs before apply/update; check pulled changes for cross-machine conflicts using the shared AGENTS.md; report conflicts with actionable fixes.
+description: "Use before any chezmoi apply/update on any machine: cross-machine diff review with shared AGENTS.md context."
+tags: [chezmoi, dotfiles, agents, review]
+---
+
+# Chezmoi Interagent Collab (Hermes wrapper)
+
+The canonical skill lives on the remote branch `agents/interagent-collab`
+(chezmoi repo, `EquilOne/dotfiles`). It is not checked out locally right
+now — if the worktree `~/.local/share/chezmoi-collab` does not exist, get
+the files with:
+`git -C ~/.local/share/chezmoi show origin/agents/interagent-collab:dot_agents/skills/chezmoi-interagent-collab/SKILL.md`
+(and `...:AGENTS.md` for the shared machine context).
+
+Read and follow those files — they are the source of truth. The main source
+dir (`~/.local/share/chezmoi`) stays on `main` as stable backup; do all
+agent work via commits in the worktree.
+
+Quick rules before loading the full skill:
+- Never run `chezmoi apply`/`chezmoi update` without a reviewed `chezmoi diff`.
+- Write only to your own hostname's section in AGENTS.md.
+- Surface conflicts to the user with exact fix commands; get approval per change.
+
 ---
 
 # Chezmoi Interagent Collab
