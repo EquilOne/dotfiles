@@ -1,0 +1,87 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 40,
+  "modules-left": [
+    "clock",
+    "hyprland/workspaces"
+  ],
+  "modules-center": [],
+  "modules-right": [
+    "network",
+    "pulseaudio",
+    "cpu",
+    "memory",
+    "battery"
+  ],
+  "hyprland/workspaces": {
+    "format": "{icon}",
+    "format-icons": {
+      "1": "",
+      "2": "",
+      "3": "",
+      "active": ""
+    },
+    "persistent-workspaces": {
+      "*": [
+        1,
+        2,
+        3
+      ]
+    }
+  },
+  "clock": {
+    "format": "{:%a %H:%M}",
+    "format-alt": "{:%D}",
+    "tooltip-format": "{:%A, %B %d}"
+  },
+  "network": {
+    "format-wifi": "  {signalStrength}%",
+    "tooltip-format-wifi": "{essid}:  {bandwidthUpBytes}/  {bandwidthDownBytes}",
+    "format-ethernet": "󰈀",
+    "format-disconnected": "",
+    "on-click": "foot -e impala",
+    "on-click-right": "nm-connection-editor"
+  },
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-icons": [
+      "",
+      "",
+      ""
+    ],
+    "on-click": "pavucontrol"
+  },
+  "battery": {
+    "format": "{icon} {capacity}%",
+    "format-charging": " {capacity}%",
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "states": {
+      "low": 50,
+      "warning": 30,
+      "critical": 15
+    }
+  },
+  "cpu": {
+    "format": " {usage}%",
+    "states": {
+      "warning": 70,
+      "critical": 90
+    },
+    "on-click": "foot -e btop"
+  },
+  "memory": {
+    "format": " {}%",
+    "states": {
+      "warning": 70,
+      "critical": 90
+    },
+    "on-click": "foot -e btop"
+  }
+}

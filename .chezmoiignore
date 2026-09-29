@@ -231,6 +231,23 @@ opencode/*.log
 .config/hypr/scripts/**
 {{- end }}
 
+# ── Non-omarchy hosts (pinetab): B's profile clutter ────────────────────
+# The pinetab keeps its own static waybar config and has no use for uwsm
+# or B's starship prompt variants.
+{{ if not .omarchy }}
+.config/waybar/config.jsonc
+.config/uwsm
+.config/uwsm/**
+.config/starship/starship_omarchy.toml
+.config/starship/starship_minimal.toml
+.config/starship/starship_narrow.toml
+{{ end }}
+
+# ── Omarchy machines never get the pinetab's static waybar config ───────
+{{ if .omarchy }}
+.config/waybar/config
+{{ end }}
+
 # ── mako: omarchy3 uses the theme symlink; omarchy4 dropped mako entirely;
 # pinetab uses the static config above. Gate each variant so the target is
 # only ever claimed by one source entry (chezmoi rejects duplicates).

@@ -16,7 +16,7 @@ set_starship_width() {
         elif (( columns < 80 )); then
             export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship_narrow.toml"
         else
-            export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
+            export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship_omarchy.toml"
         fi
     else
         if (( columns < 40 )); then
