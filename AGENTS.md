@@ -91,6 +91,14 @@ and a change log. Only this machine's agents write here.
     (headless, no TTY for the prompt); re-ran with --force —
     that target's delta was already in the reviewed pre-apply
     diff (30 lines). No source changes; targets only.
+  - 2026-09-29 — Synthesized starship router with collab's restructure:
+    01_starship.sh is now a .tmpl keyed on device.model at render time —
+    pinetab gets the foot set at all widths (foot_minimal/narrow/foot);
+    omarchy desktops and remote get starship_minimal/narrow with
+    starship.toml at wide (foot prompt and starship_omarchy both ruled
+    out for remote). .chezmoiignore starship gates adopted from collab's
+    split (omarchy-variant ignored on non-omarchy; minimal/narrow not
+    ignored on remote).
 
 ### Equilibria
 
