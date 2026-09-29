@@ -29,6 +29,12 @@ there should not be one — it is in `.chezmoiignore`).
    what; confirm with `git show <commit> -- <file>`.
 2. **Pull** (`git pull --ff-only`; if that fails, STOP and report — a
    diverged tree means someone else committed overlapping changes).
+   - Shared-list conflicts (e.g. two agents appending to AGENTS.md's
+     Architecture ideas tail) resolve as a UNION — all sides are
+     candidates; never keep only one side.
+   - When replaying a commit that INSERTS a section, verify the inserted
+     section appears exactly once after the replay; a replayed pick whose
+     diff comes back empty is redundant — `git rebase --skip` it.
 3. **Diff:** `chezmoi diff`. Also `chezmoi managed` for the full target list
    if the diff is large. Classify every change:
    - **Expected** — matches the commit messages and this machine's section.
@@ -49,8 +55,10 @@ there should not be one — it is in `.chezmoiignore`).
    - The change would delete files present on disk → flag explicitly.
 5. **Report findings**, one line each:
    `[CONFLICT|CONCERN|INFO] <path> — <why> — <exact fix command>`.
-   Fix vocabulary: `chezmoi apply -- <file>` (targeted; target must be
-   ~-absolute — relative target paths fail with "not managed"),
+   Fix vocabulary: `chezmoi apply -- <file>` (targeted; run from $HOME with
+   ~-absolute targets — ANY chezmoi command taking a target arg
+   (apply/cat/source-path/diff) fails with "not managed" for relative args
+   from inside the source dir),
    `chezmoi merge <file>` (three-way destination/source/target),
    `chezmoi re-add <file>` (adopt local), ignore-rule edit in
    `.chezmoiignore`, or "ask other machine's agent" for cross-machine
@@ -96,3 +104,6 @@ explicit user approval of that specific change.
   section — surface it to the user.
 - NEVER bypass the `remote`/`desktop`/pinetab ignore gates to "fix" a missing
   config on the wrong machine.
+- NEVER resolve a shared-list conflict by keeping only one side, and NEVER
+  `git rebase --continue` a replayed pick without checking whether the
+  pick's diff is empty (redundant replay → skip).

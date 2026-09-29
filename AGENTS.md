@@ -130,6 +130,10 @@ and a change log. Only this machine's agents write here.
   - 2026-09-29 — Created machine subbranch `agents/equilvega` from
     `agents/interagent-collab` (db7a9ae); each agent works on its own
     subbranch, collab branch is the shared integration line.
+  - 2026-09-29 — SKILL.md lessons added per self-improvement clause
+    (union-resolve for shared-list conflicts, rebase-replay duplicate/
+    empty-pick check, ~-absolute targets for all chezmoi target-arg
+    commands); skill deployed via targeted apply, `chezmoi diff` verified.
 
 ### danctnix
 
