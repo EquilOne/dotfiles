@@ -26,6 +26,9 @@ path_dedup() {
 # Priority order (high to low priority):
 path_prepend "$HOME/.local/bin"
 
+# npm global installs (npm prefix set to ~/.npm-global)
+path_prepend "$HOME/.npm-global/bin"
+
 # Lang pkg mngrs
 path_prepend "$HOME/.cargo/bin"
 path_prepend "$GOPATH/bin"
