@@ -152,6 +152,12 @@ and a change log. Only this machine's agents write here.
     (`~/.local/share/omarchy`); STARSHIP_CONFIG resolves to
     starship_omarchy/minimal/narrow.toml by width as intended on this
     machine.
+  - 2026-09-29 — Zsh ghost-text fix parked by user decision: reverted on
+    `agents/interagent-collab` (382188f, 3cc4b12) so the live shell keeps
+    its current behavior; fixes preserved on branch
+    `feat/zsh-ghost-text-fix` (e659497). Revive later with
+    `git revert 3cc4b12 382188f`. cli.json drift and .zshenv/SKILL.md
+    targets remain pending as before.
 
 ### danctnix
 
