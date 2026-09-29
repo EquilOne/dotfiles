@@ -10,7 +10,7 @@
 set_starship_width() {
     local columns="${COLUMNS:-80}"
 
-    if [[ -d /usr/share/omarchy ]]; then
+    if [[ -d /usr/share/omarchy || -d ~/.local/share/omarchy ]]; then
         if (( columns < 40 )); then
             export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship_minimal.toml"
         elif (( columns < 80 )); then

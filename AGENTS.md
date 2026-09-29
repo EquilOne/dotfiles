@@ -147,6 +147,11 @@ and a change log. Only this machine's agents write here.
     (STARSHIP_CONFIG resolved to starship_foot_minimal.toml in a live
     shell). Restored starship.toml (disk + source) to the common rose-pine
     preset via re-add; switcher fix proposed in Architecture ideas.
+  - 2026-09-29 — Switcher fix applied and verified live: `01_starship.sh`
+    omarchy test now accepts the v3 install path
+    (`~/.local/share/omarchy`); STARSHIP_CONFIG resolves to
+    starship_omarchy/minimal/narrow.toml by width as intended on this
+    machine.
 
 ### danctnix
 
