@@ -58,6 +58,12 @@ there should not be one — it is in `.chezmoiignore`).
      install-path markers can conflate omarchy version detection with
      machine-type detection (v3 = ~/.local/share/omarchy, v4 =
      /usr/share/omarchy).
+   - Shared router scripts whose branches select variant files: a change
+     verified only on the committing machine can change resolution on
+     other machine classes — before applying pulled changes, verify every
+     branch resolves to a file THIS machine actually receives
+     (cross-check `.chezmoiignore`), and surface cross-machine caveats
+     found in commit bodies to the user before applying.
 5. **Report findings**, one line each:
    `[CONFLICT|CONCERN|INFO] <path> — <why> — <exact fix command>`.
    Fix vocabulary: `chezmoi apply -- <file>` (targeted; run from $HOME with

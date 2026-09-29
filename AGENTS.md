@@ -174,6 +174,13 @@ and a change log. Only this machine's agents write here.
     live: `chezmoi diff` completely empty, cli.json byte-identical to
     pre-migration backup. Other machines: script runs on next apply from
     collab, preserving their runtime keys.
+  - 2026-09-29 — User ruled the foot prompt pinetab-only: 01_starship.sh
+    router restructured to per-class variant sets (omarchy set / foot set
+    via file-presence probe / starship.toml-tiered fallback for remote) and
+    .chezmoiignore split so starship_minimal/narrow deploy on non-omarchy
+    non-pinetab hosts (equil-remote gains real width tiers). Fix committed
+    on agents/interagent-collab; machines pull, review, and apply from
+    collab (cross-device test line).
 
 ### danctnix
 

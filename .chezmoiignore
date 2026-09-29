@@ -232,9 +232,10 @@ opencode/*.log
 .config/hypr/scripts/**
 {{- end }}
 
-# ── Non-omarchy hosts (pinetab): B's profile clutter ────────────────────
-# The pinetab keeps its own static waybar config, runs foot (not ghostty),
-# and has no use for uwsm or B's starship prompt variants.
+# ── Non-omarchy hosts: B's profile clutter ──────────────────────────────
+# Non-omarchy hosts run no omarchy desktop (pinetab: foot; equil-remote:
+# headless). The omarchy wide variant is ignored everywhere non-omarchy;
+# the minimal/narrow variants deploy there so every width tier resolves.
 {{ if not .omarchy }}
 .config/ghostty
 .config/ghostty/**
@@ -242,6 +243,13 @@ opencode/*.log
 .config/uwsm
 .config/uwsm/**
 .config/starship/starship_omarchy.toml
+{{ end }}
+
+# ── Pinetab only: foot-tuned starship set owns its width tiers ──────────
+# The pinetab runs foot with its own minimal/narrow/wide variants, so B's
+# omarchy minimal/narrow presets would be dead weight and could collide
+# with the router's tier paths.
+{{ if and (not .omarchy) (eq .device.model "pinetab2") }}
 .config/starship/starship_minimal.toml
 .config/starship/starship_narrow.toml
 {{ end }}

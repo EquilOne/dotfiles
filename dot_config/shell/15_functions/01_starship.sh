@@ -2,30 +2,39 @@
 # =============================================================================
 # STARSHIP PROMPT INITIALIZATION (cross-shell compatible, device-aware)
 # =============================================================================
-# Omarchy machines use B's starship_minimal/starship_narrow/starship configs.
-# Non-omarchy (pinetab) machines use starship_foot_minimal/starship_foot_narrow
-# and default to starship.toml (foot terminal tuned configs).
+# Width-tiered prompt router — each machine class has its own variant set:
+#   Omarchy machines:   starship_minimal / starship_narrow / starship_omarchy
+#   PineTab (foot):     starship_foot_minimal / starship_foot_narrow / starship_foot
+#   Other non-omarchy
+#   (equil-remote):     starship_minimal / starship_narrow / starship.toml
+# The foot set deploys only on the pinetab and the omarchy set only on omarchy
+# machines (see .chezmoiignore), so file presence identifies the machine class
+# at runtime; every STARSHIP_CONFIG path must therefore point at a deployed file.
 
-# Set prompt config by column width before Starship initializes.
 set_starship_width() {
     local columns="${COLUMNS:-80}"
+    local minimal narrow wide
 
     if [[ -d /usr/share/omarchy || -d ~/.local/share/omarchy ]]; then
-        if (( columns < 40 )); then
-            export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship_minimal.toml"
-        elif (( columns < 80 )); then
-            export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship_narrow.toml"
-        else
-            export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship_omarchy.toml"
-        fi
+        minimal=starship_minimal.toml
+        narrow=starship_narrow.toml
+        wide=starship_omarchy.toml
+    elif [[ -f "$XDG_CONFIG_HOME/starship/starship_foot.toml" ]]; then
+        minimal=starship_foot_minimal.toml
+        narrow=starship_foot_narrow.toml
+        wide=starship_foot.toml
     else
-        if (( columns < 40 )); then
-            export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship_foot_minimal.toml"
-        elif (( columns < 80 )); then
-            export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship_foot_narrow.toml"
-        else
-            export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship_foot.toml"
-        fi
+        minimal=starship_minimal.toml
+        narrow=starship_narrow.toml
+        wide=starship.toml
+    fi
+
+    if (( columns < 40 )); then
+        export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/$minimal"
+    elif (( columns < 80 )); then
+        export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/$narrow"
+    else
+        export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/$wide"
     fi
 }
 
