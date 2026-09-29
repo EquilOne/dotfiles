@@ -1,7 +1,7 @@
 ---
 description: Smartest break-glass agent — independently double-checks critical code, plans, configs, and prior-agent findings. Only invoke explicitly; never auto-routed.
 mode: all
-model: openrouter/openai/gpt-5.6-terra#xhigh
+model: openrouter/openai/gpt-6-sol#xhigh
 permissions:
   - action: edit
     resource: "*"
