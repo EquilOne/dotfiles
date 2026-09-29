@@ -72,6 +72,8 @@ and a change log. Only this machine's agents write here.
   - 2026-09-29 — Corrected cached machine data (omarchy=true →
     false in ~/.config/chezmoi/chezmoi.toml); omarchy-only files
     dropped from managed set; diff re-classified pending.
+  - 2026-09-29 — De-hardcoded /home/equilone in herdr config
+    (→ template) and pane-move scripts (→ $HOME).
 
 ### Equilibria
 
