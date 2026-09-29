@@ -181,6 +181,12 @@ and a change log. Only this machine's agents write here.
     non-pinetab hosts (equil-remote gains real width tiers). Fix committed
     on agents/interagent-collab; machines pull, review, and apply from
     collab (cross-device test line).
+  - 2026-09-29 — Applied 0c96ccc targets from collab: 01_starship.sh
+    router + interagent-collab SKILL.md (targeted apply; both diffs empty;
+    STARSHIP_CONFIG resolves the omarchy set as intended on v3). Branch
+    fast-forwarded bc210c4 → 303a1b6 (collab incl. merge of this branch)
+    and pushed; chezmoi diff now empty — opencode targets resolved in
+    303a1b6.
 
 ### danctnix
 
