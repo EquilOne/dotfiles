@@ -69,6 +69,9 @@ and a change log. Only this machine's agents write here.
     captured directly, bounded with timeout 15; keys upserted (verified
     live; vault resolution intermittently flaky — one transient 'vault
     not found' failure retried OK).
+  - 2026-09-29 — Corrected cached machine data (omarchy=true →
+    false in ~/.config/chezmoi/chezmoi.toml); omarchy-only files
+    dropped from managed set; diff re-classified pending.
 
 ### Equilibria
 
