@@ -138,5 +138,8 @@ if ! apply_layout; then
   herdr --session "$SESSION" pane focus --direction left --pane "$opencode" >/dev/null 2>&1 || true
 fi
 
+# Focus the new workspace so the attach below lands on it.
+herdr --session "$SESSION" workspace focus "$ws_id" >/dev/null 2>&1 || true
+
 trap - EXIT
 exec herdr --session "$SESSION"

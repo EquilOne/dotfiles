@@ -208,6 +208,12 @@ type = "shell"
 command = "/home/equilone/.config/herdr/ide-pane-move-next.sh"
 description = "Move focused pane to the next tab (split into it)"
 
+[[keys.command]]
+key = "super+shift+enter"
+type = "shell"
+command = "/home/equilone/.config/herdr/ide-repo-picker.sh"
+description = "Pick a git repo and open it in the IDE session"
+
 # Legacy indexed shortcut config is still parsed for compatibility.
 # Prefer switch_tab, switch_workspace, and focus_agent for new configs.
 # [keys.indexed]
