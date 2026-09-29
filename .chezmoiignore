@@ -27,6 +27,7 @@ nvim/*
 
 # Repository documentation (not deployed).
 docs/**
+AGENTS.md
 
 # Dead .conf files under the Hyprland 0.56 lua config — omarchy owns the live
 # config (~/.config/hypr/*.lua); these vendored .conf copies are obsolete and the
