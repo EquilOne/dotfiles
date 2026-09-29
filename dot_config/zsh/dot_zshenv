@@ -1,0 +1,6 @@
+#!/bin/zsh
+# Sourced by every zsh invocation (login, non-login, interactive, script).
+# Lives here instead of .zprofile so non-login shells (herdr panes, terminal
+# spawners that skip .zprofile) still get XDG_STATE_HOME before .zshrc uses it
+# for mkdir/histfile setup.
+export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"

@@ -1,3 +1,3 @@
 #!/bin/zsh
 # Set up environment for login shells
-export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
+# XDG_STATE_HOME is exported in .zshenv (sourced by all zsh shells), not here.
