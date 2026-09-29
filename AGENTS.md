@@ -89,6 +89,38 @@ and a change log. Only this machine's agents write here.
   - 2026-09-29 — Applied pending skill deployment (targeted), verified
     `chezmoi diff` empty and deployed SKILL.md identical to source.
 
+### EquilVega
+
+- Role: Arch Linux (rolling, kernel 7.2.7-arch1-1), omarchy v3 / Hyprland
+  desktop, profile `desktop`. Falls through the default device branch of
+  `.chezmoi.toml.tmpl` (device.model = hostname, omarchy = true). Chezmoi
+  2.72.2. Planned: upgrade to omarchy v4 once Equilibria's v4 config is
+  stable.
+- Intentionally unmanaged here: omarchy-owned paths per the `.chezmoiignore`
+  desktop gate (jolt, mdt, btop, .config/omarchy) — omarchy rewrites them on
+  theme switch, never re-add; omarchy v3 gates: hypr *.lua ignored (v3 runs
+  hyprland.conf as live entrypoint), waybar/config ignored,
+  .config/mako/config ignored but mako/symlink_config MANAGED on v3;
+  machine-local state (node_modules, opencode.db*, opencode notifier
+  state/logs, package manifests, env files except `.config/shell/env.local`,
+  KDE leftovers).
+- Quirks:
+  - `.chezmoiignore` comment claims `.config/shell/env.local` is managed via
+    an env.local.tmpl, but no such source file exists (verified 2026-09-29);
+    env.local exists on disk and is unmanaged.
+  - omarchy v3→v4 upgrade flips the whole ignore matrix + templates:
+    `omarchyVersion` = `test -d /usr/share/omarchy` (omarchy4 if present).
+    After upgrading, re-run the full diff review before applying (hypr
+    .conf↔.lua, waybar/mako gating, ghostty/uwsm/hermes-skin/nvim templates).
+  - Equilibria is a separate omarchy v4 desktop machine (not this hostname);
+    its AGENTS.md section is read-only from here; cross-machine conflicts go
+    to the user.
+- Change log:
+  - 2026-09-29 — Section created; first interagent diff review run on branch
+    `agents/interagent-collab`: 4 differing targets — starship.toml clobber
+    traced to 2eda38f, cli.json permissions drop, 10_aliases.sh hrdr drift;
+    awaiting approval.
+
 ### danctnix
 
 - Role: PINE64 PineTab 2 tablet, Arch Linux ARM aarch64 bare metal
@@ -172,3 +204,8 @@ its agent should treat this file as read-only reference.
   `.chezmoidata/machines/<hostname>.yaml` migration: the hostname→device dict
   is currently hardcoded inside `.chezmoi.toml.tmpl`; external data would let
   agents edit machine facts without touching template logic.
+- (candidate) Shared configs that drift per machine (e.g. starship.toml
+  differs between source and disk on EquilVega) → either per-machine variants
+  gated like the existing starship_foot*.toml pattern, or machine-varying
+  values moved into `.chezmoidata` (same machinery as the machines-table
+  candidate above).
