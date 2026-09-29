@@ -74,6 +74,9 @@ and a change log. Only this machine's agents write here.
     dropped from managed set; diff re-classified pending.
   - 2026-09-29 — De-hardcoded /home/equilone in herdr config
     (→ template) and pane-move scripts (→ $HOME).
+  - 2026-09-29 — Reverted shared GOPATH to $HOME/go
+    (Equilibria's go-bin path was machine-specific); Equilibria
+    needs an env.local override before next apply.
 
 ### Equilibria
 
