@@ -67,6 +67,11 @@ there should not be one — it is in `.chezmoiignore`).
      of previously-ignored paths.
    - Any `run_*` script added/modified → read it; flag sudo, network, or
      interactive prompts (headless machines hang on these).
+   - Destination-changed targets hang headless applies: chezmoi prompts on
+     a TTY when a target's destination differs from what it last wrote —
+     pre-identify such targets during review (`chezmoi status`), decide
+     `--force` eligibility before applying, and record that the target's
+     delta was in the reviewed pre-apply diff.
    - Any path listed in THIS machine's "intentionally unmanaged" list now
      managed → CONFLICT candidate.
    - Any path claimed in ANOTHER machine's section being changed → flag as
