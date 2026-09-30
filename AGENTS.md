@@ -282,6 +282,14 @@ and a change log. Only this machine's agents write here.
     agent env stripped (ls-remote exit 0). Optional leftovers: register
     agent's equil-pinetab key (SHA256:MkKA8XRV…) for device attribution;
     remove stale on-disk ~/.ssh/id_ed25519.
+  - 2026-09-29 — Full collab batch applied after review (21 targets; full
+    apply used deliberately — every target individually classified Expected
+    this cycle): remote's router synthesis renders pinetab foot set at all
+    widths (verified 30/60/120), herdr paths de-hardcoded, GOPATH=$HOME/go
+    (~/go exists here), hermes-env-keys re-ran (env.local/API keys created,
+    headless-safe), plugins.manifest.toml source-only, new skills deployed.
+    User un-parked the zsh ghost-text fix (f5e344b) — 07_zsh_autosuggestions.sh
+    + KEYBINDINGS.md applied.
 
 ### Notes for other systems
 
