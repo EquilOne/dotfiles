@@ -217,6 +217,23 @@ and a change log. Only this machine's agents write here.
     non-pinetab hosts (equil-remote gains real width tiers). Fix committed
     on agents/interagent-collab; machines pull, review, and apply from
     collab (cross-device test line).
+  - 2026-09-29 — Applied collab f5e344b after full review: fish-style
+    autosuggestions fix — removed the stale-response
+    `_zsh_autosuggest_suggest` override that killed as-you-type ghost text
+    (accepted occasional stale ghost per user decision), menu toggle
+    wrappers restore the ghost after C-e close, menuselect Tab cycles items
+    (wraps), ^Y/^M/^J use complist's accept-line (the old custom
+    menu-accept widget made Enter execute the line). KEYBINDINGS.md
+    deployed to match. All 8 spec items zpty-verified before apply;
+    `chezmoi diff` empty post-apply. Same apply: hermes-env-keys re-ran
+    (content changed in 8a8bfda); .hermes/.env perms 600, keys upserted.
+  - 2026-09-29 — Confirmed intentional (user decision): the device-keyed
+    starship router (1697020) is live here — wide terminals now resolve
+    starship.toml (rose-pine preset); starship_omarchy.toml stays deployed
+    but unreferenced. Supersedes the earlier "wide = starship_omarchy.toml
+    as intended" note above. Open item: local agents/equilvega branch
+    diverged from collab (duplicate config commits bc210c4/38c32a4 vs
+    collab's 6fb9451/20bf5a6) — needs reset-to-collab or rebase cleanup.
 
 ### danctnix
 
