@@ -85,17 +85,18 @@ Ghost-text suggestions + fish/blink-style completion menu. Config in `30_tools/0
 | `Tab` (Ctrl+I) | insert, ghost showing | Accept next word or path section (fish-style: `tmp/` then `sddm-auth-…` per press) |
 | `Ctrl+Y` | insert/normal | Accept whole suggestion |
 | `→` / `End` | insert | Accept whole suggestion |
-| `Ctrl+E` / `Ctrl+N` | insert | Open completion menu (1st item) |
-| `Ctrl+P` | insert | Open completion menu (last item) |
+| `Ctrl+E` / `Ctrl+N` | insert | Open completion menu (1st item); toggle — closes it and restores the ghost immediately |
+| `Ctrl+P` | insert | Open completion menu (last item); restores ghost on close |
 | `Shift+Tab` | insert | Force completion menu (bypasses ghost) |
 
 While the menu is open (menuselect keymap):
 
 | Key | Action |
 |-----|--------|
+| `Tab` (Ctrl+I) | Cycle to next item (wraps around at list edges) |
 | `Ctrl+N` / `Ctrl+P` | Next / previous item |
-| `Ctrl+E` | Close menu (toggle off) |
-| `Enter` / `Ctrl+Y` / `Tab` | Accept highlighted item (no execute) |
+| `Ctrl+E` | Close menu (toggle off; ghost restored immediately) |
+| `Enter` / `Ctrl+Y` / `Ctrl+J` | Accept highlighted item (no execute) |
 | `Shift+Tab` | Previous item |
 | `Ctrl+B` / `Ctrl+F` | Move cursor left / right |
 
