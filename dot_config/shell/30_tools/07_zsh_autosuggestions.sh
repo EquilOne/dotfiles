@@ -98,7 +98,12 @@ typeset -ga ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(
 # from the response — stale/misaligned async arrivals can still append the
 # full stale command, accepted per user decision in exchange for ghost
 # text that actually shows while typing), and accepts directly from
-# POSTDISPLAY. Fallback contract is unchanged: with nothing to accept, run
+# POSTDISPLAY. After the accept it re-styles through the plugin's canonical
+# highlight reset+apply (see the inline comment at the accept): without it
+# the accepted section keeps rendering in the ghost's fg=8 on screen — zle
+# does a cursor-only refresh (the line text didn't change, only the cursor),
+# so the stale region_highlight entry is never repainted away.
+# Fallback contract is unchanged: with nothing to accept, run
 # normal Tab completion (expand-or-complete).
 function _autosuggest_accept_next_word() {
     # Refetch when POSTDISPLAY is unusable: empty (fetch skipped by coalesced
@@ -142,6 +147,20 @@ function _autosuggest_accept_next_word() {
             BUFFER="${BUFFER}${pd[1,n]}"
             CURSOR=$#BUFFER
             POSTDISPLAY="${pd:$n}"
+            # Re-style via the plugin's canonical path: the ghost's
+            # region_highlight entry is keyed on the PRE-accept offsets, so
+            # after the mutation above the accepted section is still inside
+            # the dim span — and because only the cursor moved, zle does a
+            # cursor-only refresh and never repaints those chars (they keep
+            # rendering fg=8 on screen). reset+apply swaps the stale entry for
+            # a correctly-offset one; the changed region_highlight then forces
+            # the repaint. z-sys-hl preserves non-memo entries (this one) on
+            # its line-pre-redraw pass, so the new entry survives.
+            if (( ${+functions[_zsh_autosuggest_highlight_reset]} && ${+functions[_zsh_autosuggest_highlight_apply]} )); then
+                _zsh_autosuggest_highlight_reset
+                _zsh_autosuggest_highlight_apply
+            fi
+            zle -R
             return
         fi
     fi
