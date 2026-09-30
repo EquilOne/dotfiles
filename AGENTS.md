@@ -134,6 +134,27 @@ and a change log. Only this machine's agents write here.
   - 2026-09-29 — Created agent subbranch `agents/Equilibria` from
     `agents/interagent-collab` (1fac526), pushed with upstream tracking;
     documented the flat `agents/<hostname>` convention in rule 7.
+  - 2026-09-29 — Ghost-text Tab-accept investigation: root cause = herdr
+    remote bridges deliver keystrokes as coalesced bursts, zle defers the
+    redraw fetch hook, Tab landed with empty/stale POSTDISPLAY →
+    expand-or-complete fallback ("origin" symptom). Fix 80f64f2 (sync
+    refetch + direct accept from POSTDISPLAY in
+    autosuggest-accept-next-word, widget moved to IGNORE list), merged to
+    collab (1cb9b7d) and applied; pty-validated 6/6 accepts.
+  - 2026-09-29 — Full collab apply (f5e344b batch, 20+ targets incl.
+    run_once_after_30_hermes-env-keys.sh): diff empty post-apply. Starship
+    router now device-keyed tmpl — wide resolves starship.toml
+    (disk-identical to starship_omarchy.toml, no visible change);
+    GOPATH=$HOME/go (~/go exists; remote's env.local note was inverted —
+    no override needed); herdr paths de-hardcoded to /home/equildev; keys
+    upserted.
+  - 2026-09-29 — f5e344b widget rework zpty-validated here: burst Tab
+    accept 5/5 (0.15–1.0 s), stale leading-space case clean, menu
+    open/`^I` cycle/`^Y` accept-no-execute verified.
+  - 2026-09-29 — Secrets fix f744891 (user-approved): hermes-env-keys tmpl
+    share URI → name-based protonPass refs (pass://api-keys/agent-search-*),
+    URI no longer in tracked files; applied, keys verified, run-once
+    re-runs on rotation by design.
 
 ### EquilVega
 
