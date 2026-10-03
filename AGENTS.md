@@ -109,6 +109,27 @@ and a change log. Only this machine's agents write here.
     .chezmoiignore mako/config gate keyed on omarchy-or-not-pinetab2;
     omarchyVersion probe now emits "none" on omarchy-less machines
     (renders identical on omarchy hosts — verify at next pull).
+  - 2026-10-03 — Hermes memory reconcile system deployed (script
+    + systemd user timer, daily 04:30 local, git-snapshotted):
+    dot_local/bin/executable_hermes-memory-reconcile (git snapshot →
+    .sync-conflict-* resolution via one-shot `hermes chat -q` merge with
+    newest-mtime fallback → char-limit condense of MEMORY.md/USER.md via
+    Hermes, warn-and-leave on failure → post-reconcile commit; log at
+    ~/.local/state/hermes-memory-reconcile.log). Timer
+    hermes-memory-reconcile.{service,timer} enabled --now. Machine clock is
+    UTC (not America/Denver), so 04:30 local = 04:30 UTC = 22:30 MT.
+    ~/.hermes/memories is now the Syncthing hub folder (folder creation
+    pending device IDs); memories files remain chezmoi-managed until all
+    machines run Syncthing — coordinated source removal later. NOTE: the
+    private_dot_hermes/private_memories/*.md source files vanished from the
+    worktree mid-session (20:27:59, unattributed actor — hermes sessions
+    had tool_turns=0, no gateway/cron activity in logs); if not
+    user-approved, restore with
+    `git checkout -- private_dot_hermes/private_memories/` BEFORE the next
+    full apply, else they're silently forgotten (diff currently empty for
+    that reason). Other machines must NOT accept the Syncthing folder until
+    their agent adds ~/.hermes/memories to their unmanaged list
+    (cross-machine review).
 
 ### Equilibria
 
