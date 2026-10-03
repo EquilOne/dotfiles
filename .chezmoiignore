@@ -271,7 +271,7 @@ opencode/*.log
 {{ if or (not .omarchy) (ne (includeTemplate "omarchyVersion" .) "omarchy3") }}
 .config/mako/symlink_config
 {{ end }}
-{{ if .omarchy }}
+{{ if or .omarchy (ne .device.model "pinetab2") }}
 .config/mako/config
 {{ end }}
 
