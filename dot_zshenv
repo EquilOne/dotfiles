@@ -1,6 +1,1 @@
-# Sourced by every zsh invocation — this is the ONLY .zshenv zsh reads when
-# ZDOTDIR is unset (e.g. sshd spawns). Keep all env-critical defaults here;
-# $ZDOTDIR/.zshenv is NOT re-sourced after ZDOTDIR changes (zsh reads one
-# .zshenv per invocation, decided before user files run).
-export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 export ZDOTDIR="$HOME/.config/zsh"
