@@ -281,3 +281,17 @@ opencode/*.log
 {{ if ne (includeTemplate "omarchyVersion" .) "omarchy4" }}
 .config/hypr/*.lua
 {{ end }}
+
+# ── Hermes shared memory (Syncthing): live data is machine-local; the hub
+# (equil-remote) reconciles it daily. Source copies under
+# private_dot_hermes/private_memories/ are vestigial seed/history until all
+# machines run Syncthing — coordinated removal is a later commit.
+.hermes/memories/.stfolder
+.hermes/memories/.stignore
+
+# ── Hermes memory reconcile: equil-remote is the Syncthing hub/consolidator ──
+{{ if ne .chezmoi.hostname "equil-remote" }}
+.local/bin/hermes-memory-reconcile
+.config/systemd/user/hermes-memory-reconcile.service
+.config/systemd/user/hermes-memory-reconcile.timer
+{{ end }}

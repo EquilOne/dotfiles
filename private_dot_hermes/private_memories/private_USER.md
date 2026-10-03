@@ -1,9 +1,0 @@
-Chase prefers incremental, one-decision-at-a-time configuration work: discuss and approve each matrix or config change before applying it, then verify the change before moving on. He prefers Hermes as the general assistant/integration orchestrator and OpenCode as the development assistant, with native configuration primitives over abstract modes.
-§
-Chase's career sequence: first become broadly junior-job-ready (TypeScript/web/backend/general software plus small-business automation and LLM integrations), then client-ready, then build performant tools that reduce computer-bound work and form a company around validated products. Entrepreneurship supports but does not outrank software proficiency until client readiness.
-§
-Chase's Stage 1 curriculum is TypeScript-first: Boot.dev (backend depth; DSA course done) + Odin Project as the web/frontend backbone. Codecademy Pro (paid) reserved for the accessibility unit + TS syntax drills. Python supporting; Ops/Data Analyst deferred. iCanStudy is a learning-how-to-learn course, not spaced-repetition.
-§
-PipeOps (EquilOne/PipeOps in ~/projects/PipeOps) is Chase's learning capstone (PostgreSQL + TS REST API + React UI). Plans live in ~/projects/education/curriculum/. He uses Linear for project/issue tracking and TickTick for shift-aligned study assignments/due dates.
-§
-Chase's timezone is America/Denver — always express times in Mountain Time (schedules use UTC cron: 8am MT = 14:00 UTC winter / 15:00 UTC during DST).
