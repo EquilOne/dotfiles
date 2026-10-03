@@ -1,1 +1,1 @@
-{{- output "sh" "-c" "test -d /usr/share/omarchy && echo omarchy4 || echo omarchy3" | trim -}}
+{{- output "sh" "-c" "test -d /usr/share/omarchy && echo omarchy4 || { test -d \"$HOME/.local/share/omarchy\" && echo omarchy3 || echo none; }" | trim -}}
