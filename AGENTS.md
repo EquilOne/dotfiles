@@ -99,6 +99,16 @@ and a change log. Only this machine's agents write here.
     out for remote). .chezmoiignore starship gates adopted from collab's
     split (omarchy-variant ignored on non-omarchy; minimal/narrow not
     ignored on remote).
+  - 2026-10-03 — Fixed stale cached data via `chezmoi init`
+    (omarchy=true/localhost4 → omarchy=false/headless); omarchy-only
+    targets (uwsm, starship_omarchy.toml) dropped from managed set.
+    Applied collab batch: SKILL.md lesson, 07_zsh_autosuggestions
+    re-style fix, hermes-env-keys re-run (keys verified, perms 600).
+    .hermes/memories/*.md source-stale vs local Hermes writes —
+    applies withheld pending shared-memory decision. Source fixes:
+    .chezmoiignore mako/config gate keyed on omarchy-or-not-pinetab2;
+    omarchyVersion probe now emits "none" on omarchy-less machines
+    (renders identical on omarchy hosts — verify at next pull).
 
 ### Equilibria
 
