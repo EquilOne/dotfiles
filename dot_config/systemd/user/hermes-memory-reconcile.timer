@@ -1,0 +1,10 @@
+[Unit]
+Description=Daily reconcile of ~/.hermes/memories (Syncthing hub folder)
+
+[Timer]
+OnCalendar=*-*-* 04:30:00
+Persistent=true
+Unit=hermes-memory-reconcile.service
+
+[Install]
+WantedBy=timers.target

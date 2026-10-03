@@ -1,0 +1,187 @@
+#!/bin/sh
+# hermes-memory-reconcile — daily reconcile of ~/.hermes/memories (the
+# Syncthing-shared memory folder; hub = equil-remote).
+#
+# Flow: git snapshot -> resolve .sync-conflict-* files -> keep MEMORY.md /
+# USER.md within Hermes' char limits -> final commit. Semantic merges and
+# condensing are attempted via a one-shot Hermes call
+# (`hermes chat --oneshot -q`); mechanical fallbacks: newest-mtime wins for
+# conflicts, warn-and-leave for over-limit files. Never truncates.
+set -eu
+
+MEMDIR="${HOME}/.hermes/memories"
+STATE_DIR="${XDG_STATE_HOME:-${HOME}/.local/state}"
+LOG="${STATE_DIR}/hermes-memory-reconcile.log"
+MEMORY_LIMIT=2200
+USER_LIMIT=1375
+HERMES_TIMEOUT=240
+
+[ -d "$MEMDIR" ] || exit 0
+mkdir -p "$(dirname "$LOG")"
+
+log() {
+    printf '%s %s\n' "$(date '+%Y-%m-%dT%H:%M:%S%z')" "$*" >> "$LOG"
+}
+
+# hermes_oneshot QUERY TIMEOUT_SECONDS — run a bounded one-shot Hermes query
+# with MEMDIR as working directory; returns Hermes' exit status. On failure,
+# appends an output tail to the log for diagnosis.
+hermes_oneshot() {
+    command -v hermes >/dev/null 2>&1 || return 1
+    out=$(mktemp) || return 1
+    timeout "$2" hermes chat --oneshot -q "$1" --in "$MEMDIR" \
+        --max-turns 8 >"$out" 2>&1
+    status=$?
+    if [ "$status" -ne 0 ]; then
+        printf '%s hermes-oneshot: exit %s; output tail:\n' \
+            "$(date '+%Y-%m-%dT%H:%M:%S%z')" "$status" >> "$LOG"
+        tail -n 15 "$out" | sed 's/^/    /' >> "$LOG"
+    fi
+    rm -f "$out"
+    return "$status"
+}
+
+commit_step() { # commit_step MESSAGE
+    git add -A
+    if [ -n "$(git status --porcelain)" ]; then
+        if git commit -q -m "$1"; then
+            log "git: $1"
+        else
+            log "git: commit failed: $1"
+        fi
+    else
+        log "git: nothing to commit ($1)"
+    fi
+}
+
+# canon_of FILENAME — strip the Syncthing conflict marker to get the
+# canonical file name (e.g. MEMORY.md.sync-conflict-...-abcd.md -> MEMORY.md).
+canon_of() {
+    printf '%s\n' "$1" | sed 's/\.sync-conflict-[0-9]\{8\}-[0-9]\{6\}-[A-Za-z0-9]*//'
+}
+
+# resolve_group CANONICAL COPY... — resolve one conflict group.
+# Hermes merge first (verifies all copies are gone); else newest-mtime wins.
+resolve_group() {
+    canon=$1
+    shift
+    copies="$*"
+    log "conflicts: group '$canon' copies: $copies"
+    if [ -f "$canon" ]; then
+        q="In the current directory, the file '$canon' has Syncthing conflict copies: $copies.
+Read '$canon' and each listed copy. Semantically merge any unique information
+from the copies into '$canon', keeping the §-separated section format and
+staying under $MEMORY_LIMIT characters (under $USER_LIMIT if this is USER.md).
+Then delete every listed conflict copy. If a copy has nothing unique, just
+delete it. Do not touch any other files."
+        # Verify the outcome regardless of Hermes' exit status: the agent
+        # may have completed the merge before an erroring turn.
+        hermes_oneshot "$q" "$HERMES_TIMEOUT" ||
+            log "conflicts: Hermes merge exited non-zero; verifying result anyway"
+        merged=ok
+        for c in $copies; do
+            [ -e "$c" ] && merged=failed
+        done
+        [ -f "$canon" ] || merged=failed
+        if [ "$merged" = ok ]; then
+            log "conflicts: Hermes merge succeeded for '$canon'"
+            return 0
+        fi
+        log "conflicts: Hermes merge incomplete for '$canon'; falling back to newest-mtime"
+    else
+        log "conflicts: no canonical '$canon'; promoting newest copy"
+    fi
+    for c in $copies; do
+        if [ ! -f "$canon" ]; then
+            mv "$c" "$canon"
+            log "conflicts: promoted '$c' -> '$canon' (no canonical existed)"
+        elif [ "$c" -nt "$canon" ]; then
+            mv -f "$c" "$canon"
+            log "conflicts: newest-wins: '$c' replaced '$canon'"
+        else
+            if git rm -f -q "$c" >/dev/null 2>&1; then
+                log "conflicts: newest-wins: removed stale copy '$c' (git rm)"
+            else
+                rm -f "$c"
+                log "conflicts: newest-wins: removed stale copy '$c'"
+            fi
+        fi
+    done
+}
+
+# condense_if_over FILE LIMIT
+condense_if_over() {
+    f=$1
+    limit=$2
+    [ -f "$f" ] || return 0
+    size=$(wc -c < "$f")
+    if [ "$size" -le "$limit" ]; then
+        return 0
+    fi
+    log "limits: $f is $size chars (limit $limit); attempting Hermes condense"
+    q="Rewrite the file '$f' (in the current directory) in place: condense it to
+under $limit characters while preserving the most important information and
+the §-separated section format. Drop the least relevant details first; never
+truncate mid-sentence."
+    # Verify the outcome regardless of Hermes' exit status: the agent may
+    # have written the condensed file before an erroring turn.
+    hermes_oneshot "$q" "$HERMES_TIMEOUT" ||
+        log "limits: Hermes condense exited non-zero; verifying result anyway"
+    if [ -f "$f" ]; then
+        nsize=$(wc -c < "$f")
+        if [ "$nsize" -le "$limit" ]; then
+            log "limits: Hermes condensed $f to $nsize chars"
+            return 0
+        fi
+        log "limits: Hermes condense insufficient ($nsize chars); leaving $f as-is"
+    else
+        log "limits: Hermes condense failed; leaving $f as-is ($size chars)"
+    fi
+}
+
+log "=== run start ==="
+
+cd "$MEMDIR"
+
+# Git snapshot
+if [ ! -d .git ]; then
+    git init -q -b main
+    log "git: initialized repo in $MEMDIR"
+fi
+if [ ! -e .gitignore ]; then
+    printf '.stfolder/\n.stignore\n*.lock\n' > .gitignore
+fi
+commit_step "pre-reconcile snapshot $(date '+%Y-%m-%d %H:%M:%S')"
+
+# Resolve .sync-conflict-* files, grouped by canonical name (lexicographic
+# order keeps each group contiguous). Pairwise newest-mtime comparison
+# against the canonical file converges on the newest version regardless of
+# iteration order.
+conflicts=$(find . -maxdepth 1 -name '*sync-conflict-*' -type f 2>/dev/null | sed 's|^\./||' | sort)
+if [ -n "$conflicts" ]; then
+    prev_canon=""
+    group=""
+    # Memory file names are simple (no spaces) — safe to word-split.
+    for f in $conflicts; do
+        canon=$(canon_of "$f")
+        if [ -n "$prev_canon" ] && [ "$canon" != "$prev_canon" ]; then
+            resolve_group "$prev_canon" $group
+            group=""
+        fi
+        group="$group $f"
+        prev_canon=$canon
+    done
+    if [ -n "$prev_canon" ]; then
+        resolve_group "$prev_canon" $group
+    fi
+else
+    log "conflicts: none"
+fi
+
+# Char-limit checks (attempt Hermes condense; warn + leave on failure)
+condense_if_over MEMORY.md "$MEMORY_LIMIT"
+condense_if_over USER.md "$USER_LIMIT"
+
+# Final commit
+commit_step "post-reconcile $(date '+%Y-%m-%d %H:%M:%S')"
+log "=== run end ==="

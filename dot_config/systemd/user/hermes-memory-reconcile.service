@@ -1,0 +1,6 @@
+[Unit]
+Description=Reconcile ~/.hermes/memories (git snapshot, conflict resolution, char limits)
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/hermes-memory-reconcile
